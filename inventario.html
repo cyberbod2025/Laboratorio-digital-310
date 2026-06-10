@@ -1,0 +1,2908 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <!-- LABORATORIO DIGITAL 310 — MVP LOCAL v1.0 -->
+  <title>Lab 310 | Diagnóstico local</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #5a5a7a;
+      --line: rgba(0,0,0,0.08);
+      --surface: rgba(255,255,255,0.72);
+      --canvas: #f4f7fc;
+      --navy: #0b1220;
+      --blue: #2563eb;
+      --blue-soft: #e8f0ff;
+      --green: #10b981;
+      --green-soft: #dff8ee;
+      --yellow: #eab308;
+      --yellow-soft: #fff7cf;
+      --red: #ef4444;
+      --red-soft: #ffe7e7;
+      --gray: #94a3b8;
+      --gray-soft: #edf2f7;
+      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+      --glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.35));
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(45,91,255,0.06), transparent 40%),
+        radial-gradient(ellipse at 80% 100%, rgba(15,123,74,0.05), transparent 40%),
+        var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    select {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 3px;
+    }
+
+    .shell {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 24px clamp(16px, 3vw, 44px) 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 38px;
+      padding: 12px 20px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--ink);
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--navy);
+      color: white;
+      letter-spacing: 0;
+    }
+
+    .top-actions,
+    .hero-actions,
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .local-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid #cdd8e7;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .local-badge::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      content: "";
+      box-shadow: 0 0 0 4px var(--blue-soft);
+    }
+
+    .text-link {
+      color: #475569;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .text-link:hover {
+      color: var(--blue);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.5fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 800px;
+      margin: 0;
+      font-size: clamp(3.25rem, 8vw, 7.6rem);
+      font-weight: 950;
+      letter-spacing: -0.075em;
+      line-height: 0.83;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      margin: 23px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      line-height: 1.65;
+    }
+
+    .hero-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-panel-value {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+
+    .hero-panel-meta {
+      margin: 8px 0 20px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #e6ebf2;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2563eb, #38bdf8);
+      transition: width 220ms ease;
+    }
+
+    .progress-copy {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 43px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 850;
+      transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: white;
+      box-shadow: 0 10px 24px rgba(11, 18, 32, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: #172033;
+    }
+
+    .btn-secondary {
+      border-color: #d7e0eb;
+      background: white;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      border-color: #b9c6d6;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .btn-danger {
+      border-color: #fecaca;
+      background: #fff7f7;
+      color: #b91c1c;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 13px;
+      margin-bottom: 22px;
+    }
+
+    .summary-card {
+      position: relative;
+      min-height: 132px;
+      overflow: hidden;
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card::after {
+      position: absolute;
+      right: -18px;
+      bottom: -28px;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: var(--accent-soft, var(--gray-soft));
+      content: "";
+    }
+
+    .summary-label {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      position: relative;
+      z-index: 1;
+      margin: 19px 0 0;
+      color: var(--accent, var(--ink));
+      font-size: 2.55rem;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .workspace {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .workspace-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 25px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      letter-spacing: -0.035em;
+    }
+
+    .section-copy {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .control {
+      min-height: 43px;
+      padding: 9px 13px;
+      border: 1px solid #d7e0eb;
+      border-radius: 13px;
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .control:hover,
+    .control:focus {
+      border-color: #9fb0c4;
+      background: white;
+    }
+
+    .station-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      padding: 25px;
+    }
+
+    .station {
+      position: relative;
+      display: flex;
+      min-height: 154px;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+      text-align: left;
+      transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .station:hover {
+      z-index: 1;
+      border-color: #b9c6d6;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    }
+
+    .station-number {
+      font-size: 1.65rem;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+    }
+
+    .station-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #526174;
+      font-size: 0.74rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .station-dot {
+      flex: 0 0 auto;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--status-color);
+      box-shadow: 0 0 0 5px var(--status-soft);
+    }
+
+    .station-photo {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      display: grid;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      background: white;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 950;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .station[data-status="verde"] {
+      --status-color: var(--green);
+      --status-soft: var(--green-soft);
+    }
+
+    .station[data-status="amarillo"] {
+      --status-color: var(--yellow);
+      --status-soft: var(--yellow-soft);
+    }
+
+    .station[data-status="rojo"] {
+      --status-color: var(--red);
+      --status-soft: var(--red-soft);
+    }
+
+    .station[data-status="gris"] {
+      --status-color: var(--gray);
+      --status-soft: var(--gray-soft);
+    }
+
+    .station-empty {
+      grid-column: 1 / -1;
+      padding: 50px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .data-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 25px;
+      border-top: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(5, 10, 20, 0.58);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(760px, 100%);
+      max-height: min(90vh, 860px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .modal-head {
+      position: sticky;
+      z-index: 2;
+      top: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 25px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .modal-kicker {
+      margin: 0 0 5px;
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: -0.045em;
+    }
+
+    .icon-btn {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .modal-body {
+      padding: 25px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field + .field {
+      margin-top: 16px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .field label {
+      color: #334155;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      min-height: 47px;
+      padding: 11px 13px;
+      border: 1px solid #d7e0eb;
+      border-radius: 13px;
+      background: #f8fafc;
+      color: var(--ink);
+    }
+
+    .field textarea {
+      min-height: 125px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .field input:hover,
+    .field select:hover,
+    .field textarea:hover,
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #9fb0c4;
+      background: white;
+    }
+
+    .photo-field {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #f8fafc;
+    }
+
+    .photo-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .photo-title {
+      margin: 0;
+      color: #334155;
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+
+    .photo-help {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+
+    .photo-frame {
+      position: relative;
+      display: grid;
+      min-height: 220px;
+      overflow: hidden;
+      place-items: center;
+      border: 1px dashed #b9c6d6;
+      border-radius: 15px;
+      background:
+        linear-gradient(45deg, #f1f5f9 25%, transparent 25%),
+        linear-gradient(-45deg, #f1f5f9 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f1f5f9 75%),
+        linear-gradient(-45deg, transparent 75%, #f1f5f9 75%),
+        white;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      background-size: 16px 16px;
+    }
+
+    .photo-preview {
+      display: none;
+      width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+    }
+
+    .photo-preview.is-visible {
+      display: block;
+    }
+
+    .photo-placeholder {
+      padding: 32px 20px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 750;
+      line-height: 1.5;
+    }
+
+    .photo-placeholder.is-hidden {
+      display: none;
+    }
+
+    .photo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .file-button {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-button input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .storage-meter {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      white-space: nowrap !important;
+      clip-path: inset(50%) !important;
+    }
+
+    .modal-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 25px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .save-status {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 40;
+      right: 20px;
+      bottom: 20px;
+      max-width: min(360px, calc(100vw - 40px));
+      padding: 13px 17px;
+      border-radius: 14px;
+      background: var(--navy);
+      color: white;
+      font-size: 0.86rem;
+      font-weight: 750;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border: 1px solid #cdd8e7;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      color: #92400e;
+      font-size: 0.68rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tech-badge::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #eab308;
+      content: "";
+      box-shadow: 0 0 0 3px rgba(234,179,8,0.2);
+    }
+    .backup-group {
+      position: relative;
+      display: inline-block;
+    }
+    .backup-menu {
+      position: absolute;
+      z-index: 10;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 200px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 12px 36px rgba(15,23,42,0.12);
+      display: none;
+    }
+    .backup-menu.is-open { display: block; }
+    .backup-menu .btn {
+      width: 100%;
+      justify-content: flex-start;
+      border: none;
+      background: transparent;
+      border-radius: 11px;
+      min-height: 38px;
+    }
+    .backup-menu .btn:hover { background: #f1f5f9; }
+    .dir-notice {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      color: #1e40af;
+      font-size: 0.82rem;
+      font-weight: 750;
+      line-height: 1.5;
+    }
+    .dir-notice a {
+      color: #1e40af;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .dir-notice a:hover { color: var(--blue); }
+    .dir-responses { margin-top: 12px; font-size: 0.82rem; }
+    .dir-responses summary { cursor: pointer; font-weight: 650; color: var(--muted); padding: 8px 0; }
+    .dir-responses summary:hover { color: var(--ink); }
+    .dir-responses-body { padding: 8px 0 4px 12px; }
+    .dir-response-item { margin-bottom: 8px; }
+    .dir-response-item strong { display: block; font-weight: 600; }
+    .dir-response-item span { color: var(--muted); }
+    .dir-response-empty { color: var(--muted); font-style: italic; }
+    .dir-response-group { margin-bottom: 12px; }
+    .dir-response-group h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+
+    .noscript {
+      margin: 20px;
+      padding: 18px;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      background: #fff7f7;
+      color: #991b1b;
+      font-weight: 750;
+    }
+
+    @media (max-width: 1080px) {
+      .summary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .station-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        padding-top: 17px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        margin-bottom: 30px;
+      }
+
+      .top-actions {
+        justify-content: flex-end;
+      }
+
+      .text-link {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      h1 {
+        font-size: clamp(3.7rem, 18vw, 6.5rem);
+      }
+
+      .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .summary-card:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .workspace-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .toolbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar .control:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .station-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding: 17px;
+      }
+
+      .data-note {
+        flex-direction: column;
+        gap: 7px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .local-badge {
+        padding: 8px 10px;
+        font-size: 0.68rem;
+      }
+
+      .brand {
+        font-size: 0;
+      }
+
+      .brand-mark {
+        font-size: 0.85rem;
+      }
+
+      .summary-card {
+        min-height: 115px;
+      }
+
+      .station-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal-card {
+        max-height: 94vh;
+        border-radius: 25px 25px 0 0;
+      }
+
+      .modal-foot {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .modal-foot .btn {
+        width: 100%;
+      }
+    }
+
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .sync-badge-local { background: var(--gray-soft); color: #475569; }
+    .sync-badge-pending { background: var(--yellow-soft); color: #92400e; }
+    .sync-badge-synced { background: var(--green-soft); color: #065f46; }
+    .sync-badge-error { background: var(--red-soft); color: #991b1b; }
+
+    /* ── Guided Diagnostic UI ── */
+    .guide-mode-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .guide-mode-btn {
+      flex: 1;
+      min-height: 47px;
+      padding: 10px 12px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 850;
+      transition: all 150ms ease;
+    }
+    .guide-mode-btn.is-active {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .guide-details {
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fbfcfe;
+    }
+    .guide-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 13px 17px;
+      cursor: pointer;
+      font-weight: 850;
+      font-size: 0.92rem;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      list-style: none;
+    }
+    .guide-summary::-webkit-details-marker { display: none; }
+    .guide-summary::before {
+      content: "▶";
+      font-size: 0.7rem;
+      color: var(--muted);
+      transition: transform 180ms ease;
+      flex-shrink: 0;
+    }
+    .guide-details[open] > .guide-summary::before {
+      transform: rotate(90deg);
+    }
+    .guide-summary-title {
+      flex: 1;
+    }
+    .guide-summary-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .guide-body {
+      padding: 0 17px 17px;
+      border-top: 1px solid var(--line);
+    }
+    .guide-instruction {
+      margin: 12px 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+    .guide-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .guide-option-btn {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1.5px solid #d7e0eb;
+      border-radius: 999px;
+      background: white;
+      color: #334155;
+      font-size: 0.82rem;
+      font-weight: 800;
+      transition: all 140ms ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .guide-option-btn:hover {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .guide-option-btn.is-selected {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    }
+
+    .guide-commands {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f1f5f9;
+    }
+    .guide-cmd-block {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .guide-cmd-code {
+      flex: 1;
+      min-width: 140px;
+      padding: 8px 11px;
+      border-radius: 9px;
+      background: #0b1220;
+      color: #e2e8f0;
+      font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      font-size: 0.78rem;
+      user-select: all;
+    }
+    .guide-cmd-copy {
+      padding: 7px 13px;
+      border: 1px solid #b9c6d6;
+      border-radius: 999px;
+      background: white;
+      color: #334155;
+      font-size: 0.72rem;
+      font-weight: 850;
+      white-space: nowrap;
+      transition: all 140ms ease;
+    }
+    .guide-cmd-copy:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+    .guide-cmd-copy.is-copied {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+    .guide-cmd-desc {
+      width: 100%;
+      color: var(--muted);
+      font-size: 0.74rem;
+    }
+
+    .guide-notes {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1px solid #d7e0eb;
+      border-radius: 11px;
+      background: white;
+      font-size: 0.82rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .guide-photo-type {
+      margin: 18px 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #f8fafc;
+    }
+    .guide-photo-type label {
+      display: block;
+      margin-bottom: 7px;
+      color: #334155;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+    .guide-photo-type select {
+      width: 100%;
+      min-height: 47px;
+      padding: 10px 12px;
+      border: 1px solid #d7e0eb;
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .guide-recommendations {
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid var(--yellow);
+      border-radius: 16px;
+      background: var(--yellow-soft);
+    }
+    .guide-recommendations h3 {
+      margin: 0 0 10px;
+      color: #92400e;
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+    .guide-recommendations-list {
+      display: grid;
+      gap: 8px;
+    }
+    .guide-recommendation-item {
+      padding: 10px 13px;
+      border-radius: 10px;
+      background: white;
+      color: #78350f;
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.5;
+      border-left: 4px solid #eab308;
+    }
+    .guide-recommendations-empty {
+      margin: 0;
+      color: #92400e;
+      font-size: 0.82rem;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .shell {
+        max-width: none;
+        padding: 0;
+      }
+
+      .top-actions,
+      .hero-actions,
+      .toolbar,
+      .data-note,
+      .modal,
+      .toast {
+        display: none !important;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 4rem;
+      }
+
+      .hero-panel,
+      .summary-card,
+      .workspace {
+        box-shadow: none;
+      }
+
+      .station-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .station {
+        min-height: 115px;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div class="noscript">Esta aplicación necesita JavaScript para registrar diagnósticos locales.</div>
+  </noscript>
+
+  <main class="shell">
+    <nav class="topbar" aria-label="Navegación principal">
+      <a class="brand" href="index.html" aria-label="Lab 310, inicio">
+        <span class="brand-mark">310</span>
+        Secundaria 310
+      </a>
+      <div class="top-actions">
+        <span class="tech-badge">Vista técnica — uso interno Prof. Hugo</span>
+        <a class="text-link" href="informe-preliminar.html">Ver informe para Dirección</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Control técnico local</p>
+        <h1>Lab<br>310.</h1>
+        <p class="hero-copy">
+          Herramienta de inventario y diagnóstico técnico. Captura el estado de cada estación,
+            agrega evidencia fotográfica y sincroniza con Supabase cuando hay conexión.
+        </p>
+      </div>
+
+      <aside class="hero-panel" aria-label="Progreso de revisión">
+        <p class="hero-panel-label">Auditoría local actual</p>
+        <p class="hero-panel-value" id="audit-date">Sin iniciar</p>
+        <p class="hero-panel-meta" id="last-update">Aún no hay cambios registrados.</p>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-copy">
+          <span id="progress-label">0 de 30 revisadas</span>
+          <span id="progress-percent">0%</span>
+        </div>
+      </aside>
+    </header>
+
+    <section class="summary" aria-label="Resumen de estaciones">
+      <article class="summary-card">
+        <p class="summary-label">Total</p>
+        <p class="summary-value" id="count-total">30</p>
+      </article>
+      <article class="summary-card" style="--accent: var(--green); --accent-soft: var(--green-soft);">
+        <p class="summary-label">Funcionales</p>
+        <p class="summary-value" id="count-verde">0</p>
+      </article>
+      <article class="summary-card" style="--accent: #ca8a04; --accent-soft: var(--yellow-soft);">
+        <p class="summary-label">Observaciones</p>
+        <p class="summary-value" id="count-amarillo">0</p>
+      </article>
+      <article class="summary-card" style="--accent: var(--red); --accent-soft: var(--red-soft);">
+        <p class="summary-label">Fallas</p>
+        <p class="summary-value" id="count-rojo">0</p>
+      </article>
+      <article class="summary-card" style="--accent: var(--gray); --accent-soft: var(--gray-soft);">
+        <p class="summary-label">Pendientes</p>
+        <p class="summary-value" id="count-gris">30</p>
+      </article>
+    </section>
+
+    <section class="workspace">
+      <header class="workspace-head">
+        <div>
+          <h2>Mapa digital del laboratorio</h2>
+          <p class="section-copy">Selecciona una estación para abrir su ficha técnica.</p>
+        </div>
+
+        <div class="toolbar">
+          <select class="control" id="status-filter" aria-label="Filtrar estaciones por estado">
+            <option value="todos">Todos los estados</option>
+            <option value="gris">Sin revisar</option>
+            <option value="verde">Funcionales</option>
+            <option value="amarillo">Con observaciones</option>
+            <option value="rojo">No funcionales</option>
+          </select>
+          <button class="btn btn-secondary" id="config-supabase" type="button">⚙ Supabase</button>
+          <button class="btn btn-secondary" id="export-html" type="button">Exportar HTML</button>
+          <button class="btn btn-secondary" id="print-report" type="button">Imprimir / PDF</button>
+          <div class="backup-group">
+            <button class="btn btn-secondary" id="backup-toggle" type="button">Respaldo técnico ▾</button>
+            <div class="backup-menu" id="backup-menu">
+              <button class="btn btn-secondary" id="export-json" type="button">Exportar JSON</button>
+              <button class="btn btn-secondary" id="import-json" type="button">Restaurar JSON</button>
+            </div>
+          </div>
+          <button class="btn btn-danger" id="new-audit" type="button">Nueva auditoría local</button>
+          <input class="visually-hidden" id="import-file" type="file" accept="application/json,.json" tabindex="-1" aria-hidden="true">
+        </div>
+      </header>
+
+      <div class="station-grid" id="station-grid" aria-live="polite"></div>
+
+      <footer class="data-note">
+        <span><strong>Alcance:</strong> borrador de trabajo local, sin sincronización ni notificación institucional.</span>
+        <span><span id="storage-status">Guardado local disponible.</span> <span id="sync-status" class="sync-badge sync-badge-local" style="display:none;">Local</span></span>
+        <div class="dir-notice">
+          Esta pantalla es la <strong>vista técnica de inventario</strong>, no el informe para Dirección.
+          Para presentar el diagnóstico ejecutivo, usa <a href="informe-preliminar.html">Informe para Dirección</a>.
+        </div>
+        <details class="dir-responses" id="dir-responses">
+          <summary>Ver respuestas de Dirección</summary>
+          <p style="font-size:0.78rem;color:var(--muted);margin:6px 0 8px;padding:0 4px;">
+            Solo muestra respuestas guardadas en este mismo dispositivo. Si el Director respondi&oacute;
+            desde otro equipo, pide que te env&iacute;e el resumen por WhatsApp o correo.
+          </p>
+          <div class="dir-responses-body" id="dir-responses-body"></div>
+        </details>
+      </footer>
+    </section>
+  </main>
+
+  <div class="modal" id="station-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <section class="modal-card">
+      <header class="modal-head">
+        <div>
+          <p class="modal-kicker">Ficha técnica local</p>
+          <h2 class="modal-title" id="modal-title">Estación 1</h2>
+        </div>
+        <button class="icon-btn" id="close-modal" type="button" aria-label="Cerrar ficha">x</button>
+      </header>
+
+      <form id="station-form">
+        <div class="modal-body">
+          <div class="guide-mode-toggle">
+            <button type="button" class="guide-mode-btn is-active" data-mode="rapido">Diagnóstico rápido</button>
+            <button type="button" class="guide-mode-btn" data-mode="completo">Diagnóstico completo</button>
+          </div>
+
+          <div class="guide-sections" id="guide-sections"></div>
+
+          <section class="guide-photo-type">
+            <label for="guide-photo-type">Tipo de fotografía</label>
+            <select id="guide-photo-type">
+              <option value="general">Vista general de la estación</option>
+              <option value="panel_frontal">Panel frontal</option>
+              <option value="panel_posterior">Panel posterior</option>
+              <option value="pantalla">Pantalla / monitor</option>
+              <option value="teclado">Teclado</option>
+              <option value="mouse">Mouse</option>
+              <option value="interior">Interior (placa base)</option>
+              <option value="etiqueta">Etiqueta / número de serie</option>
+              <option value="evidencia">Evidencia de falla</option>
+            </select>
+          </section>
+
+          <div class="guide-recommendations" id="guide-recommendations">
+            <h3>Recomendaciones automáticas</h3>
+            <div class="guide-recommendations-list" id="guide-recommendations-list">
+              <p class="guide-recommendations-empty">Selecciona opciones en las secciones de arriba para generar recomendaciones.</p>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:16px;">
+            <label for="estado">Estado general de la estación</label>
+            <select id="estado" name="estado">
+              <option value="gris">Sin revisar</option>
+              <option value="verde">Funcional</option>
+              <option value="amarillo">Con observaciones</option>
+              <option value="rojo">No funcional</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="responsable">Revisó (referencia local)</label>
+            <input id="responsable" name="responsable" maxlength="120" autocomplete="off" placeholder="Nombre o iniciales">
+          </div>
+
+          <div class="field">
+            <label for="observaciones">Observaciones adicionales</label>
+            <textarea
+              id="observaciones"
+              name="observaciones"
+              maxlength="1000"
+              placeholder="Notas adicionales no cubiertas por el diagnóstico guiado..."
+            ></textarea>
+          </div>
+
+          <section class="photo-field" aria-labelledby="photo-title">
+            <div class="photo-head">
+              <div>
+                <h3 class="photo-title" id="photo-title">Evidencia fotográfica local</h3>
+                <p class="photo-help">
+                  Una foto por estación. Se comprime antes de guardarse para reducir el uso de espacio.
+                </p>
+              </div>
+            </div>
+            <div class="photo-frame">
+              <img class="photo-preview" id="photo-preview" alt="Vista previa de la estación">
+              <span class="photo-placeholder" id="photo-placeholder">Todavía no hay una fotografía para esta estación.</span>
+            </div>
+            <div class="photo-actions">
+              <label class="btn btn-secondary file-button">
+                Tomar o elegir foto
+                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+              </label>
+              <button class="btn btn-danger" id="remove-photo" type="button">Quitar foto</button>
+            </div>
+            <p class="storage-meter" id="photo-status">Formatos admitidos: JPG, PNG y WebP.</p>
+          </section>
+        </div>
+
+        <footer class="modal-foot">
+          <span class="save-status" id="form-save-status">Los cambios se guardan al confirmar.</span>
+          <button class="btn btn-primary" type="submit">Guardar diagnóstico local</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal" id="supabase-config-modal" role="dialog" aria-modal="true" aria-labelledby="supabase-config-title">
+    <section class="modal-card">
+      <header class="modal-head">
+        <div>
+          <p class="modal-kicker">Integración institucional</p>
+          <h2 class="modal-title" id="supabase-config-title">Configurar Supabase</h2>
+        </div>
+        <button class="icon-btn" id="close-supabase-config" type="button" aria-label="Cerrar configuración">x</button>
+      </header>
+      <form id="supabase-config-form">
+        <div class="modal-body">
+          <div class="field">
+            <label for="supabase-url">SUPABASE_URL</label>
+            <input id="supabase-url" name="supabase-url" type="url" maxlength="255" autocomplete="off" placeholder="https://xxxxx.supabase.co">
+          </div>
+          <div class="field">
+            <label for="supabase-anon-key">SUPABASE_ANON_KEY</label>
+            <input id="supabase-anon-key" name="supabase-anon-key" type="text" maxlength="500" autocomplete="off" placeholder="eyJhbGciOiJIUzI1NiIs...">
+          </div>
+          <div class="field">
+            <label for="supabase-audit-token">Token de auditoría (pilot_token)</label>
+            <input id="supabase-audit-token" name="supabase-audit-token" type="text" maxlength="120" autocomplete="off" placeholder="UUID del token piloto">
+            <p style="margin:4px 0 0;color:var(--muted);font-size:0.76rem;line-height:1.4;">Token registrado en la tabla <code>pilot_tokens</code> de Supabase. Consíguelo con el responsable del proyecto.</p>
+          </div>
+        </div>
+        <footer class="modal-foot">
+          <span class="save-status" id="supabase-config-status">Los cambios se guardan en este navegador.</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-secondary" id="test-supabase-connection" type="button">Probar conexión</button>
+            <button class="btn btn-primary" type="submit">Guardar configuración</button>
+          </div>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (() => {
+      "use strict";
+      // LABORATORIO DIGITAL 310 — MVP LOCAL v1.0
+
+      const STORAGE_KEY = "sase310.lab310.audit.v2";
+      const LEGACY_STORAGE_KEY = "sase310.lab310.audit.v1";
+      const SCHEMA_VERSION = 2;
+      const STATION_COUNT = 30;
+      const MAX_SOURCE_PHOTO_BYTES = 15 * 1024 * 1024;
+      const MAX_PHOTO_DATA_URL_LENGTH = 100000;
+      const VALID_STATES = ["verde", "amarillo", "rojo", "gris"];
+      const STATUS_LABELS = {
+        verde: "Funcional",
+        amarillo: "Con observaciones",
+        rojo: "No funcional",
+        gris: "Sin revisar"
+      };
+      const TEXT_FIELDS = ["cpu", "monitor", "teclado", "mouse", "red", "responsable", "observaciones"];
+
+      const GUIDE_SECTIONS = [
+        { id: 'encendido', title: 'Encendido', instruction: 'Conecta la estación a la corriente y presiona el botón de encendido.', mode: 'rapido', options: [
+          { label: 'Enciende normalmente', value: 'enciende_normal', field: '', valueMap: '' },
+          { label: 'No enciende', value: 'no_enciende', field: 'cpu', valueMap: 'No enciende' },
+          { label: 'Enciende sin video', value: 'enciende_sin_video', field: 'monitor', valueMap: 'No recibe señal' },
+          { label: 'Enciende con ruidos', value: 'enciende_ruidos', field: 'cpu', valueMap: 'Ruidos extraños al encender' },
+          { label: 'Se apaga solo', value: 'enciende_se_apaga', field: 'cpu', valueMap: 'Se apaga inesperadamente' }
+        ], commands: [] },
+        { id: 'bios', title: 'BIOS', instruction: 'Durante el arranque presiona F2, F10, F12 o Supr para acceder a la BIOS.', mode: 'completo', options: [
+          { label: 'Accede sin problema', value: 'bios_ok', field: '', valueMap: '' },
+          { label: 'No accede / pide contraseña', value: 'bios_password', field: '', valueMap: '' },
+          { label: 'Batería baja (fecha/hora incorrectas)', value: 'bios_bateria', field: '', valueMap: '' },
+          { label: 'No reconoce disco duro', value: 'bios_no_disco', field: 'cpu', valueMap: 'BIOS no detecta disco' },
+          { label: 'No reconoce RAM', value: 'bios_no_ram', field: 'cpu', valueMap: 'BIOS no detecta RAM' }
+        ], commands: [] },
+        { id: 'windows', title: 'Windows', instruction: 'Espera a que Windows inicie sesión. Verifica la versión y el rendimiento general.', mode: 'rapido', options: [
+          { label: 'Inicio normal', value: 'windows_normal', field: '', valueMap: '' },
+          { label: 'Inicio lento', value: 'windows_lento', field: 'cpu', valueMap: 'Inicio de Windows lento' },
+          { label: 'Pantalla azul / error', value: 'windows_bsod', field: 'cpu', valueMap: 'Pantalla azul en inicio' },
+          { label: 'No inicia / se queda cargando', value: 'windows_no_inicia', field: 'cpu', valueMap: 'Windows no inicia' },
+          { label: 'Sin licencia / activación', value: 'windows_sin_licencia', field: '', valueMap: '' },
+          { label: 'Windows 7', value: 'win7', field: '', valueMap: '' },
+          { label: 'Windows 10', value: 'win10', field: '', valueMap: '' },
+          { label: 'Windows 11', value: 'win11', field: '', valueMap: '' }
+        ], commands: [
+          { cmd: 'winver', label: 'Versión de Windows', desc: 'Muestra la versión y compilación de Windows.' },
+          { cmd: 'msinfo32', label: 'Información del sistema', desc: 'Abre el resumen completo del sistema.' },
+          { cmd: 'systeminfo', label: 'Detalles del sistema', desc: 'Lista configuración de hardware y SO.' }
+        ] },
+        { id: 'cpuRamDisco', title: 'CPU / RAM / Disco', instruction: 'Revisa el rendimiento del procesador, la memoria RAM y el estado del disco duro.', mode: 'rapido', options: [
+          { label: 'Rendimiento normal', value: 'cpu_normal', field: 'cpu', valueMap: 'Rendimiento normal' },
+          { label: 'CPU al 100% sin razón', value: 'cpu_alto', field: 'cpu', valueMap: 'CPU al 100% en reposo' },
+          { label: 'RAM insuficiente (<4GB)', value: 'ram_poca', field: 'cpu', valueMap: 'RAM insuficiente' },
+          { label: 'Disco HDD mecánico', value: 'hdd_mecanico', field: '', valueMap: '' },
+          { label: 'Disco SSD', value: 'ssd', field: '', valueMap: '' },
+          { label: 'Disco con errores / lento', value: 'disco_lento', field: 'cpu', valueMap: 'Disco presenta errores' },
+          { label: 'Sobrecalentamiento', value: 'sobrecalentamiento', field: 'cpu', valueMap: 'Equipo se sobrecalienta' }
+        ], commands: [
+          { cmd: 'wmic cpu get name', label: 'Modelo de CPU', desc: 'Muestra el procesador instalado.' },
+          { cmd: 'wmic memorychip get capacity,speed', label: 'Memoria RAM', desc: 'Muestra capacidad y velocidad de cada módulo.' },
+          { cmd: 'wmic diskdrive get model,size', label: 'Disco duro', desc: 'Lista los discos instalados y su tamaño.' }
+        ] },
+        { id: 'red', title: 'Red / Internet', instruction: 'Conecta el cable de red o verifica WiFi. Abre el navegador para confirmar conectividad.', mode: 'rapido', options: [
+          { label: 'Conectividad normal', value: 'red_normal', field: 'red', valueMap: 'Conectividad normal' },
+          { label: 'Sin conexión', value: 'red_sin_conexion', field: 'red', valueMap: 'Sin conexión de red' },
+          { label: 'Solo red local (sin Internet)', value: 'red_solo_local', field: 'red', valueMap: 'Solo red local' },
+          { label: 'WiFi no funciona', value: 'red_wifi_mal', field: 'red', valueMap: 'WiFi no funciona' },
+          { label: 'IP dinámica ok', value: 'red_dhcp', field: '', valueMap: '' },
+          { label: 'IP estática', value: 'red_estatica', field: '', valueMap: '' }
+        ], commands: [
+          { cmd: 'ipconfig', label: 'IP actual', desc: 'Muestra la configuración de red actual.' },
+          { cmd: 'ipconfig /all', label: 'IP detallada', desc: 'Muestra toda la info de red.' },
+          { cmd: 'ping 127.0.0.1', label: 'Ping local', desc: 'Verifica que la tarjeta de red funciona.' },
+          { cmd: 'ping 8.8.8.8', label: 'Ping a Google DNS', desc: 'Verifica conectividad a Internet.' },
+          { cmd: 'ping google.com', label: 'Ping por nombre', desc: 'Verifica resolución DNS.' }
+        ] },
+        { id: 'monitor', title: 'Monitor', instruction: 'Verifica que la imagen se vea correctamente, sin pixeles muertos ni distorsión.', mode: 'rapido', options: [
+          { label: 'Funciona correctamente', value: 'monitor_ok', field: 'monitor', valueMap: 'Funciona correctamente' },
+          { label: 'No prende / sin luz', value: 'monitor_no_prende', field: 'monitor', valueMap: 'No prende' },
+          { label: 'Imagen distorsionada / rayas', value: 'monitor_distorsion', field: 'monitor', valueMap: 'Imagen distorsionada' },
+          { label: 'Pixeles muertos', value: 'monitor_pixeles', field: 'monitor', valueMap: 'Pixeles muertos visibles' },
+          { label: 'Flicker / parpadeo', value: 'monitor_flicker', field: 'monitor', valueMap: 'Parpadeo en pantalla' },
+          { label: 'Cable dañado / suelto', value: 'monitor_cable', field: 'monitor', valueMap: 'Cable de monitor dañado' }
+        ], commands: [] },
+        { id: 'teclado', title: 'Teclado', instruction: 'Conecta el teclado y prueba cada grupo de teclas.', mode: 'completo', options: [
+          { label: 'Funciona correctamente', value: 'teclado_ok', field: 'teclado', valueMap: 'Funciona correctamente' },
+          { label: 'Teclas no responden', value: 'teclado_no_responde', field: 'teclado', valueMap: 'Teclas no responden' },
+          { label: 'Puerto USB dañado', value: 'teclado_usb', field: 'teclado', valueMap: 'Puerto USB no reconoce' },
+          { label: 'Teclas pegajosas / atascadas', value: 'teclado_pegajoso', field: 'teclado', valueMap: 'Teclas pegajosas' },
+          { label: 'Falta teclado', value: 'teclado_falta', field: 'teclado', valueMap: 'No hay teclado' }
+        ], commands: [] },
+        { id: 'mouse', title: 'Mouse', instruction: 'Conecta el mouse y verifica que el cursor se mueva suavemente.', mode: 'completo', options: [
+          { label: 'Funciona correctamente', value: 'mouse_ok', field: 'mouse', valueMap: 'Funciona correctamente' },
+          { label: 'Cursor no se mueve', value: 'mouse_no_curse', field: 'mouse', valueMap: 'Cursor no se mueve' },
+          { label: 'Botones no responden', value: 'mouse_botones', field: 'mouse', valueMap: 'Botones no responden' },
+          { label: 'Scroll no funciona', value: 'mouse_scroll', field: 'mouse', valueMap: 'Scroll no funciona' },
+          { label: 'Falta mouse', value: 'mouse_falta', field: 'mouse', valueMap: 'No hay mouse' }
+        ], commands: [] },
+        { id: 'audio', title: 'Audio', instruction: 'Conecta bocinas o audífonos. Reproduce un sonido y verifica volumen.', mode: 'completo', options: [
+          { label: 'Audio funciona', value: 'audio_ok', field: '', valueMap: '' },
+          { label: 'No hay sonido', value: 'audio_no', field: '', valueMap: '' },
+          { label: 'Audio distorsionado', value: 'audio_distorsion', field: '', valueMap: '' },
+          { label: 'Solo un canal', value: 'audio_mono', field: '', valueMap: '' },
+          { label: 'Plug dañado / no reconoce', value: 'audio_plug', field: '', valueMap: '' }
+        ], commands: [] },
+        { id: 'energia', title: 'Energía', instruction: 'Verifica el cable de corriente, el estado del regulador o UPS y la fuente de poder.', mode: 'completo', options: [
+          { label: 'Cable de corriente OK', value: 'cable_ok', field: '', valueMap: '' },
+          { label: 'Cable dañado', value: 'cable_danado', field: '', valueMap: '' },
+          { label: 'Fuente de poder no funciona', value: 'fuente_muerta', field: '', valueMap: '' },
+          { label: 'Fuente hace ruido', value: 'fuente_ruido', field: '', valueMap: '' },
+          { label: 'Regulador / UPS faltante', value: 'regulador_falta', field: '', valueMap: '' }
+        ], commands: [] }
+      ];
+
+      const RECOMENDACIONES_MAP = {
+        windows_lento: 'Revisar programas de inicio (msconfig). Desfragmentar disco si es HDD.',
+        windows_bsod: 'Anotar código de error. Revisar controladores, ejecutar "sfc /scannow".',
+        windows_no_inicia: 'Intentar reparación de inicio (F8 → Reparar). Usar USB de instalación.',
+        hdd_mecanico: 'Evaluar reemplazo por SSD para mejorar rendimiento significativamente.',
+        disco_lento: 'Ejecutar "chkdsk /f" como administrador. Respaldar datos antes de reparar.',
+        sobrecalentamiento: 'Limpiar polvo de ventiladores y disipador. Reemplazar pasta térmica.',
+        ram_poca: 'Se recomienda ampliar la memoria RAM a al menos 8 GB.',
+        cpu_alto: 'Abrir Administrador de tareas y ordenar por uso de CPU para identificar el proceso.',
+        red_sin_conexion: 'Verificar cable de red, probar otro puerto en el switch. Revisar drivers.',
+        red_solo_local: 'Verificar configuración de DNS y gateway. Ejecutar "ipconfig /renew".',
+        red_wifi_mal: 'Verificar WiFi habilitado en hardware. Reinstalar controladores.',
+        monitor_no_prende: 'Verificar cable de alimentación y conexión. Probar con otro monitor.',
+        monitor_distorsion: 'Probar con otro cable VGA/HDMI. Si persiste, el monitor necesita revisión.',
+        monitor_pixeles: 'Pixel muerto permanente. Reportar para evaluación de reemplazo.',
+        monitor_flicker: 'Ajustar frecuencia de actualización. Probar otro cable.',
+        monitor_cable: 'Reemplazar el cable VGA/HDMI/DisplayPort.',
+        teclado_no_responde: 'Limpiar puerto USB con aire comprimido. Probar en otra estación.',
+        teclado_usb: 'El puerto USB podría tener daño físico. Usar otro puerto.',
+        teclado_pegajoso: 'Limpiar el teclado con alcohol isopropílico y aire comprimido.',
+        teclado_falta: 'Asignar teclado del inventario disponible.',
+        mouse_no_curse: 'Limpiar el sensor óptico. Probar en otra superficie.',
+        mouse_botones: 'El mouse tiene desgaste mecánico. Se recomienda reemplazo.',
+        mouse_falta: 'Asignar mouse del inventario disponible.',
+        bios_bateria: 'Reemplazar la pila CR2032 en la placa base.',
+        bios_no_disco: 'Verificar conexión SATA del disco. Podría haber fallado.',
+        bios_no_ram: 'Reseat los módulos de RAM. Limpiar contactos con borrador.',
+        no_enciende: 'Verificar cable de corriente y fuente de poder. Probar con otro cable.',
+        enciende_sin_video: 'Reseat RAM y tarjeta de video si es dedicada. Probar otro monitor.',
+        enciende_se_apaga: 'Posible sobrecalentamiento o fuente deficiente. Revisar ventiladores.',
+        enciende_ruidos: 'Verificar ventiladores y fuente de poder. Limpiar el interior.',
+        fuente_muerta: 'Reemplazar la fuente de poder. No intentar reparar.',
+        fuente_ruido: 'El ventilador de la fuente falla. Reemplazar la fuente.',
+        audio_no: 'Verificar bocinas con corriente. Revisar volumen y controladores.',
+        audio_distorsion: 'Probar con otros audífonos. Si persiste, el conector está dañado.',
+        windows_sin_licencia: 'Registrar número de serie del equipo. Reportar para licenciamiento.',
+        regulador_falta: 'Conectar la estación a un regulador de voltaje antes de encender.',
+        cable_danado: 'Reemplazar el cable de corriente dañado.'
+      };
+
+      const getRecomendaciones = (guiadx) => {
+        const recs = [];
+        if (!guiadx || !guiadx.sections) return recs;
+        Object.values(guiadx.sections).forEach(section => {
+          if (section.selected && RECOMENDACIONES_MAP[section.selected]) {
+            recs.push(RECOMENDACIONES_MAP[section.selected]);
+          }
+        });
+        const selected = Object.values(guiadx.sections).map(s => s.selected).filter(Boolean);
+        if (selected.includes('windows_lento') && selected.includes('hdd_mecanico')) {
+          recs.push('URGENTE: HDD mecánico + Windows lento. Priorizar migración a SSD.');
+        }
+        if (selected.includes('ram_poca') && selected.includes('windows_lento')) {
+          recs.push('Combinación de RAM insuficiente + lentitud. Ampliar RAM y migrar a SSD.');
+        }
+        if (selected.includes('sobrecalentamiento') && selected.includes('fuente_ruido')) {
+          recs.push('URGENTE: Sobrecalentamiento + fuente ruidosa. Revisar sistema de enfriamiento completo.');
+        }
+        return [...new Set(recs)];
+      };
+
+      const createGuiadx = () => ({
+        mode: 'rapido',
+        sections: Object.fromEntries(GUIDE_SECTIONS.map(s => [s.id, { selected: '', notes: '' }])),
+        photoType: 'general',
+        recomendaciones: []
+      });
+
+      const normalizeGuiadx = (value) => {
+        if (!value || typeof value !== 'object') return createGuiadx();
+        const base = createGuiadx();
+        base.mode = (value.mode === 'rapido' || value.mode === 'completo') ? value.mode : 'rapido';
+        base.photoType = typeof value.photoType === 'string' ? value.photoType : 'general';
+        GUIDE_SECTIONS.forEach(s => {
+          const existing = value.sections && value.sections[s.id];
+          base.sections[s.id] = {
+            selected: (existing && typeof existing.selected === 'string') ? existing.selected : '',
+            notes: (existing && typeof existing.notes === 'string') ? existing.notes.slice(0, 300) : ''
+          };
+        });
+        base.recomendaciones = Array.isArray(value.recomendaciones) ? value.recomendaciones : [];
+        return base;
+      };
+
+      const grid = document.querySelector("#station-grid");
+      const modal = document.querySelector("#station-modal");
+      const form = document.querySelector("#station-form");
+      const filter = document.querySelector("#status-filter");
+      const toast = document.querySelector("#toast");
+      const photoInput = document.querySelector("#photo-input");
+      const photoPreview = document.querySelector("#photo-preview");
+      const photoPlaceholder = document.querySelector("#photo-placeholder");
+      const photoStatus = document.querySelector("#photo-status");
+      let selectedId = null;
+      let pendingPhoto = null;
+      let toastTimer = null;
+      let formModified = false;
+
+      const generateId = () =>
+        globalThis.crypto && typeof globalThis.crypto.randomUUID === "function"
+          ? globalThis.crypto.randomUUID()
+          : "local-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+
+      const createStation = (id) => ({
+        id,
+        clientId: generateId(),
+        estado: "gris",
+        cpu: "Pendiente",
+        monitor: "Pendiente",
+        teclado: "Pendiente",
+        mouse: "Pendiente",
+        red: "Pendiente",
+        responsable: "",
+        observaciones: "",
+        photo: null,
+        guiadx: null,
+        updatedAt: null
+      });
+
+      const createAudit = () => ({
+        version: SCHEMA_VERSION,
+        id: generateId(),
+        scope: "local",
+        startedAt: new Date().toISOString(),
+        updatedAt: null,
+        stations: Array.from({ length: STATION_COUNT }, (_, index) => createStation(index + 1)),
+        _syncStatus: "local",
+        _syncedAt: null,
+        _syncError: null
+      });
+
+      const cleanText = (value, maxLength = 1000) =>
+        typeof value === "string" ? value.slice(0, maxLength) : "";
+
+      const normalizePhoto = (value) => {
+        if (!value || typeof value !== "object") return null;
+        const dataUrl = typeof value.dataUrl === "string" ? value.dataUrl : "";
+        if (!/^data:image\/(?:jpeg|png|webp);base64,/i.test(dataUrl)) return null;
+        if (dataUrl.length > MAX_PHOTO_DATA_URL_LENGTH * 1.25) return null;
+
+        return {
+          dataUrl,
+          mimeType: cleanText(value.mimeType, 60) || "image/jpeg",
+          name: cleanText(value.name, 160) || "evidencia.jpg",
+          capturedAt: typeof value.capturedAt === "string" ? value.capturedAt : null,
+          size: Number.isFinite(Number(value.size)) ? Number(value.size) : 0
+        };
+      };
+
+      const normalizeStation = (value, id) => {
+        const base = createStation(id);
+        if (!value || typeof value !== "object") return base;
+
+        base.clientId = cleanText(value.clientId, 80) || base.clientId;
+        base.estado = VALID_STATES.includes(value.estado) ? value.estado : "gris";
+        TEXT_FIELDS.forEach((field) => {
+          const limit = field === "observaciones" ? 1000 : 120;
+          base[field] = cleanText(value[field], limit) || (field === "responsable" || field === "observaciones" ? "" : "Pendiente");
+        });
+        base.photo = normalizePhoto(value.photo);
+        base.guiadx = normalizeGuiadx(value.guiadx);
+        base.updatedAt = typeof value.updatedAt === "string" ? value.updatedAt : null;
+        return base;
+      };
+
+      const localAuditRepository = {
+        kind: "localStorage",
+        loadCurrent() {
+          const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        },
+        saveCurrent(value) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+        },
+        clearCurrent() {
+          localStorage.removeItem(STORAGE_KEY);
+        },
+        serializedSize(value) {
+          return new Blob([JSON.stringify(value)]).size;
+        }
+      };
+
+      const normalizeAudit = (stored) => {
+        if (!stored || typeof stored !== "object") return createAudit();
+          const stationsById = new Map(
+            Array.isArray(stored.stations)
+              ? stored.stations.map((station) => [Number(station.id), station])
+              : []
+          );
+
+          return {
+            version: SCHEMA_VERSION,
+            id: cleanText(stored.id, 80) || generateId(),
+            scope: "local",
+            startedAt: typeof stored.startedAt === "string" ? stored.startedAt : new Date().toISOString(),
+            updatedAt: typeof stored.updatedAt === "string" ? stored.updatedAt : null,
+            stations: Array.from(
+              { length: STATION_COUNT },
+              (_, index) => normalizeStation(stationsById.get(index + 1), index + 1)
+            ),
+            _syncStatus: stored._syncStatus || "local",
+            _syncedAt: stored._syncedAt || null,
+            _syncError: stored._syncError || null
+          };
+      };
+
+      const loadAudit = () => {
+        try {
+          return normalizeAudit(localAuditRepository.loadCurrent());
+        } catch (error) {
+          document.querySelector("#storage-status").textContent =
+            "No se pudo leer el guardado anterior; se abrió un borrador nuevo.";
+          return createAudit();
+        }
+      };
+
+      let audit = loadAudit();
+
+      const formatDate = (iso, includeTime = false) => {
+        if (!iso) return "";
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return "";
+
+        return new Intl.DateTimeFormat("es-MX", {
+          dateStyle: "medium",
+          ...(includeTime ? { timeStyle: "short" } : {})
+        }).format(date);
+      };
+
+      const saveAudit = (skipSyncFlag) => {
+        try {
+          if (!skipSyncFlag && audit._syncStatus === "synced") {
+            audit._syncStatus = "pending";
+          }
+          if (!audit._syncStatus) audit._syncStatus = "local";
+          localAuditRepository.saveCurrent(audit);
+          const sizeMb = (localAuditRepository.serializedSize(audit) / (1024 * 1024)).toFixed(2);
+          document.querySelector("#storage-status").textContent = audit.updatedAt
+            ? "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB"
+            : "Nueva auditoría guardada localmente · " + sizeMb + " MB";
+          updateSyncBadge();
+          if (isSupabaseConfigured() && !skipSyncFlag) {
+            syncAuditToSupabase(true);
+          }
+          return true;
+        } catch (error) {
+          document.querySelector("#storage-status").textContent =
+            "No fue posible guardar en este navegador. Descarga un respaldo.";
+          showToast("No se pudo guardar localmente.");
+          return false;
+        }
+      };
+
+      const getSummary = () => {
+        const summary = { total: audit.stations.length, verde: 0, amarillo: 0, rojo: 0, gris: 0 };
+        audit.stations.forEach((station) => {
+          summary[station.estado] += 1;
+        });
+        return summary;
+      };
+
+      const renderSummary = () => {
+        const summary = getSummary();
+        const reviewed = summary.total - summary.gris;
+        const percent = Math.round((reviewed / summary.total) * 100);
+
+        document.querySelector("#count-total").textContent = summary.total;
+        document.querySelector("#count-verde").textContent = summary.verde;
+        document.querySelector("#count-amarillo").textContent = summary.amarillo;
+        document.querySelector("#count-rojo").textContent = summary.rojo;
+        document.querySelector("#count-gris").textContent = summary.gris;
+        document.querySelector("#progress-bar").style.width = percent + "%";
+        document.querySelector("#progress-label").textContent = reviewed + " de " + summary.total + " revisadas";
+        document.querySelector("#progress-percent").textContent = percent + "%";
+        document.querySelector("#audit-date").textContent = "Iniciada " + formatDate(audit.startedAt);
+        document.querySelector("#last-update").textContent = audit.updatedAt
+          ? "Último cambio local: " + formatDate(audit.updatedAt, true)
+          : "Aún no hay cambios registrados.";
+      };
+
+      const renderStations = () => {
+        const currentFilter = filter.value;
+        const visible = audit.stations.filter(
+          (station) => currentFilter === "todos" || station.estado === currentFilter
+        );
+
+        if (visible.length === 0) {
+          grid.innerHTML = '<p class="station-empty">No hay estaciones con este estado.</p>';
+          return;
+        }
+
+        grid.innerHTML = visible.map((station) => `
+          <button
+            class="station"
+            type="button"
+            data-id="${station.id}"
+            data-status="${station.estado}"
+            aria-label="Abrir estación ${station.id}, ${STATUS_LABELS[station.estado]}"
+          >
+            <span class="station-number">E${String(station.id).padStart(2, "0")}</span>
+            ${station.photo ? '<span class="station-photo" title="Incluye fotografía" aria-label="Incluye fotografía">F</span>' : ""}
+            <span class="station-status">
+              <span class="station-dot" aria-hidden="true"></span>
+              ${STATUS_LABELS[station.estado]}
+            </span>
+          </button>
+        `).join("");
+      };
+
+      const render = () => {
+        renderSummary();
+        renderStations();
+      };
+
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("is-visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 2600);
+      };
+
+      const formatBytes = (bytes) => {
+        if (!Number.isFinite(bytes) || bytes <= 0) return "0 KB";
+        if (bytes < 1024 * 1024) return Math.ceil(bytes / 1024) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      };
+
+      const dataUrlBytes = (dataUrl) => {
+        const payload = String(dataUrl).split(",")[1] || "";
+        return Math.ceil((payload.length * 3) / 4);
+      };
+
+      const setPhotoPreview = (photo) => {
+        if (photo) {
+          photoPreview.src = photo.dataUrl;
+          photoPreview.classList.add("is-visible");
+          photoPlaceholder.classList.add("is-hidden");
+          photoStatus.textContent =
+            "Foto preparada: " + formatBytes(photo.size || dataUrlBytes(photo.dataUrl)) +
+            (photo.capturedAt ? " · " + formatDate(photo.capturedAt, true) : "");
+          return;
+        }
+
+        photoPreview.removeAttribute("src");
+        photoPreview.classList.remove("is-visible");
+        photoPlaceholder.classList.remove("is-hidden");
+        photoStatus.textContent = "Formatos admitidos: JPG, PNG y WebP.";
+      };
+
+      const readFileAsDataUrl = (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("No fue posible leer la imagen."));
+          reader.readAsDataURL(file);
+        });
+
+      const loadImage = (source) =>
+        new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error("El archivo no contiene una imagen válida."));
+          image.src = source;
+        });
+
+      const compressPhoto = async (file) => {
+        if (!file || !/^image\/(?:jpeg|png|webp)$/i.test(file.type)) {
+          throw new Error("Selecciona una imagen JPG, PNG o WebP.");
+        }
+        if (file.size > MAX_SOURCE_PHOTO_BYTES) {
+          throw new Error("La imagen original supera 15 MB.");
+        }
+
+        const source = await readFileAsDataUrl(file);
+        const image = await loadImage(source);
+        const maxSide = 1100;
+        const initialScale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+        let width = Math.max(1, Math.round(image.naturalWidth * initialScale));
+        let height = Math.max(1, Math.round(image.naturalHeight * initialScale));
+        let quality = 0.78;
+        let dataUrl = "";
+
+        for (let attempt = 0; attempt < 12; attempt += 1) {
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const context = canvas.getContext("2d", { alpha: false });
+          if (!context) throw new Error("El navegador no pudo procesar la imagen.");
+          context.fillStyle = "#ffffff";
+          context.fillRect(0, 0, width, height);
+          context.drawImage(image, 0, 0, width, height);
+          dataUrl = canvas.toDataURL("image/jpeg", quality);
+
+          if (dataUrl.length <= MAX_PHOTO_DATA_URL_LENGTH) break;
+          if (quality > 0.46) {
+            quality -= 0.08;
+          } else {
+            width = Math.max(1, Math.round(width * 0.82));
+            height = Math.max(1, Math.round(height * 0.82));
+            quality = 0.62;
+          }
+        }
+
+        if (!dataUrl || dataUrl.length > MAX_PHOTO_DATA_URL_LENGTH) {
+          throw new Error("No fue posible comprimir la imagen al tamaño local permitido.");
+        }
+
+        return {
+          dataUrl,
+          mimeType: "image/jpeg",
+          name: cleanText(file.name.replace(/\.[^.]+$/, "") + ".jpg", 160),
+          capturedAt: new Date().toISOString(),
+          size: dataUrlBytes(dataUrl)
+        };
+      };
+
+      const openStation = (id) => {
+        const station = audit.stations.find((item) => item.id === id);
+        if (!station) return;
+
+        selectedId = id;
+        formModified = false;
+        pendingPhoto = station.photo ? { ...station.photo } : null;
+        document.querySelector("#modal-title").textContent = "Estación " + id;
+        form.elements.estado.value = station.estado;
+        TEXT_FIELDS.forEach((field) => {
+          form.elements[field].value = station[field];
+        });
+        photoInput.value = "";
+        setPhotoPreview(pendingPhoto);
+        document.querySelector("#form-save-status").textContent = station.updatedAt
+          ? "Último guardado local: " + formatDate(station.updatedAt, true)
+          : "Los cambios se guardan al confirmar.";
+
+        if (!station.guiadx) station.guiadx = createGuiadx();
+        const modeBtn = document.querySelector(`.guide-mode-btn[data-mode="${station.guiadx.mode}"]`);
+        if (modeBtn) {
+          document.querySelectorAll(".guide-mode-btn").forEach(b => b.classList.remove("is-active"));
+          modeBtn.classList.add("is-active");
+        }
+        const photoTypeSel = document.querySelector("#guide-photo-type");
+        if (photoTypeSel && station.guiadx.photoType) photoTypeSel.value = station.guiadx.photoType;
+        renderGuideSections();
+        updateGuideRecommendations();
+
+        modal.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        form.elements.estado.focus();
+      };
+
+      const closeModal = () => {
+        modal.classList.remove("is-open");
+        document.body.style.overflow = "";
+        const stationButton = grid.querySelector(`[data-id="${selectedId}"]`);
+        selectedId = null;
+        formModified = false;
+        pendingPhoto = null;
+        photoInput.value = "";
+        if (stationButton) stationButton.focus();
+      };
+
+      const download = (filename, content, type) => {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      };
+
+      const createExportSnapshot = () => ({
+        schema: "sase310.lab310.audit",
+        version: SCHEMA_VERSION,
+        exportedAt: new Date().toISOString(),
+        scope: "local",
+        repository: localAuditRepository.kind,
+        audit
+      });
+
+      const exportJson = () => {
+        const date = new Date().toISOString().slice(0, 10);
+        download(
+          `lab-310-${date}.json`,
+          JSON.stringify(createExportSnapshot(), null, 2),
+          "application/json"
+        );
+        showToast("Respaldo JSON local descargado.");
+      };
+
+      const escapeHtml = (value) =>
+        String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+
+      const buildReportHtml = () => {
+        const summary = getSummary();
+        const reviewed = summary.total - summary.gris;
+        const stationCards = audit.stations.map((station) => {
+          let guideHtml = "";
+          if (station.guiadx) {
+            const g = station.guiadx;
+            const itemLabels = [];
+            GUIDE_SECTIONS.forEach(s => {
+              const sd = g.sections && g.sections[s.id];
+              if (sd && sd.selected) {
+                const opt = s.options.find(o => o.value === sd.selected);
+                if (opt) itemLabels.push(`<span class="guide-tag"><b>${escapeHtml(s.title)}:</b> ${escapeHtml(opt.label)}</span>`);
+              }
+            });
+            const recs = getRecomendaciones(g);
+            if (itemLabels.length) {
+              guideHtml = `<section class="guide-report"><strong>Diagnóstico por sección</strong><div class="guide-tags">${itemLabels.join("")}</div>`;
+              if (g.photoType) guideHtml += `<p class="guide-photo-info">Tipo de fotografía: ${escapeHtml(g.photoType)}</p>`;
+              guideHtml += "</section>";
+            }
+            if (recs.length) {
+              guideHtml += `<section class="guide-report-rec"><strong>Recomendaciones</strong>${recs.map(r => `<p>${escapeHtml(r)}</p>`).join("")}</section>`;
+            }
+          }
+          return `
+          <article class="station status-${station.estado}">
+            <header>
+              <div>
+                <p class="kicker">Estación ${String(station.id).padStart(2, "0")}</p>
+                <h2>${escapeHtml(STATUS_LABELS[station.estado])}</h2>
+              </div>
+              <span class="status">${escapeHtml(STATUS_LABELS[station.estado])}</span>
+            </header>
+            ${station.photo ? `<img src="${station.photo.dataUrl}" alt="Evidencia de estación ${station.id}">` : ""}
+            <dl>
+              <div><dt>CPU</dt><dd>${escapeHtml(station.cpu)}</dd></div>
+              <div><dt>Monitor</dt><dd>${escapeHtml(station.monitor)}</dd></div>
+              <div><dt>Teclado</dt><dd>${escapeHtml(station.teclado)}</dd></div>
+              <div><dt>Mouse</dt><dd>${escapeHtml(station.mouse)}</dd></div>
+              <div><dt>Red / Internet</dt><dd>${escapeHtml(station.red)}</dd></div>
+              <div><dt>Revisó</dt><dd>${escapeHtml(station.responsable || "Sin registrar")}</dd></div>
+            </dl>
+            ${guideHtml}
+            <section class="notes">
+              <strong>Observaciones</strong>
+              <p>${escapeHtml(station.observaciones || "Sin observaciones registradas.")}</p>
+            </section>
+            <footer>${station.updatedAt ? "Actualización local: " + escapeHtml(formatDate(station.updatedAt, true)) : "Sin actualización registrada"}</footer>
+          </article>
+        `;
+        }).join("");
+
+        return `<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Informe local · Laboratorio Digital 310</title>
+  <style>
+    :root{--ink:#0f172a;--muted:#64748b;--line:#dbe3ed;--green:#059669;--yellow:#ca8a04;--red:#dc2626;--gray:#64748b}
+    *{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{width:min(1100px,100%);margin:auto;padding:34px 22px 60px}.report-head{padding:30px;border-radius:24px;background:#0b1220;color:white}
+    h1{margin:0;font-size:clamp(36px,7vw,68px);letter-spacing:-.06em;line-height:.95}.report-head p{max-width:750px;color:#cbd5e1}
+    .scope{display:inline-block;padding:7px 11px;border:1px solid #475569;border-radius:999px;font-size:12px;font-weight:800}
+    .summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0}.summary div{padding:16px;border:1px solid var(--line);border-radius:16px;background:white}
+    .summary span{display:block;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase}.summary strong{font-size:30px}
+    .station{margin:14px 0;padding:22px;border:1px solid var(--line);border-left:6px solid var(--gray);border-radius:18px;background:white;break-inside:avoid}
+    .station.status-verde{border-left-color:var(--green)}.station.status-amarillo{border-left-color:var(--yellow)}.station.status-rojo{border-left-color:var(--red)}
+    .station header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.station h2{margin:0;font-size:25px}.kicker{margin:0;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+    .status{padding:7px 11px;border-radius:999px;background:#f1f5f9;font-size:12px;font-weight:850}.station img{display:block;width:100%;max-height:430px;margin:18px 0;border-radius:14px;object-fit:contain;background:#e2e8f0}
+    dl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}dl div{padding:11px;border-radius:11px;background:#f8fafc}dt{color:var(--muted);font-size:11px;font-weight:850;text-transform:uppercase}dd{margin:3px 0 0;font-weight:700}
+    .notes{padding:13px;border-radius:12px;background:#f8fafc}.notes p{margin:4px 0 0;white-space:pre-wrap}.station footer{margin-top:12px;color:var(--muted);font-size:11px}
+    .guide-report,.guide-report-rec{margin:12px 0;padding:11px;border-radius:11px;background:#f8fafc}.guide-report strong,.guide-report-rec strong{display:block;margin-bottom:6px;font-size:11px;text-transform:uppercase;color:var(--muted)}.guide-tags{display:flex;flex-wrap:wrap;gap:5px}.guide-tag{padding:4px 9px;border-radius:999px;background:#e8f0ff;font-size:11px;font-weight:700}.guide-tag b{font-weight:850}.guide-photo-info{margin:6px 0 0;font-size:11px;color:var(--muted)}.guide-report-rec p{margin:4px 0;padding:6px 9px;border-left:3px solid #eab308;background:white;border-radius:6px;font-size:12px}
+    .report-footer{margin-top:24px;color:var(--muted);font-size:12px;text-align:center}.print-button{position:fixed;right:20px;bottom:20px;padding:12px 18px;border:0;border-radius:999px;background:#0b1220;color:white;font-weight:850;cursor:pointer}
+    @media(max-width:720px){.summary{grid-template-columns:repeat(2,1fr)}dl{grid-template-columns:1fr}.report-head{padding:22px}}
+    @media print{body{background:white}main{width:auto;padding:0}.report-head{border-radius:0}.print-button{display:none}.station{box-shadow:none}.summary div{box-shadow:none}@page{margin:12mm}}
+  </style>
+</head>
+<body>
+  <main>
+    <header class="report-head">
+      <span class="scope">Informe generado localmente</span>
+      <h1>Laboratorio Digital 310</h1>
+      <p>Diagnóstico e inventario por estación. Este archivo no acredita notificación, firma, auditoría ni persistencia institucional.</p>
+      <p>Auditoría iniciada: ${escapeHtml(formatDate(audit.startedAt, true))} · Informe generado: ${escapeHtml(formatDate(new Date().toISOString(), true))}</p>
+    </header>
+    <section class="summary">
+      <div><span>Total</span><strong>${summary.total}</strong></div>
+      <div><span>Revisadas</span><strong>${reviewed}</strong></div>
+      <div><span>Funcionales</span><strong>${summary.verde}</strong></div>
+      <div><span>Observaciones</span><strong>${summary.amarillo}</strong></div>
+      <div><span>Fallas</span><strong>${summary.rojo}</strong></div>
+    </section>
+    ${stationCards}
+    <p class="report-footer">Laboratorio Digital 310 · Copia local en preparación</p>
+  </main>
+  <button class="print-button" type="button" onclick="window.print()">Imprimir / Guardar PDF</button>
+</body>
+</html>`;
+      };
+
+      const exportHtml = () => {
+        const date = new Date().toISOString().slice(0, 10);
+        download(
+          `informe-lab-310-${date}.html`,
+          buildReportHtml(),
+          "text/html;charset=utf-8"
+        );
+        showToast("Informe HTML local descargado.");
+      };
+
+      const printReport = () => {
+        const reportWindow = window.open("", "_blank");
+        if (!reportWindow) {
+          showToast("El navegador bloqueó la vista de impresión. Usa Exportar HTML.");
+          return;
+        }
+        reportWindow.opener = null;
+        reportWindow.document.open();
+        reportWindow.document.write(buildReportHtml());
+        reportWindow.document.close();
+        reportWindow.focus();
+        reportWindow.addEventListener("load", () => {
+          reportWindow.print();
+        }, { once: true });
+      };
+
+      const importJsonFile = async (file) => {
+        if (!file) return;
+        try {
+          const parsed = JSON.parse(await file.text());
+          const candidate = parsed && parsed.audit ? parsed.audit : parsed;
+          if (!candidate || !Array.isArray(candidate.stations)) {
+            throw new Error("El respaldo no contiene estaciones.");
+          }
+          if (parsed.schema && parsed.schema !== "sase310.lab310.audit") {
+            throw new Error("El esquema del respaldo no corresponde a Lab 310.");
+          }
+          if (Number(candidate.version) > SCHEMA_VERSION) {
+            throw new Error("El respaldo pertenece a una versión más reciente.");
+          }
+          const restored = normalizeAudit(candidate);
+          const confirmed = window.confirm(
+            "El respaldo reemplazará la auditoría guardada en este navegador. ¿Deseas continuar?"
+          );
+          if (!confirmed) return;
+
+          audit = restored;
+          audit.scope = "local";
+          audit.updatedAt = new Date().toISOString();
+          filter.value = "todos";
+          const saved = saveAudit();
+          render();
+          showToast(saved ? "Respaldo JSON restaurado localmente." : "Respaldo abierto, pero sin persistencia local.");
+        } catch (error) {
+          showToast("El archivo JSON no es un respaldo válido de Lab 310.");
+        } finally {
+          document.querySelector("#import-file").value = "";
+        }
+      };
+
+      // ---- Supabase Integration ----
+      const SUPABASE_CONFIG_KEY = "sase310.lab310.supabase.config";
+
+      const loadSupabaseConfig = () => {
+        try {
+          const raw = localStorage.getItem(SUPABASE_CONFIG_KEY);
+          return raw ? JSON.parse(raw) : { url: "", anonKey: "", auditToken: "" };
+        } catch { return { url: "", anonKey: "", auditToken: "" }; }
+      };
+
+      const saveSupabaseConfig = (config) => {
+        localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify(config));
+      };
+
+      let supabaseClient = null;
+
+      const initSupabase = () => {
+        const config = loadSupabaseConfig();
+        if (!config.url || !config.anonKey || typeof supabase === "undefined") return null;
+        try {
+          const headers = {};
+          if (config.auditToken) headers["x-audit-token"] = config.auditToken;
+          supabaseClient = supabase.createClient(config.url, config.anonKey, { global: { headers } });
+          return supabaseClient;
+        } catch { supabaseClient = null; return null; }
+      };
+
+      const isSupabaseConfigured = () => {
+        const config = loadSupabaseConfig();
+        return !!(config.url && config.anonKey && typeof supabase !== "undefined");
+      };
+
+      const buildSupabasePayload = () => {
+        const summary = getSummary();
+        const config = loadSupabaseConfig();
+        return {
+          title: "Auditoría Laboratorio Digital 310",
+          school: "Secundaria Diurna No. 310",
+          created_by: audit.stations.find(s => s.responsable)?.responsable || "Equipo auditor",
+          pilot_token: config.auditToken || null,
+          client_id: audit.id,
+          status: summary.gris === 0 ? "completed" : "draft",
+          summary: summary
+        };
+      };
+
+      const uploadStationPhoto = async (client, auditId, station) => {
+        if (!station.photo || !station.photo.dataUrl) return null;
+        const base64Data = station.photo.dataUrl.split(",")[1] || "";
+        const binaryStr = atob(base64Data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+        const fileName = auditId + "/" + station.id + "_" + Date.now() + ".jpg";
+        try {
+          const { error } = await client.storage.from("station-photos").upload(fileName, bytes, { contentType: "image/jpeg", upsert: true });
+          if (error) throw error;
+          return fileName;
+        } catch { return null; }
+      };
+
+      const handleSupabaseError = (error) => {
+        if (!error) return "Error desconocido al conectar con Supabase.";
+        if (error.code === "PGRST301") return "Permiso denegado. Verifica las políticas RLS y el token de auditoría.";
+        if (error.code === "23505") return "Registro duplicado en Supabase.";
+        const msg = error.message || "";
+        if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) return "No se pudo conectar con Supabase. Revisa tu conexión a Internet.";
+        if (msg.includes("Invalid API key") || msg.includes("invalid_api_key")) return "La llave anónima (SUPABASE_ANON_KEY) no es válida.";
+        if (msg.includes("not found") || msg.includes("404")) return "La URL de Supabase no es correcta (proyecto no encontrado).";
+        if (msg.includes("JWS") || msg.includes("JWT")) return "Error de autenticación con Supabase. Verifica las credenciales.";
+        return msg || "Error de conexión con Supabase.";
+      };
+
+      const updateSyncBadge = () => {
+        const el = document.querySelector("#sync-status");
+        if (!el) return;
+        const status = audit._syncStatus || "local";
+        if (!isSupabaseConfigured()) { el.style.display = "none"; return; }
+        el.style.display = "inline-flex";
+        const classes = { local: "sync-badge-local", pending: "sync-badge-pending", synced: "sync-badge-synced", error: "sync-badge-error" };
+        const labels = { local: "Sin sincronizar", pending: "Pendiente de sincronizar", synced: "Sincronizado", error: "Error de sincronización" };
+        el.textContent = labels[status] || "Local";
+        el.className = "sync-badge " + (classes[status] || "sync-badge-local");
+      };
+
+      const syncAuditToSupabase = async (silent) => {
+        const client = initSupabase();
+        if (!client) { if (!silent) showToast("Supabase no configurado. Abre Configuración."); return false; }
+        try {
+          if (!silent) showToast("Sincronizando con Supabase…");
+          if (silent) document.querySelector("#sync-status").textContent = "Sincronizando…";
+          const payload = buildSupabasePayload();
+          const { data: auditData, error: auditError } = await client.from("lab_audits")
+            .upsert({ client_id: payload.client_id, title: payload.title, school: payload.school, created_by: payload.created_by, pilot_token: payload.pilot_token, status: payload.status, summary: payload.summary, updated_at: new Date().toISOString() }, { onConflict: "client_id", ignoreDuplicates: false })
+            .select("id").single();
+          if (auditError) throw auditError;
+          const remoteAuditId = auditData.id;
+          let syncedCount = 0;
+          for (const station of audit.stations) {
+            let photoPath = null;
+            if (station.photo) photoPath = await uploadStationPhoto(client, remoteAuditId, station);
+            const { error: sErr } = await client.from("lab_stations")
+              .upsert({ audit_id: remoteAuditId, station_number: station.id, status: station.estado, cpu_status: station.cpu, monitor_status: station.monitor, keyboard_status: station.teclado, mouse_status: station.mouse, network_status: station.red, observations: station.observaciones, photo_path: photoPath, raw_data: station, updated_at: new Date().toISOString() }, { onConflict: "audit_id,station_number", ignoreDuplicates: false });
+            if (!sErr) syncedCount++;
+          }
+          audit._syncStatus = "synced";
+          audit._syncedAt = new Date().toISOString();
+          if (audit._syncError) delete audit._syncError;
+          saveAudit(true);
+          render();
+          showToast("Sincronizado: " + syncedCount + " de " + audit.stations.length + " estaciones.");
+          return true;
+        } catch (error) {
+          const userMsg = handleSupabaseError(error);
+          audit._syncStatus = "error";
+          audit._syncError = userMsg;
+          saveAudit(true);
+          render();
+          showToast(userMsg);
+          return false;
+        }
+      };
+      // ---- End Supabase Integration ----
+
+      // ---- Guided Diagnostic UI ----
+      const renderGuideSections = () => {
+        const container = document.querySelector("#guide-sections");
+        if (!container) return;
+        const station = audit.stations.find(s => s.id === selectedId);
+        if (!station) { container.innerHTML = ""; return; }
+
+        const guiadx = station.guiadx || createGuiadx();
+        const mode = guiadx.mode || "rapido";
+        const visible = GUIDE_SECTIONS.filter(s => mode === "completo" || s.mode === "rapido");
+
+        container.innerHTML = visible.map(section => {
+          const secData = guiadx.sections[section.id] || { selected: "", notes: "" };
+          const selectedOption = section.options.find(o => o.value === secData.selected);
+          const summaryStatus = selectedOption ? selectedOption.label : "";
+
+          const optionsHtml = section.options.map(opt =>
+            `<button type="button" class="guide-option-btn${secData.selected === opt.value ? " is-selected" : ""}" data-section="${section.id}" data-value="${opt.value}" data-field="${opt.field || ""}" data-field-value="${opt.valueMap || ""}">${escapeHtml(opt.label)}</button>`
+          ).join("");
+
+          const commandsHtml = section.commands.length
+            ? `<div class="guide-commands">${section.commands.map(c =>
+                `<div class="guide-cmd-block"><code class="guide-cmd-code">${escapeHtml(c.cmd)}</code><button type="button" class="guide-cmd-copy" data-cmd="${escapeHtml(c.cmd)}">Copiar</button><span class="guide-cmd-desc">${escapeHtml(c.desc)}</span></div>`
+              ).join("")}</div>`
+            : "";
+
+          const notesHtml = `<textarea class="guide-notes" data-section="${section.id}" placeholder="Notas para esta sección..." maxlength="300">${escapeHtml(secData.notes || "")}</textarea>`;
+
+          return `<details class="guide-details"${secData.selected ? " open" : ""}>
+            <summary class="guide-summary"><span class="guide-summary-title">${escapeHtml(section.title)}</span>${summaryStatus ? `<span class="guide-summary-status">${escapeHtml(summaryStatus)}</span>` : ""}</summary>
+            <div class="guide-body"><p class="guide-instruction">${escapeHtml(section.instruction)}</p><div class="guide-options">${optionsHtml}</div>${commandsHtml}${notesHtml}</div>
+          </details>`;
+        }).join("");
+      };
+
+      const updateGuideRecommendations = () => {
+        const listEl = document.querySelector("#guide-recommendations-list");
+        if (!listEl) return;
+        const station = audit.stations.find(s => s.id === selectedId);
+        if (!station) return;
+        const guiadx = station.guiadx || createGuiadx();
+        const recs = getRecomendaciones(guiadx);
+        if (recs.length === 0) {
+          listEl.innerHTML = '<p class="guide-recommendations-empty">Selecciona opciones en las secciones de arriba para generar recomendaciones.</p>';
+          return;
+        }
+        listEl.innerHTML = recs.map(r => `<div class="guide-recommendation-item">${escapeHtml(r)}</div>`).join("");
+      };
+
+      const syncGuiadxFromDom = () => {
+        const station = audit.stations.find(s => s.id === selectedId);
+        if (!station) return null;
+        if (!station.guiadx) station.guiadx = createGuiadx();
+        const guiEl = document.querySelector("#guide-sections");
+        if (!guiEl) return station.guiadx;
+
+        station.guiadx.mode = document.querySelector(".guide-mode-btn.is-active")?.dataset?.mode || "rapido";
+        station.guiadx.photoType = document.querySelector("#guide-photo-type")?.value || "general";
+
+        GUIDE_SECTIONS.forEach(section => {
+          const secEl = guiEl.querySelector(`[data-section="${section.id}"]`);
+          const selectedBtn = guiEl.querySelector(`.guide-option-btn.is-selected[data-section="${section.id}"]`);
+          const notesEl = guiEl.querySelector(`textarea.guide-notes[data-section="${section.id}"]`);
+          if (station.guiadx.sections[section.id]) {
+            station.guiadx.sections[section.id].selected = selectedBtn ? selectedBtn.dataset.value : "";
+            station.guiadx.sections[section.id].notes = notesEl ? notesEl.value.slice(0, 300) : "";
+          }
+        });
+
+        station.guiadx.recomendaciones = getRecomendaciones(station.guiadx);
+        return station.guiadx;
+      };
+
+      const autoPopulateLegacyFields = (guiadx) => {
+        const result = {};
+        if (!guiadx || !guiadx.sections) return result;
+        GUIDE_SECTIONS.forEach(section => {
+          const secData = guiadx.sections[section.id];
+          if (!secData || !secData.selected) return;
+          const opt = section.options.find(o => o.value === secData.selected);
+          if (opt && opt.field && opt.valueMap) {
+            const existing = result[opt.field] || "";
+            if (!existing || existing === "Pendiente") {
+              result[opt.field] = opt.valueMap;
+            }
+          }
+        });
+        return result;
+      };
+
+      const handleGuideOptionClick = (btn) => {
+        const sectionId = btn.dataset.section;
+        const value = btn.dataset.value;
+        const parent = btn.closest(".guide-options");
+        if (!parent) return;
+
+        const station = audit.stations.find(s => s.id === selectedId);
+        if (!station) return;
+        if (!station.guiadx) station.guiadx = createGuiadx();
+
+        const isSame = station.guiadx.sections[sectionId]?.selected === value;
+        const newValue = isSame ? "" : value;
+
+        parent.querySelectorAll(".guide-option-btn").forEach(b => b.classList.remove("is-selected"));
+        if (!isSame) btn.classList.add("is-selected");
+
+        if (!station.guiadx.sections[sectionId]) station.guiadx.sections[sectionId] = { selected: "", notes: "" };
+        station.guiadx.sections[sectionId].selected = newValue;
+
+        const details = btn.closest(".guide-details");
+        if (details && newValue) details.setAttribute("open", "");
+        if (details && !newValue) details.removeAttribute("open");
+
+        const summaryStatus = details?.querySelector(".guide-summary-status");
+        if (summaryStatus) {
+          const opt = GUIDE_SECTIONS.find(s => s.id === sectionId)?.options.find(o => o.value === newValue);
+          summaryStatus.textContent = opt ? opt.label : "";
+          summaryStatus.style.display = newValue ? "" : "none";
+        }
+
+        const autoFields = autoPopulateLegacyFields(station.guiadx);
+        Object.entries(autoFields).forEach(([key, val]) => {
+          if (form.elements[key]) form.elements[key].value = val;
+        });
+
+        updateGuideRecommendations();
+        formModified = true;
+      };
+
+      const handleGuideModeToggle = (btn) => {
+        document.querySelectorAll(".guide-mode-btn").forEach(b => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        const station = audit.stations.find(s => s.id === selectedId);
+        if (station) {
+          if (!station.guiadx) station.guiadx = createGuiadx();
+          station.guiadx.mode = btn.dataset.mode;
+        }
+        renderGuideSections();
+        updateGuideRecommendations();
+      };
+
+      const handleCommandCopy = async (btn) => {
+        const cmd = btn.dataset.cmd;
+        if (!cmd) return;
+        try {
+          await navigator.clipboard.writeText(cmd);
+          btn.textContent = "Copiado";
+          btn.classList.add("is-copied");
+          setTimeout(() => { btn.textContent = "Copiar"; btn.classList.remove("is-copied"); }, 1800);
+        } catch {
+          showToast("No se pudo copiar el comando.");
+        }
+      };
+
+      document.addEventListener("click", (event) => {
+        const guideOptBtn = event.target.closest(".guide-option-btn");
+        if (guideOptBtn) { handleGuideOptionClick(guideOptBtn); return; }
+
+        const copyBtn = event.target.closest(".guide-cmd-copy");
+        if (copyBtn) { handleCommandCopy(copyBtn); return; }
+
+        const modeBtn = event.target.closest(".guide-mode-btn");
+        if (modeBtn) { handleGuideModeToggle(modeBtn); return; }
+      });
+
+      document.addEventListener("input", (event) => {
+        const notesEl = event.target.closest("textarea.guide-notes");
+        if (notesEl) {
+          const station = audit.stations.find(s => s.id === selectedId);
+          if (station) {
+            if (!station.guiadx) station.guiadx = createGuiadx();
+            const sectionId = notesEl.dataset.section;
+            if (station.guiadx.sections[sectionId]) {
+              station.guiadx.sections[sectionId].notes = notesEl.value.slice(0, 300);
+            }
+            formModified = true;
+          }
+        }
+      });
+      // ---- End Guided Diagnostic UI ----
+
+      grid.addEventListener("click", (event) => {
+        const button = event.target.closest(".station");
+        if (!button) return;
+        openStation(Number(button.dataset.id));
+      });
+
+      filter.addEventListener("change", renderStations);
+      document.querySelector("#close-modal").addEventListener("click", closeModal);
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+        if (event.key === "Escape" && document.querySelector("#supabase-config-modal").classList.contains("is-open")) {
+          document.querySelector("#supabase-config-modal").classList.remove("is-open");
+          document.body.style.overflow = "";
+        }
+      });
+
+      photoInput.addEventListener("change", async () => {
+        const file = photoInput.files && photoInput.files[0];
+        if (!file) return;
+        photoStatus.textContent = "Comprimiendo fotografía...";
+        photoInput.disabled = true;
+
+        try {
+          pendingPhoto = await compressPhoto(file);
+          formModified = true;
+          setPhotoPreview(pendingPhoto);
+          showToast("Fotografía preparada. Guarda la ficha para conservarla.");
+        } catch (error) {
+          photoInput.value = "";
+          photoStatus.textContent = error instanceof Error ? error.message : "No fue posible procesar la fotografía.";
+          showToast("No fue posible preparar la fotografía.");
+        } finally {
+          photoInput.disabled = false;
+        }
+      });
+
+      document.querySelector("#remove-photo").addEventListener("click", () => {
+        pendingPhoto = null;
+        formModified = true;
+        photoInput.value = "";
+        setPhotoPreview(null);
+        showToast("Fotografía retirada de la ficha. Guarda para confirmar.");
+      });
+
+      form.addEventListener("input", () => {
+        formModified = true;
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const station = audit.stations.find((item) => item.id === selectedId);
+        if (!station) return;
+
+        station.estado = VALID_STATES.includes(form.elements.estado.value)
+          ? form.elements.estado.value
+          : "gris";
+        TEXT_FIELDS.forEach((field) => {
+          station[field] = cleanText(form.elements[field].value, field === "observaciones" ? 1000 : 120);
+        });
+        station.photo = pendingPhoto ? { ...pendingPhoto } : null;
+
+        syncGuiadxFromDom();
+        const autoFields = autoPopulateLegacyFields(station.guiadx);
+        Object.entries(autoFields).forEach(([key, val]) => {
+          if (TEXT_FIELDS.includes(key)) station[key] = val;
+        });
+
+        station.updatedAt = new Date().toISOString();
+        audit.updatedAt = station.updatedAt;
+
+        const saved = saveAudit();
+        render();
+        closeModal();
+        showToast(saved ? "Diagnóstico guardado localmente." : "Cambios visibles, pero sin guardado persistente.");
+      });
+
+      window.addEventListener("beforeunload", (event) => {
+        if (formModified) {
+          event.preventDefault();
+          event.returnValue = "";
+        }
+      });
+
+      document.querySelector("#new-audit").addEventListener("click", () => {
+        const confirmed = window.confirm(
+          "Esto reemplazará los datos guardados en este navegador. Descarga un respaldo antes de continuar si deseas conservarlos."
+        );
+        if (!confirmed) return;
+
+        audit = createAudit();
+        filter.value = "todos";
+        saveAudit();
+        render();
+        showToast("Nueva auditoría local iniciada.");
+      });
+
+      document.querySelector("#export-json").addEventListener("click", exportJson);
+      document.querySelector("#export-html").addEventListener("click", exportHtml);
+      document.querySelector("#print-report").addEventListener("click", printReport);
+      document.querySelector("#import-json").addEventListener("click", () => {
+        document.querySelector("#import-file").click();
+      });
+      document.querySelector("#import-file").addEventListener("change", (event) => {
+        importJsonFile(event.target.files && event.target.files[0]);
+      });
+
+      // Backup dropdown toggle
+      document.querySelector("#backup-toggle").addEventListener("click", (event) => {
+        event.stopPropagation();
+        document.querySelector("#backup-menu").classList.toggle("is-open");
+      });
+      document.addEventListener("click", () => {
+        document.querySelector("#backup-menu").classList.remove("is-open");
+      }, false);
+      document.querySelector("#backup-menu").addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+
+      document.querySelector("#config-supabase").addEventListener("click", () => {
+        const config = loadSupabaseConfig();
+        document.querySelector("#supabase-url").value = config.url;
+        document.querySelector("#supabase-anon-key").value = config.anonKey;
+        document.querySelector("#supabase-audit-token").value = config.auditToken || "";
+        document.querySelector("#supabase-config-status").textContent = "Configuración guardada en este navegador.";
+        document.querySelector("#supabase-config-modal").classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        document.querySelector("#supabase-url").focus();
+      });
+
+      document.querySelector("#close-supabase-config").addEventListener("click", () => {
+        document.querySelector("#supabase-config-modal").classList.remove("is-open");
+        document.body.style.overflow = "";
+      });
+
+      document.querySelector("#supabase-config-modal").addEventListener("click", (event) => {
+        if (event.target === event.currentTarget) {
+          document.querySelector("#supabase-config-modal").classList.remove("is-open");
+          document.body.style.overflow = "";
+        }
+      });
+
+      document.querySelector("#supabase-config-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const config = {
+          url: document.querySelector("#supabase-url").value.trim(),
+          anonKey: document.querySelector("#supabase-anon-key").value.trim(),
+          auditToken: document.querySelector("#supabase-audit-token").value.trim() || ""
+        };
+        if (!config.url || !config.anonKey) {
+          document.querySelector("#supabase-config-status").textContent = "SUPABASE_URL y SUPABASE_ANON_KEY son obligatorios.";
+          return;
+        }
+        saveSupabaseConfig(config);
+        supabaseClient = null;
+        document.querySelector("#supabase-config-status").textContent = "Configuración guardada. Puedes sincronizar ahora.";
+        updateSyncBadge();
+        showToast("Configuración de Supabase guardada.");
+      });
+
+      document.querySelector("#test-supabase-connection").addEventListener("click", async () => {
+        const url = document.querySelector("#supabase-url").value.trim();
+        const anonKey = document.querySelector("#supabase-anon-key").value.trim();
+        const auditToken = document.querySelector("#supabase-audit-token").value.trim() || "";
+        if (!url || !anonKey) {
+          document.querySelector("#supabase-config-status").textContent = "Completa URL y ANON_KEY primero.";
+          return;
+        }
+        document.querySelector("#supabase-config-status").textContent = "Probando conexión…";
+        try {
+          const testClient = supabase.createClient(url, anonKey, { global: { headers: auditToken ? { "x-audit-token": auditToken } : {} } });
+          const { error } = await testClient.from("lab_audits").select("id", { count: "exact", head: true });
+          if (error) throw error;
+          document.querySelector("#supabase-config-status").textContent = "Conexión exitosa. Las tablas existen y responden.";
+          showToast("Conexión con Supabase verificada.");
+        } catch (error) {
+          const msg = handleSupabaseError(error);
+          document.querySelector("#supabase-config-status").textContent = msg;
+          showToast(msg);
+        }
+      });
+
+      if (audit.updatedAt) {
+        const sizeMb = (localAuditRepository.serializedSize(audit) / (1024 * 1024)).toFixed(2);
+        document.querySelector("#storage-status").textContent =
+          "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB";
+      }
+      updateSyncBadge();
+
+      render();
+    })();
+  </script>
+  <script>
+    (() => {
+      const STORAGE_KEY = "lab310_direccion_respuestas_v1";
+      const GROUP_LABELS = {
+        proyecto: "1. Proyecto original",
+        rack: "2. Rack y cableado",
+        internet: "3. Internet",
+        pass: "4. Contraseñas y usuarios",
+        op: "5. Operación institucional",
+        tiempos: "6. Tiempos, materiales y cobertura"
+      };
+      const QUESTION_LABELS = {
+        proyecto_autorizo: "Quién autorizó el proyecto",
+        proyecto_memoria: "Existe memoria/plano",
+        proyecto_fecha: "Fecha de instalación",
+        proyecto_objetivo: "Objetivo original",
+        rack_instalo: "Quién instaló el rack",
+        rack_cable_amarillo: "Cable amarillo",
+        rack_electricidad: "Conexión eléctrica",
+        rack_etiquetado: "Etiquetado en paneles",
+        internet_contratado: "Servicio contratado activo",
+        internet_compartir: "Dirección puede compartir",
+        internet_capacidad: "Capacidad para 30 equipos",
+        internet_wifi_pass: "Contraseña WiFi",
+        internet_dedicado: "Internet dedicado",
+        pass_admin: "Admin local",
+        pass_bios: "BIOS",
+        pass_usuarios: "Usuarios creados",
+        pass_politica: "Política de acceso",
+        op_autorizar_fase: "Autoriza fase 1",
+        op_responsable: "Responsable de seguimiento",
+        op_fecha: "Fecha estimada de inicio",
+        op_presupuesto: "Presupuesto autorizado",
+        op_horario: "Horario definido",
+        tiempos_grupos: "Grupos por semana",
+        tiempos_docentes: "Docentes con acceso",
+        tiempos_fecha_limite: "Fecha límite",
+        tiempos_software: "Software necesario"
+      };
+      const getOptLabel = (v) => {
+        const m = { si:"Sí", no:"No", no_se_sabe:"No se sabe", requiere_revision:"Requiere revisión" };
+        return m[v] || v;
+      };
+      const getGroup = (id) => {
+        if (id.startsWith("proyecto")) return "proyecto";
+        if (id.startsWith("rack")) return "rack";
+        if (id.startsWith("internet")) return "internet";
+        if (id.startsWith("pass")) return "pass";
+        if (id.startsWith("op")) return "op";
+        if (id.startsWith("tiempos")) return "tiempos";
+        return "otro";
+      };
+      const renderDirResponses = () => {
+        const body = document.getElementById("dir-responses-body");
+        if (!body) return;
+        let data;
+        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { data = {}; }
+        const hasData = Object.values(data).some(a => a && (a.option || a.open));
+        if (!hasData) {
+          body.innerHTML = '<p class="dir-response-empty">Aún no hay respuestas guardadas de Dirección.</p>';
+          return;
+        }
+        const groups = {};
+        Object.keys(data).forEach(id => {
+          const g = getGroup(id);
+          if (!groups[g]) groups[g] = [];
+          groups[g].push(id);
+        });
+        let html = "";
+        ["proyecto","rack","internet","pass","op","tiempos"].forEach(g => {
+          if (!groups[g] || !groups[g].length) return;
+          html += '<div class="dir-response-group"><h4>' + (GROUP_LABELS[g] || g) + '</h4>';
+          groups[g].forEach(id => {
+            const a = data[id];
+            if (!a || (!a.option && !a.open)) return;
+            const parts = [];
+            if (a.option) parts.push(getOptLabel(a.option));
+            if (a.open) parts.push("<em>" + a.open + "</em>");
+            html += '<div class="dir-response-item"><strong>' + (QUESTION_LABELS[id] || id) + '</strong><span>' + parts.join(" — ") + '</span></div>';
+          });
+          html += '</div>';
+        });
+        body.innerHTML = html;
+      };
+      const details = document.getElementById("dir-responses");
+      if (details) {
+        details.addEventListener("toggle", () => { if (details.open) renderDirResponses(); });
+      }
+    })();
+  </script>
+</body>
+</html>

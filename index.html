@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Laboratorio Digital 310</title>
+  <style>
+    :root {
+      --bg: #f4f7fc;
+      --surface: rgba(255,255,255,0.72);
+      --ink: #1a1a2e;
+      --muted: #5a5a7a;
+      --line: rgba(0,0,0,0.08);
+      --blue: #2d5bff;
+      --blue-soft: rgba(45,91,255,0.08);
+      --green: #0f7b4a;
+      --green-soft: rgba(15,123,74,0.08);
+      --navy: #0b1220;
+      --glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.35));
+      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(45,91,255,0.06), transparent 40%),
+        radial-gradient(ellipse at 80% 100%, rgba(15,123,74,0.05), transparent 40%);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    main {
+      width: 100%;
+      max-width: 720px;
+      text-align: center;
+    }
+    .hero-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px 32px 40px;
+      box-shadow: var(--shadow);
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin-bottom: 6px;
+    }
+    .gradient {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d5bff 50%, #5a5a7a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+    .cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card-btn, .card-link {
+      flex: 1 1 240px;
+      max-width: 320px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 20px 24px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      -webkit-user-select: none;
+      user-select: none;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    .card-btn:hover, .card-link:hover, .card-btn:focus-visible, .card-link:focus-visible {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .card-btn:active, .card-link:active {
+      transform: translateY(0);
+    }
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .card-icon.i {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .card-icon.r {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+    .card-btn h2, .card-link h2 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .card-btn p, .card-link p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #fff7cf;
+      color: #92400e;
+    }
+    .footer-note {
+      margin-top: 32px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 46, 0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 32px 28px 24px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.2);
+      animation: fadeUp 0.2s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .modal-box p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+    .modal-box input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      background: rgba(255,255,255,0.7);
+      font-family: inherit;
+    }
+    .modal-box input:focus { border-color: var(--blue); }
+    .modal-error { color: #dc2626; font-size: 13px; margin-top: 8px; display: none; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .modal-actions button {
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      font-family: inherit;
+    }
+    .modal-actions button:active { opacity: 0.7; }
+    .btn-cancel { background: var(--blue-soft); color: var(--ink); }
+    .btn-confirm { background: var(--navy); color: #fff; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="hero-card">
+      <div class="brand-mark">310</div>
+      <h1><span class="gradient">Laboratorio Digital 310</span></h1>
+      <p class="subtitle">Secundaria T&eacute;cnica 310 &middot; Prof. Hugo S&aacute;nchez Res&eacute;ndiz</p>
+
+      <div class="cards">
+        <button class="card-btn" id="btn-inventario" aria-label="Inventario y auditor&iacute;a, acceso restringido">
+          <span class="card-icon i">I</span>
+          <h2>Inventario / Auditor&iacute;a</h2>
+          <p>Captura t&eacute;cnica de estaciones, diagn&oacute;stico guiado y evidencia fotogr&aacute;fica</p>
+          <span class="badge">Acceso restringido</span>
+        </button>
+
+        <a href="informe-preliminar.html" class="card-link" aria-label="Informes y resumen ejecutivo">
+          <span class="card-icon r">R</span>
+          <h2>Informes</h2>
+          <p>Resumen ejecutivo, cuestionario para Direcci&oacute;n y resultados de la auditor&iacute;a</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-note">Herramienta interna de diagn&oacute;stico local</div>
+  </main>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <h3>Acceso a Inventario</h3>
+      <p>Ingresa la contrase&ntilde;a de acceso t&eacute;cnico:</p>
+      <input type="password" id="password-input" placeholder="Contrase&ntilde;a" autocomplete="off" spellcheck="false">
+      <div class="modal-error" id="password-error">Contrase&ntilde;a incorrecta</div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="btn-cancel">Cancelar</button>
+        <button class="btn-confirm" id="btn-confirm">Acceder</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const PASSWORD = 'hugo.310.lab';
+      const overlay = document.getElementById('modal-overlay');
+      const input = document.getElementById('password-input');
+      const error = document.getElementById('password-error');
+      const btnConfirm = document.getElementById('btn-confirm');
+      const btnCancel = document.getElementById('btn-cancel');
+      const btnInventario = document.getElementById('btn-inventario');
+
+      const openModal = () => {
+        overlay.classList.add('open');
+        error.style.display = 'none';
+        input.value = '';
+        input.focus();
+      };
+      const closeModal = () => overlay.classList.remove('open');
+      const checkPassword = () => {
+        if (input.value === PASSWORD) {
+          window.location.href = 'inventario.html';
+        } else {
+          error.style.display = 'block';
+          input.focus();
+          input.select();
+        }
+      };
+      btnInventario.addEventListener('click', openModal);
+      btnConfirm.addEventListener('click', checkPassword);
+      btnCancel.addEventListener('click', closeModal);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkPassword();
+        if (e.key === 'Escape') closeModal();
+      });
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+      });
+    })();
+  </script>
+</body>
+</html>

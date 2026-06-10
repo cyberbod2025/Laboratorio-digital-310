@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f6f2">
+  <title>Informe preliminar · Laboratorio Digital 310</title>
+  <style>
+    :root {
+      --bg: #f4f7fc;
+      --surface: rgba(255,255,255,0.72);
+      --surface-border: rgba(255,255,255,0.9);
+      --ink: #1a1a2e;
+      --muted: #5a5a7a;
+      --line: rgba(0,0,0,0.08);
+      --blue: #2d5bff;
+      --blue-soft: rgba(45,91,255,0.08);
+      --green: #0f7b4a;
+      --green-soft: rgba(15,123,74,0.08);
+      --yellow: #b8860b;
+      --yellow-soft: rgba(184,134,11,0.08);
+      --red: #c62828;
+      --red-soft: rgba(198,40,40,0.08);
+      --glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.35));
+      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(45,91,255,0.06), transparent 40%),
+        radial-gradient(ellipse at 80% 100%, rgba(15,123,74,0.05), transparent 40%);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    .shell {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: 28px clamp(16px, 3vw, 32px) 60px;
+    }
+    .card {
+      padding: 28px 30px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+    .card + .card { margin-top: 20px; }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 950;
+      letter-spacing: -0.055em;
+      line-height: 0.95;
+    }
+    .gradient {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d5bff 50%, #5a5a7a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .meta-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.03);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .meta-item strong { display: block; color: var(--ink); }
+    .meta-item span { color: var(--muted); }
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      font-weight: 850;
+    }
+    p { margin: 0 0 12px; color: var(--muted); }
+    p:last-child { margin-bottom: 0; }
+    .card p, .card li { color: var(--muted); font-size: 0.95rem; }
+    ul { margin: 8px 0 0; padding-left: 20px; }
+    li { margin-bottom: 6px; color: var(--muted); font-size: 0.95rem; }
+    .tag {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .tag-green { background: var(--green-soft); color: var(--green); }
+    .tag-yellow { background: var(--yellow-soft); color: var(--yellow); }
+    .tag-red { background: var(--red-soft); color: var(--red); }
+    .tag-blue { background: var(--blue-soft); color: var(--blue); }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 20px;
+      padding: 6px 14px 6px 10px;
+      border-radius: 40px;
+      border: 1px solid var(--line);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .back-link:hover { border-color: var(--blue); color: var(--blue); }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .mini-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.025);
+      border: 1px solid var(--line);
+    }
+    .mini-card p { font-size: 0.88rem; }
+    .border-left-yellow { border-left: 4px solid var(--yellow); padding-left: 18px; }
+    .border-left-red { border-left: 4px solid var(--red); padding-left: 18px; }
+    .border-left-green { border-left: 4px solid var(--green); padding-left: 18px; }
+
+    /* Form */
+    .form-section { margin-top: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 850;
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+    .form-group textarea,
+    .form-group input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      font: inherit;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.7);
+      transition: border-color 0.15s;
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .form-group textarea:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: white;
+    }
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 0.85rem;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+    .btn-primary {
+      background: #1a1a2e;
+      color: white;
+      border-color: transparent;
+    }
+    .btn-primary:hover { background: #2a2a4e; }
+    .btn-secondary { background: rgba(0,0,0,0.04); border-color: transparent; }
+    .save-status {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    th { font-weight: 850; color: var(--ink); }
+    .footer-note {
+      margin-top: 30px;
+      padding: 22px 24px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.025);
+      border: 1px solid var(--line);
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .footer-note a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 750;
+    }
+    .footer-note a:hover { color: var(--blue); }
+    .toast {
+      position: fixed;
+      z-index: 40;
+      right: 20px;
+      bottom: 20px;
+      max-width: min(360px, calc(100vw - 40px));
+      padding: 13px 17px;
+      border-radius: 14px;
+      background: #1a1a2e;
+      color: white;
+      font-size: 0.86rem;
+      font-weight: 750;
+      box-shadow: 0 18px 46px rgba(0,0,0,0.28);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .toast.is-visible { opacity: 1; transform: translateY(0); }
+    .tech-link {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.72rem;
+    }
+    .tech-link a {
+      color: #aaa;
+      text-decoration: none;
+    }
+    .tech-link a:hover { color: var(--blue); }
+
+    /* ── Cuestionario para Dirección ── */
+    .cq-section { margin-top: 20px; }
+    .cq-group {
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.5);
+    }
+    .cq-group-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 850;
+      font-size: 0.95rem;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      list-style: none;
+    }
+    .cq-group-summary::-webkit-details-marker { display: none; }
+    .cq-group-summary::before {
+      content: "▶";
+      font-size: 0.7rem;
+      color: var(--muted);
+      transition: transform 180ms ease;
+      flex-shrink: 0;
+    }
+    .cq-group[open] > .cq-group-summary::before { transform: rotate(90deg); }
+    .cq-group-body {
+      padding: 4px 18px 16px;
+      border-top: 1px solid var(--line);
+    }
+    .cq-question {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.6);
+    }
+    .cq-question-text {
+      margin: 0 0 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    .cq-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cq-option {
+      min-height: 38px;
+      padding: 8px 14px;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      border-radius: 999px;
+      background: white;
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 140ms ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .cq-option:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+    .cq-option.is-selected {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 3px 10px rgba(45,91,255,0.25);
+    }
+    .cq-open {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 9px 12px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 11px;
+      font: inherit;
+      font-size: 0.85rem;
+      background: white;
+      resize: vertical;
+      transition: border-color 0.15s;
+    }
+    .cq-open:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    .cq-status {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* ── Resumen para Hugo ── */
+    .btn-success {
+      background: #0f7b4a;
+      color: white;
+      border-color: transparent;
+    }
+    .btn-success:hover { background: #0d6b3f; }
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      border-color: transparent;
+    }
+    .btn-whatsapp:hover { background: #1ebe5c; }
+    .btn-email {
+      background: #2d5bff;
+      color: white;
+      border-color: transparent;
+    }
+    .btn-email:hover { background: #1a4ae0; }
+    .btn-copy {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.12);
+    }
+    .btn-copy.is-copied {
+      background: #0f7b4a;
+      color: white;
+      border-color: transparent;
+    }
+    .btn-lg {
+      min-height: 50px;
+      padding: 12px 24px;
+      font-size: 1rem;
+    }
+
+    .resumen-box {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--green);
+      background: var(--green-soft);
+    }
+    .resumen-box h3 {
+      margin: 0 0 12px;
+      color: #065f46;
+      font-size: 1.05rem;
+    }
+    .resumen-content {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--ink);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .resumen-content strong {
+      color: #065f46;
+    }
+    .resumen-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding-top: 20px; }
+      .card { padding: 20px; border-radius: 20px; }
+      .meta-grid { grid-template-columns: 1fr; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 8px 10px; }
+    }
+    @media print {
+      body { background: white; }
+      .card { box-shadow: none; border: 1px solid #ddd; background: white; }
+      .btn, .form-actions, .toast, .tech-link { display: none !important; }
+      .save-status { display: none !important; }
+    }
+    .cq-question { margin-bottom: 16px; }
+    .cq-question-text { font-weight: 600; margin-bottom: 6px; font-size: 0.95rem; }
+    .cq-question select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.7);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      cursor: pointer;
+    }
+    .cq-question select:focus { border-color: var(--blue); }
+    .cq-question textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 0.88rem;
+      background: rgba(255,255,255,0.5);
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.15s;
+    }
+    .cq-question textarea:focus { border-color: var(--blue); }
+    .resumen-box {
+      animation: fadeUp 0.3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+
+    <a href="./" class="back-link" aria-label="Volver al inicio">&larr; Volver al inicio</a>
+
+    <!-- HERO -->
+    <section class="card" style="padding:32px 34px;">
+      <p class="eyebrow">Informe preliminar institucional</p>
+      <h1><span class="gradient">Laboratorio<br>Digital 310</span></h1>
+      <p style="font-size:1.05rem;max-width:680px;">
+        Diagnóstico inicial de infraestructura, equipos, red, tiempos de trabajo,
+        necesidades inmediatas y decisi&oacute;n solicitada a Direcci&oacute;n.
+      </p>
+      <div class="meta-grid">
+        <div class="meta-item"><strong>Dirigido a</strong><span>Mtro. Miguel Ángel Morales Sandoval</span></div>
+        <div class="meta-item"><strong>Elaboró</strong><span>Prof. Hugo Sánchez Reséndiz</span></div>
+        <div class="meta-item"><strong>Fecha</strong><span>08 de junio de 2026</span></div>
+      </div>
+    </section>
+
+    <!-- 1. Mensaje central -->
+    <section class="card border-left-yellow">
+      <h2>Mensaje central</h2>
+      <p>
+        Mover las computadoras al lugar donde se encuentra el módem no garantiza que el laboratorio quede funcionando.
+        El problema no se resuelve únicamente acercando los equipos a Internet.
+      </p>
+      <p>
+        Para que el laboratorio opere correctamente se requiere un proceso ordenado:
+        inventario, limpieza, diagnóstico por equipo, revisión eléctrica, validación de red,
+        configuración, bitácora y documentación.
+      </p>
+    </section>
+
+    <!-- 2. Qu&eacute; se observ&oacute; -->
+    <section class="card">
+      <h2>Qué se observó</h2>
+      <div class="grid-3">
+        <div class="mini-card">
+          <span class="tag tag-green">Existe</span>
+          <h3>Infraestructura instalada</h3>
+          <p>Rack, switches TP-Link Gigabit, patch panels, canalización y cableado estructurado.</p>
+        </div>
+        <div class="mini-card">
+          <span class="tag tag-yellow">Parcial</span>
+          <h3>Equipos funcionales</h3>
+          <p>Algunas estaciones encienden y cargan Windows, pero aún falta revisar todas.</p>
+        </div>
+        <div class="mini-card">
+          <span class="tag tag-red">Pendiente</span>
+          <h3>Internet y red</h3>
+          <p>No se confirmó salida estable a Internet ni red interna operativa.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Por qu&eacute; se requiere tiempo -->
+    <section class="card">
+      <h2>Por qué se requiere tiempo</h2>
+      <p>Cada computadora debe revisarse individualmente. No basta con encender una y asumir que todas funcionan igual.</p>
+      <table>
+        <tr><th>Actividad</th><th>Tiempo por equipo</th><th>Para qué sirve</th></tr>
+        <tr><td>Encendido y arranque</td><td>3 a 8 min</td><td>Confirmar si el equipo inicia o se congela.</td></tr>
+        <tr><td>Revisión de Windows</td><td>5 a 10 min</td><td>Verificar sistema, usuario, licencia y funcionamiento básico.</td></tr>
+        <tr><td>Diagnóstico interno</td><td>8 a 15 min</td><td>Revisar procesador, RAM, disco, red, audio y periféricos.</td></tr>
+        <tr><td>Registro fotográfico</td><td>3 a 5 min</td><td>Dejar evidencia institucional por estación.</td></tr>
+      </table>
+      <p style="margin-top:12px;">
+        En un laboratorio de aproximadamente 30 equipos, el diagnóstico técnico puede requerir
+        entre 6 y 10 horas efectivas, sin contar limpieza profunda ni configuración final.
+      </p>
+    </section>
+
+    <!-- 4. Compras inmediatas -->
+    <section class="card border-left-yellow">
+      <h2>Compras inmediatas (prioridad alta)</h2>
+      <p>Insumos necesarios para poder iniciar el diagnóstico sin dañar equipos:</p>
+      <div class="grid-3">
+        <div class="mini-card"><h3>Limpieza</h3><p>Aire comprimido, brochas antiestáticas, paños de microfibra, alcohol isopropílico, cubrebocas, guantes y bolsas para residuos.</p></div>
+        <div class="mini-card"><h3>Organización</h3><p>Etiquetas resistentes, plumón permanente, cinta velcro, cinchos, organizadores de cable y bitácora física temporal.</p></div>
+        <div class="mini-card"><h3>Red</h3><p>Cables RJ45, probador de red, etiquetas para puertos, revisión de switches y posible router o servicio dedicado.</p></div>
+      </div>
+    </section>
+
+    <!-- 5. Compras futuras -->
+    <section class="card">
+      <h2>Compras futuras (siguiente etapa)</h2>
+      <p>Equipo que probablemente requerirá reemplazo una vez completado el diagnóstico:</p>
+      <ul>
+        <li>Monitores, teclados y mouse dañados o faltantes.</li>
+        <li>Discos duros (migrar a SSD en equipos compatibles).</li>
+        <li>Fuentes de poder defectuosas.</li>
+        <li>Actualización de RAM en equipos con menos de 4 GB.</li>
+        <li>Cableado de red deteriorado o faltante.</li>
+        <li>Switches adicionales si se reorganiza la distribución.</li>
+      </ul>
+    </section>
+
+    <!-- 6. Revisi&oacute;n de Internet de Direcci&oacute;n -->
+    <section class="card border-left-red">
+      <h2>Revisión de Internet de Dirección</h2>
+      <p>
+        Se observó infraestructura de red instalada, pero no se confirmó que exista servicio activo para el laboratorio.
+        Antes de contratar un servicio nuevo, la Dirección debe responder:
+      </p>
+      <ul>
+        <li>¿Quién autorizó el proyecto original del laboratorio?</li>
+        <li>¿Existe memoria técnica o plano de red?</li>
+        <li>¿Quién instaló el rack y el cableado?</li>
+        <li>¿A dónde llega el cable amarillo observado en el laboratorio?</li>
+        <li>¿Dirección puede compartir su conexión sin saturar su propio servicio?</li>
+        <li>¿El servicio actual de Dirección tiene capacidad para 30 equipos simultáneos?</li>
+      </ul>
+    </section>
+
+    <!-- Cuestionario para Dirección -->
+    <section class="card cq-section">
+      <h2>Cuestionario para Dirección sobre antecedentes, red y operación del laboratorio</h2>
+      <p>Selecciona una opción por pregunta y agrega detalles si lo consideras necesario. Las respuestas se guardan en este navegador.</p>
+
+      <div id="direccion-cuestionario">
+        <details class="cq-group">
+          <summary class="cq-group-summary">1. Proyecto original</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿Quién autorizó el proyecto original del laboratorio?</p>
+              <textarea class="cq-open" data-q="proyecto_autorizo" placeholder="Nombre de la persona o instancia que autorizó" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Existe memoria técnica, plano de red o documento del proyecto?</p>
+              <select data-q="proyecto_memoria">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="proyecto_memoria" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Cuándo se instaló originalmente el laboratorio?</p>
+              <textarea class="cq-open" data-q="proyecto_fecha" placeholder="Fecha o periodo aproximado" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se sabe cuál era el objetivo original del laboratorio?</p>
+              <textarea class="cq-open" data-q="proyecto_objetivo" placeholder="Describe el objetivo o propósito original" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="cq-group">
+          <summary class="cq-group-summary">2. Rack y cableado</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿Quién instaló el rack y el cableado estructurado?</p>
+              <textarea class="cq-open" data-q="rack_instalo" placeholder="Nombre de la persona o empresa" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿A dónde llega el cable amarillo observado en el laboratorio?</p>
+              <textarea class="cq-open" data-q="rack_cable_amarillo" placeholder="¿A qué lugar o equipo está conectado?" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿El rack tiene conexión eléctrica regulada y funcionando?</p>
+              <select data-q="rack_electricidad">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="rack_electricidad" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Existe etiquetado en los paneles de parcheo?</p>
+              <select data-q="rack_etiquetado">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="rack_etiquetado" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="cq-group">
+          <summary class="cq-group-summary">3. Internet</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿El laboratorio tiene servicio de Internet contratado y activo?</p>
+              <select data-q="internet_contratado">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="internet_contratado" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Dirección puede compartir su conexión sin saturar el servicio?</p>
+              <select data-q="internet_compartir">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="internet_compartir" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿El servicio actual tiene capacidad para 30 equipos simultáneos?</p>
+              <select data-q="internet_capacidad">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="internet_capacidad" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Hay contraseña del WiFi institucional disponible?</p>
+              <select data-q="internet_wifi_pass">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="internet_wifi_pass" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se contratará un servicio de Internet dedicado para el laboratorio?</p>
+              <select data-q="internet_dedicado">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="internet_dedicado" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="cq-group">
+          <summary class="cq-group-summary">4. Contraseñas y usuarios</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿Existen contraseñas de administrador local de las estaciones?</p>
+              <select data-q="pass_admin">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="pass_admin" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se conoce la contraseña del BIOS de las estaciones?</p>
+              <select data-q="pass_bios">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="pass_bios" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Hay usuarios creados para docentes o alumnos?</p>
+              <select data-q="pass_usuarios">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="pass_usuarios" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Existe política de contraseñas o acceso controlado?</p>
+              <select data-q="pass_politica">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="pass_politica" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="cq-group">
+          <summary class="cq-group-summary">5. Operación institucional</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se autoriza la fase de diagnóstico, limpieza e inventario?</p>
+              <select data-q="op_autorizar_fase">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="op_autorizar_fase" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Quién será el responsable institucional de dar seguimiento?</p>
+              <textarea class="cq-open" data-q="op_responsable" placeholder="Nombre del responsable" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Hay fecha estimada para iniciar los trabajos?</p>
+              <textarea class="cq-open" data-q="op_fecha" placeholder="Fecha estimada o periodo" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se asignará presupuesto para compras inmediatas?</p>
+              <select data-q="op_presupuesto">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="op_presupuesto" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Hay horario definido para trabajar en el laboratorio?</p>
+              <select data-q="op_horario">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="op_horario" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <details class="cq-group">
+          <summary class="cq-group-summary">6. Tiempos, materiales y cobertura de grupos</summary>
+          <div class="cq-group-body">
+            <div class="cq-question">
+              <p class="cq-question-text">¿Cuántos grupos usarán el laboratorio por semana?</p>
+              <textarea class="cq-open" data-q="tiempos_grupos" placeholder="Número aproximado de grupos" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Cuántos docentes requieren acceso al laboratorio?</p>
+              <textarea class="cq-open" data-q="tiempos_docentes" placeholder="Número aproximado de docentes" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Se requiere habilitar el laboratorio para una fecha específica?</p>
+              <textarea class="cq-open" data-q="tiempos_fecha_limite" placeholder="Fecha específica si aplica" rows="2" style="margin-top:4px;"></textarea>
+            </div>
+            <div class="cq-question">
+              <p class="cq-question-text">¿Hay software específico que deba instalarse?</p>
+              <select data-q="tiempos_software">
+                <option value="">Seleccionar...</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+                <option value="no_se_sabe">No se sabe</option>
+                <option value="requiere_revision">Requiere revisión</option>
+              </select>
+              <textarea class="cq-open" data-q="tiempos_software" placeholder="Detalles (opcional)" rows="2"></textarea>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="form-actions" id="cq-actions">
+        <button class="btn btn-success btn-lg" id="cq-save" type="button">Guardar y enviar resumen</button>
+      </div>
+      <span id="cq-status" class="cq-status"></span>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:10px;">
+        Las respuestas se guardan en este dispositivo. Para que el Prof. Hugo las reciba,
+        presione <strong>"Guardar y enviar resumen"</strong> y use los botones de abajo para enviarlas.
+      </p>
+
+      <div class="resumen-box" id="resumen-box" style="display:none;">
+        <h3>Resumen para Hugo</h3>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px;">
+          El resumen ya está listo. Envíalo al Prof. Hugo por WhatsApp o correo para que quede registrado.
+        </p>
+        <div class="resumen-content" id="resumen-content"></div>
+        <div class="resumen-actions">
+          <button class="btn btn-whatsapp" id="resumen-whatsapp" type="button">Enviar por WhatsApp</button>
+          <button class="btn btn-email" id="resumen-email" type="button">Enviar por correo</button>
+          <button class="btn btn-copy" id="resumen-copy" type="button">Copiar resumen</button>
+        </div>
+      </div>
+
+      <details class="cq-group" style="margin-top:16px;">
+        <summary class="cq-group-summary" style="opacity:0.55;font-size:0.82rem;">Opciones técnicas avanzadas</summary>
+        <div class="cq-group-body">
+          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:12px;">Solo usar si el Prof. Hugo solicita respaldo técnico.</p>
+          <button class="btn btn-secondary" id="cq-export" type="button">Exportar JSON</button>
+          <button class="btn btn-secondary" id="cq-clear" type="button" style="margin-left:8px;background:var(--red-soft);color:var(--red);">Borrar respuestas guardadas</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- 9. Decisi&oacute;n solicitada -->
+    <section class="card border-left-green">
+      <h2>Decisión solicitada</h2>
+      <p>
+        Se solicita a Dirección autorizar formalmente la <strong>Fase 1: Diagnóstico, limpieza e inventario</strong>
+        del Laboratorio Digital 310. Esta fase no requiere contratación de Internet ni compra de equipo mayor.
+      </p>
+      <p style="margin-top:8px;">
+        <strong>Recursos solicitados:</strong><br>
+        &mdash; Acceso al laboratorio en horario definido.<br>
+        &mdash; Presupuesto para insumos de limpieza y organización (estimado inicial: aportación voluntaria o gestión escolar).<br>
+        &mdash; Designación de un contacto institucional para coordinar horarios y accesos.
+      </p>
+      <p style="margin-top:8px;">
+        <strong>Entregable comprometido:</strong> al concluir la Fase 1 se presentará un informe detallado con:
+        inventario completo, diagnóstico por estación, evidencia fotográfica, recomendaciones técnicas
+        y presupuesto estimado para la Fase 2 (equipamiento y conectividad).
+      </p>
+    </section>
+
+    <!-- 10. Riesgos -->
+    <section class="card border-left-red">
+      <h2>Riesgos si se intenta operar sin diagnóstico</h2>
+      <ul>
+        <li>Equipos que parecen funcionar pueden congelarse o fallar durante clase.</li>
+        <li>La red puede no responder aunque las computadoras estén encendidas.</li>
+        <li>El polvo puede provocar sobrecalentamiento o fallas prematuras.</li>
+        <li>Sin etiquetas no se puede saber qué equipo falló ni cuándo.</li>
+        <li>Sin bitácora se repite el problema anterior: contraseñas compartidas, pérdida de control y uso desordenado.</li>
+      </ul>
+    </section>
+
+    <!-- 11. Visi&oacute;n final -->
+    <section class="card">
+      <h2>Visión final del proyecto</h2>
+      <div class="border-left-green" style="padding-left:18px;">
+        <p>La meta no es solo que las computadoras tengan Internet.<br>
+        La meta es contar con un laboratorio funcional, documentado, controlado y útil para docentes y estudiantes.</p>
+      </div>
+    </section>
+
+    <!-- 12. Conclusi&oacute;n -->
+    <section class="card border-left-green">
+      <h2>Conclusión preliminar</h2>
+      <p>
+        El laboratorio no debe considerarse perdido ni listo para operar sin revisión.
+        La evidencia indica que existe infraestructura valiosa y equipos recuperables,
+        pero se requiere un proceso formal para determinar su estado real.
+      </p>
+      <p>
+        Se recomienda autorizar una fase inicial de diagnóstico, limpieza e inventario antes
+        de tomar decisiones sobre traslado de equipos, contratación de Internet o uso regular con alumnos.
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer-note">
+      Propuesta preliminar · Laboratorio Digital 310 · Prof. Hugo Sánchez Reséndiz
+    </div>
+
+    <div class="tech-link"><a href="inventario.html">Acceso técnico interno</a></div>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      "use strict";
+
+      var STORAGE_KEY = "lab310_respuestas_direccion_v1";
+      var OLG_KEY = "lab310_direccion_respuestas_v1";
+      try { localStorage.removeItem(OLG_KEY); } catch (e) { /* ignore */ }
+
+      var CQ_QUESTIONS = [
+        "proyecto_autorizo","proyecto_memoria","proyecto_fecha","proyecto_objetivo",
+        "rack_instalo","rack_cable_amarillo","rack_electricidad","rack_etiquetado",
+        "internet_contratado","internet_compartir","internet_capacidad","internet_wifi_pass","internet_dedicado",
+        "pass_admin","pass_bios","pass_usuarios","pass_politica",
+        "op_autorizar_fase","op_responsable","op_fecha","op_presupuesto","op_horario",
+        "tiempos_grupos","tiempos_docentes","tiempos_fecha_limite","tiempos_software"
+      ];
+
+      var toast = document.getElementById("toast");
+      var toastTimer = null;
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add("is-visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { if (toast) toast.classList.remove("is-visible"); }, 2600);
+      }
+
+      function getOptLabel(v) {
+        var map = { si:"S\u00ed", no:"No", no_se_sabe:"No se sabe", requiere_revision:"Requiere revisi\u00f3n" };
+        return map[v] || v;
+      }
+
+      function collectData() {
+        var data = {};
+        for (var i = 0; i < CQ_QUESTIONS.length; i++) {
+          var id = CQ_QUESTIONS[i];
+          var select = document.querySelector('select[data-q="' + id + '"]');
+          var textarea = document.querySelector('textarea.cq-open[data-q="' + id + '"]');
+          data[id] = {
+            option: select ? select.value : "",
+            open: textarea ? textarea.value.trim() : ""
+          };
+        }
+        return data;
+      }
+
+      function buildResumenText(data) {
+        function g(id) {
+          var a = data[id];
+          if (!a) return "\u2014";
+          if (!a.option && !a.open) return "\u2014";
+          if (!a.option && a.open) return a.open;
+          var parts = [];
+          if (a.option) parts.push(getOptLabel(a.option));
+          if (a.open) parts.push("(" + a.open + ")");
+          return parts.join(" ");
+        }
+        var now = new Date().toLocaleDateString("es-MX", { year:"numeric", month:"long", day:"numeric", weekday:"long" });
+        return [
+          "RESUMEN DE RESPUESTAS \u2014 LABORATORIO DIGITAL 310",
+          "",
+          "Fecha: " + now,
+          "",
+          "1. PROYECTO ORIGINAL",
+          "\u2022 \u00bfQui\u00e9n autoriz\u00f3?: " + g("proyecto_autorizo"),
+          "\u2022 \u00bfExiste memoria/plano?: " + g("proyecto_memoria"),
+          "\u2022 Fecha de instalaci\u00f3n: " + g("proyecto_fecha"),
+          "\u2022 Objetivo original: " + g("proyecto_objetivo"),
+          "",
+          "2. RACK Y CABLEADO",
+          "\u2022 \u00bfQui\u00e9n instal\u00f3 el rack?: " + g("rack_instalo"),
+          "\u2022 Cable amarillo: " + g("rack_cable_amarillo"),
+          "\u2022 Conexi\u00f3n el\u00e9ctrica: " + g("rack_electricidad"),
+          "\u2022 Etiquetado: " + g("rack_etiquetado"),
+          "",
+          "3. INTERNET",
+          "\u2022 Servicio contratado activo: " + g("internet_contratado"),
+          "\u2022 Direcci\u00f3n puede compartir: " + g("internet_compartir"),
+          "\u2022 Capacidad para 30 equipos: " + g("internet_capacidad"),
+          "\u2022 Contrase\u00f1a WiFi: " + g("internet_wifi_pass"),
+          "\u2022 Internet dedicado: " + g("internet_dedicado"),
+          "",
+          "4. CONTRASE\u00d1AS Y USUARIOS",
+          "\u2022 Admin local: " + g("pass_admin"),
+          "\u2022 BIOS: " + g("pass_bios"),
+          "\u2022 Usuarios creados: " + g("pass_usuarios"),
+          "\u2022 Pol\u00edtica de acceso: " + g("pass_politica"),
+          "",
+          "5. OPERACI\u00d3N INSTITUCIONAL",
+          "\u2022 Autoriza fase 1: " + g("op_autorizar_fase"),
+          "\u2022 Responsable: " + g("op_responsable"),
+          "\u2022 Fecha estimada: " + g("op_fecha"),
+          "\u2022 Presupuesto: " + g("op_presupuesto"),
+          "\u2022 Horario: " + g("op_horario"),
+          "",
+          "6. TIEMPOS, MATERIALES Y COBERTURA",
+          "\u2022 Grupos por semana: " + g("tiempos_grupos"),
+          "\u2022 Docentes: " + g("tiempos_docentes"),
+          "\u2022 Fecha l\u00edmite: " + g("tiempos_fecha_limite"),
+          "\u2022 Software: " + g("tiempos_software"),
+          "",
+          "---",
+          "Generado autom\u00e1ticamente desde el cuestionario del Laboratorio Digital 310."
+        ].join("\n");
+      }
+
+      function saveAndGenerate() {
+        try {
+          var data = collectData();
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          var statusEl = document.getElementById("cq-status");
+          if (statusEl) statusEl.textContent = "Respuestas guardadas. Ahora puede enviarlas por WhatsApp, correo o copiarlas.";
+
+          var text = buildResumenText(data);
+          var contentEl = document.getElementById("resumen-content");
+          if (contentEl) contentEl.textContent = text;
+
+          var box = document.getElementById("resumen-box");
+          if (box) {
+            box.style.display = "block";
+            setTimeout(function () { box.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100);
+          }
+          showToast("Respuestas guardadas. Ahora puede enviarlas por WhatsApp, correo o copiarlas.");
+        } catch (e) {
+          showToast("No se pudieron procesar las respuestas. Avise al Prof. Hugo.");
+        }
+      }
+
+      function copyResumen() {
+        var el = document.getElementById("resumen-content");
+        if (!el || !el.textContent) return;
+        var text = el.textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            var btn = document.getElementById("resumen-copy");
+            if (btn) { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar resumen"; }, 2000); }
+            showToast("Resumen copiado.");
+          }).catch(function () { fallbackCopy(text); });
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      function fallbackCopy(text) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); showToast("Resumen copiado."); } catch (e) { showToast("No se pudo copiar. Seleccione el texto manualmente."); }
+        document.body.removeChild(ta);
+      }
+
+      function enviarWhatsApp() {
+        var el = document.getElementById("resumen-content");
+        if (!el || !el.textContent) return;
+        window.open("https://wa.me/?text=" + encodeURIComponent(el.textContent), "_blank");
+      }
+
+      function enviarCorreo() {
+        var el = document.getElementById("resumen-content");
+        if (!el || !el.textContent) return;
+        var subject = encodeURIComponent("Respuestas Direcci\u00f3n - Laboratorio Digital 310");
+        window.open("mailto:?subject=" + subject + "&body=" + encodeURIComponent(el.textContent), "_blank");
+      }
+
+      function loadSaved() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          if (!data) return;
+          var hasData = false;
+          for (var i = 0; i < CQ_QUESTIONS.length; i++) {
+            var id = CQ_QUESTIONS[i];
+            var ans = data[id];
+            if (!ans) continue;
+            var select = document.querySelector('select[data-q="' + id + '"]');
+            var textarea = document.querySelector('textarea.cq-open[data-q="' + id + '"]');
+            if (ans.option && select) { select.value = ans.option; hasData = true; }
+            if (ans.open && textarea) { textarea.value = ans.open; }
+          }
+          if (hasData) {
+            var statusEl = document.getElementById("cq-status");
+            if (statusEl) statusEl.textContent = "Respuestas recuperadas de este navegador.";
+            var text = buildResumenText(data);
+            var contentEl = document.getElementById("resumen-content");
+            if (contentEl) contentEl.textContent = text;
+            var box = document.getElementById("resumen-box");
+            if (box) box.style.display = "block";
+          }
+        } catch (e) { /* silent */ }
+      }
+
+      function exportJson() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) { showToast("No hay respuestas para exportar."); return; }
+          var data = JSON.parse(raw);
+          var hasData = false;
+          for (var k in data) { if (data[k] && (data[k].option || data[k].open)) { hasData = true; break; } }
+          if (!hasData) { showToast("No hay respuestas para exportar."); return; }
+          var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "direccion-respuestas-lab310-" + new Date().toISOString().slice(0,10) + ".json";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showToast("JSON exportado.");
+        } catch (e) { showToast("No se pudo exportar."); }
+      }
+
+      var btnSave = document.getElementById("cq-save");
+      if (btnSave) btnSave.addEventListener("click", saveAndGenerate);
+
+      var btnExport = document.getElementById("cq-export");
+      if (btnExport) btnExport.addEventListener("click", exportJson);
+
+      var btnClear = document.getElementById("cq-clear");
+      if (btnClear) {
+        btnClear.addEventListener("click", function () {
+          if (confirm("\u00bfBorrar todas las respuestas guardadas de Direcci\u00f3n? Esta acci\u00f3n no se puede deshacer.")) {
+            localStorage.removeItem(STORAGE_KEY);
+            var selects = document.querySelectorAll("select[data-q]");
+            for (var i = 0; i < selects.length; i++) selects[i].value = "";
+            var textareas = document.querySelectorAll("textarea.cq-open");
+            for (var j = 0; j < textareas.length; j++) textareas[j].value = "";
+            var box = document.getElementById("resumen-box");
+            if (box) box.style.display = "none";
+            var statusEl = document.getElementById("cq-status");
+            if (statusEl) statusEl.textContent = "Respuestas borradas.";
+            showToast("Respuestas borradas.");
+          }
+        });
+      }
+
+      var btnCopy = document.getElementById("resumen-copy");
+      if (btnCopy) btnCopy.addEventListener("click", copyResumen);
+
+      var btnWA = document.getElementById("resumen-whatsapp");
+      if (btnWA) btnWA.addEventListener("click", enviarWhatsApp);
+
+      var btnMail = document.getElementById("resumen-email");
+      if (btnMail) btnMail.addEventListener("click", enviarCorreo);
+
+      loadSaved();
+    });
+  </script>
+</body>
+</html>
