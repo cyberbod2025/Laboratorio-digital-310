@@ -145,6 +145,32 @@ CREATE POLICY "Leer fotos con token" ON storage.objects
       SELECT 1 FROM public.pilot_tokens WHERE expires_at IS NULL OR expires_at > now()
     )
   );
+
+-- 9. Tabla de respuestas de Dirección (cuestionario ejecutivo)
+CREATE TABLE IF NOT EXISTS public.direccion_respuestas (
+  id text PRIMARY KEY,
+  pilot_token text,
+  data jsonb NOT NULL,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.direccion_respuestas ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Insertar direccion_respuestas con token" ON public.direccion_respuestas
+  FOR INSERT WITH CHECK (
+    pilot_token IN (SELECT token FROM public.pilot_tokens WHERE expires_at IS NULL OR expires_at > now())
+  );
+
+CREATE POLICY "Actualizar direccion_respuestas con token" ON public.direccion_respuestas
+  FOR UPDATE USING (
+    pilot_token IN (SELECT token FROM public.pilot_tokens WHERE expires_at IS NULL OR expires_at > now())
+  );
+
+CREATE POLICY "Leer direccion_respuestas con token" ON public.direccion_respuestas
+  FOR SELECT USING (
+    pilot_token IN (SELECT token FROM public.pilot_tokens WHERE expires_at IS NULL OR expires_at > now())
+  );
 ```
 
 ---

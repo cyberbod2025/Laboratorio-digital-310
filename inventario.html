@@ -413,6 +413,7 @@
       justify-content: space-between;
       padding: 16px;
       border: 1px solid var(--line);
+      cursor: pointer;
       border-radius: var(--radius);
       background: var(--glass);
       backdrop-filter: blur(12px);
@@ -470,6 +471,17 @@
       font-size: 0.72rem;
       font-weight: 950;
       box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .station-author {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.62rem;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .station[data-status="verde"] {
@@ -729,6 +741,40 @@
       height: 1px;
       opacity: 0;
       pointer-events: none;
+    }
+
+    .camera-box {
+      margin-bottom: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #0b1220;
+    }
+    .camera-box video {
+      display: block;
+      width: 100%;
+      max-height: 340px;
+      border-radius: 10px;
+      background: #000;
+      object-fit: contain;
+    }
+    .camera-actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .camera-status {
+      margin: 6px 0 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .camera-msg {
+      margin: 5px 0 0;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #dc2626;
     }
 
     .storage-meter {
@@ -1184,6 +1230,40 @@
       font-family: inherit;
     }
 
+    .guide-field {
+      margin-bottom: 12px;
+    }
+    .guide-field-label {
+      display: inline-block;
+      margin-bottom: 3px;
+      padding: 2px 9px;
+      border-radius: 6px;
+      background: rgba(45,91,255,0.08);
+      color: #2d5bff;
+      font-size: 0.68rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .guide-field-text {
+      margin: 0;
+      color: #334155;
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+    .guide-commands-label {
+      margin: 14px 0 6px;
+      padding: 2px 9px;
+      border-radius: 6px;
+      background: rgba(15,123,74,0.08);
+      color: #0f7b4a;
+      font-size: 0.68rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-block;
+    }
+
     .guide-photo-type {
       margin: 18px 0;
       padding: 14px;
@@ -1237,10 +1317,22 @@
       border-left: 4px solid #eab308;
     }
     .guide-recommendations-empty {
-      margin: 0;
-      color: #92400e;
-      font-size: 0.82rem;
+      color: var(--muted);
+      font-size: 0.8rem;
     }
+
+    .falta-cpu-warning {
+      margin: 12px 0;
+      padding: 14px 16px;
+      border: 1px solid #f59e0b;
+      border-radius: 14px;
+      background: #fffbeb;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #92400e;
+    }
+    .falta-cpu-warning p { margin: 0; }
+    .falta-cpu-warning strong { font-weight: 900; }
 
     @media print {
       body {
@@ -1284,6 +1376,218 @@
         break-inside: avoid;
       }
     }
+
+    .import-modal-textarea {
+      width: 100%;
+      min-height: 260px;
+      padding: 14px;
+      border: 1px solid #d7e0eb;
+      border-radius: 14px;
+      font-family: "SF Mono", "Cascadia Code", "Consolas", monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .import-modal-textarea:focus {
+      border-color: var(--blue);
+      outline: none;
+      box-shadow: 0 0 0 3px var(--blue-soft);
+    }
+
+    .import-preview-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .import-preview-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+    }
+
+    .import-preview-card h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .import-preview-card .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      margin: 2px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+
+    .tag-new { background: #dff8ee; color: #065f46; }
+    .tag-conflict { background: #ffe7e7; color: #991b1b; }
+    .tag-merge { background: #e8f0ff; color: #1e40af; }
+    .tag-notfound { background: #f1f5f9; color: #64748b; }
+
+    .import-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .import-status {
+      margin: 8px 0 0;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .import-status.ok { background: #dff8ee; color: #065f46; }
+    .import-status.warn { background: #fff7cf; color: #92400e; }
+    .import-status.err { background: #ffe7e7; color: #991b1b; }
+
+    .registry-panel {
+      margin-top: 22px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .registry-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .registry-head h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+    }
+
+    .registry-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .registry-count {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: #1e40af;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .registry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .registry-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.82);
+    }
+
+    .registry-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 11px;
+    }
+
+    .registry-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .registry-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 0.7rem;
+      font-weight: 850;
+    }
+
+    .registry-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+    }
+
+    .registry-data div {
+      min-width: 0;
+      padding: 9px 10px;
+      border-radius: 10px;
+      background: #f8fafc;
+    }
+
+    .registry-data dt {
+      color: var(--muted);
+      font-size: 0.66rem;
+      font-weight: 850;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .registry-data dd {
+      margin: 3px 0 0;
+      overflow-wrap: anywhere;
+      color: #334155;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: pre-wrap;
+    }
+
+    .registry-empty {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 26px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.86rem;
+    }
+
+    .local-storage-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--blue);
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .local-storage-note code {
+      font-weight: 850;
+    }
+
+    @media(max-width: 760px) {
+      .registry-grid,
+      .registry-data {
+        grid-template-columns: 1fr;
+      }
+
+      .registry-head {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1298,8 +1602,9 @@
         Secundaria 310
       </a>
       <div class="top-actions">
-        <span class="tech-badge">Vista técnica — uso interno Prof. Hugo</span>
+        <span class="tech-badge" id="user-badge"></span>
         <a class="text-link" href="informe-preliminar.html">Ver informe para Dirección</a>
+        <button class="btn btn-secondary" id="logout-btn" type="button" style="font-size:11px;padding:4px 10px;">Salir</button>
       </div>
     </nav>
 
@@ -1349,6 +1654,48 @@
         <p class="summary-value" id="count-gris">30</p>
       </article>
     </section>
+    <section class="summary" aria-label="Resumen operativo" style="margin-bottom:22px;">
+      <article class="summary-card" style="--accent:#6366f1;--accent-soft:#eef2ff;">
+        <p class="summary-label">Estaciones revisadas</p>
+        <p class="summary-value" id="count-reviewed">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#ca8a04;--accent-soft:var(--yellow-soft);">
+        <p class="summary-label">Con observaciones</p>
+        <p class="summary-value" id="count-reviewed-observations">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#7c3aed;--accent-soft:#f5f3ff;">
+        <p class="summary-label">Estaciones incompletas</p>
+        <p class="summary-value" id="count-incomplete">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#dc2626;--accent-soft:#fee2e2;">
+        <p class="summary-label">Estaciones sin CPU</p>
+        <p class="summary-value" id="count-sinCPU">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#f59e0b;--accent-soft:#fef3c7;">
+        <p class="summary-label">CPU sueltas</p>
+        <p class="summary-value" id="count-cpuSueltas">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#f59e0b;--accent-soft:#fef3c7;">
+        <p class="summary-label">Monitores sueltos</p>
+        <p class="summary-value" id="count-monitoresSueltos">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#0ea5e9;--accent-soft:#eff6ff;">
+        <p class="summary-label">No-breaks sueltos</p>
+        <p class="summary-value" id="count-noBreaksSueltos">0</p>
+      </article>
+      <article class="summary-card" style="--accent:var(--red);--accent-soft:var(--red-soft);">
+        <p class="summary-label">Estaciones sin protección</p>
+        <p class="summary-value" id="count-sinProteccion">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#8b5cf6;--accent-soft:#f5f3ff;">
+        <p class="summary-label">Pendientes de emparejar</p>
+        <p class="summary-value" id="count-pending-pair">0</p>
+      </article>
+      <article class="summary-card" style="--accent:#0f766e;--accent-soft:#ccfbf1;">
+        <p class="summary-label">Hallazgos generales</p>
+        <p class="summary-value" id="count-general-findings">0</p>
+      </article>
+    </section>
 
     <section class="workspace">
       <header class="workspace-head">
@@ -1366,6 +1713,7 @@
             <option value="rojo">No funcionales</option>
           </select>
           <button class="btn btn-secondary" id="config-supabase" type="button">⚙ Supabase</button>
+          <button class="btn btn-secondary" id="import-chatgpt" type="button">🤖 Importar ChatGPT</button>
           <button class="btn btn-secondary" id="export-html" type="button">Exportar HTML</button>
           <button class="btn btn-secondary" id="print-report" type="button">Imprimir / PDF</button>
           <div class="backup-group">
@@ -1383,7 +1731,7 @@
       <div class="station-grid" id="station-grid" aria-live="polite"></div>
 
       <footer class="data-note">
-        <span><strong>Alcance:</strong> borrador de trabajo local, sin sincronización ni notificación institucional.</span>
+        <span><strong>Alcance:</strong> Borrador guardado solo en este navegador. No está sincronizado con Supabase ni enviado a Dirección. Exporte JSON para respaldo.</span>
         <span><span id="storage-status">Guardado local disponible.</span> <span id="sync-status" class="sync-badge sync-badge-local" style="display:none;">Local</span></span>
         <div class="dir-notice">
           Esta pantalla es la <strong>vista técnica de inventario</strong>, no el informe para Dirección.
@@ -1397,7 +1745,80 @@
           </p>
           <div class="dir-responses-body" id="dir-responses-body"></div>
         </details>
+        <details class="dir-responses" id="hallazgos-section">
+          <summary>Inventario previo y resguardo</summary>
+          <p style="font-size:0.78rem;color:var(--muted);margin:6px 0 8px;padding:0 4px;">
+            Registrar diferencias entre inventario previo y estado f&iacute;sico actual.
+            Sin acusaciones, solo documentaci&oacute;n institucional.
+          </p>
+          <div class="hallazgos-body" id="hallazgos-body" style="padding:8px 4px;">
+            <div class="field"><label>¿Existe inventario previo a la remodelaci&oacute;n?</label>
+              <select id="h-inv-previo"><option value="">Seleccionar...</option><option>S&iacute;</option><option>No</option><option>Se desconoce</option></select>
+            </div>
+            <div class="field"><label>¿Cu&aacute;ntas CPU estaban registradas?</label>
+              <input id="h-cpu-registradas" type="text" maxlength="120" placeholder="Ej: 25">
+            </div>
+            <div class="field"><label>¿Cu&aacute;ntos monitores estaban registrados?</label>
+              <input id="h-monitores-registrados" type="text" maxlength="120" placeholder="Ej: 28">
+            </div>
+            <div class="field"><label>¿Cu&aacute;ntos teclados y mouse estaban registrados?</label>
+              <input id="h-teclados-registrados" type="text" maxlength="120" placeholder="Ej: 25 juegos">
+            </div>
+            <div class="field"><label>¿Cu&aacute;ntos no-breaks/reguladores estaban registrados?</label>
+              <input id="h-nobreaks-registrados" type="text" maxlength="120" placeholder="Ej: 5 no-breaks, 10 reguladores">
+            </div>
+            <div class="field"><label>¿Qui&eacute;n ten&iacute;a el resguardo?</label>
+              <input id="h-responsable-resguardo" type="text" maxlength="200" placeholder="Nombre del responsable anterior">
+            </div>
+            <div class="field"><label>¿Hubo acta de entrega-recepci&oacute;n antes de los trabajos?</label>
+              <select id="h-acta-entrega"><option value="">Seleccionar...</option><option>S&iacute;</option><option>No</option><option>Se desconoce</option></select>
+            </div>
+            <div class="field"><label>¿Qui&eacute;n supervis&oacute; el acceso al aula durante el cableado/remodelaci&oacute;n?</label>
+              <input id="h-supervisor" type="text" maxlength="200" placeholder="Nombre o &aacute;rea">
+            </div>
+            <div class="field"><label>¿Se hizo inventario posterior?</label>
+              <select id="h-inv-posterior"><option value="">Seleccionar...</option><option>S&iacute;</option><option>No</option><option>Parcial</option></select>
+            </div>
+            <div class="field"><label>¿Hay equipos dados de baja, reubicados, prestados o enviados a reparaci&oacute;n?</label>
+              <textarea id="h-equipos-observaciones" maxlength="500" placeholder="Detallar equipos y su situaci&oacute;n"></textarea>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:10px;">
+              <button class="btn btn-primary" id="hallazgos-save" type="button">Guardar</button>
+              <span class="save-status" id="hallazgos-status"></span>
+            </div>
+          </div>
+        </details>
       </footer>
+    </section>
+
+    <section class="registry-panel" aria-labelledby="loose-assets-title">
+      <header class="registry-head">
+        <div>
+          <h2 id="loose-assets-title">Equipo suelto y pendiente de emparejar</h2>
+          <p>Activos importados que todavía no forman parte de una estación E01-E30 o requieren cotejo físico.</p>
+        </div>
+        <span class="registry-count" id="loose-assets-count">0 registros</span>
+      </header>
+      <div class="registry-grid" id="loose-assets-list"></div>
+      <p class="local-storage-note">
+        Guardado en este navegador bajo <code>lab310_loose_assets</code>. Las estaciones se conservan en
+        <code>lab310_stations</code>. Exporte JSON para contar con un respaldo fuera del navegador.
+      </p>
+    </section>
+
+    <section class="registry-panel" aria-labelledby="general-findings-title">
+      <header class="registry-head">
+        <div>
+          <h2 id="general-findings-title">Hallazgos generales del laboratorio</h2>
+          <p>Observaciones transversales que no corresponden exclusivamente a una estación.</p>
+        </div>
+        <span class="registry-count" id="general-findings-count">0 registros</span>
+      </header>
+      <div class="registry-grid" id="general-findings-list"></div>
+      <p class="local-storage-note">
+        Guardado en <code>lab310_general_findings</code>. El historial de importaciones se conserva en
+        <code>lab310_import_history</code><span id="last-import-note">.</span>
+      </p>
     </section>
   </main>
 
@@ -1413,9 +1834,16 @@
 
       <form id="station-form">
         <div class="modal-body">
+          <div class="no-user-banner" id="no-user-banner" style="display:none;padding:12px 14px;background:#ffe7e7;border-radius:12px;color:#991b1b;font-size:0.85rem;font-weight:700;margin-bottom:14px;">
+            Para guardar cambios debe ingresar con una clave autorizada.
+          </div>
           <div class="guide-mode-toggle">
             <button type="button" class="guide-mode-btn is-active" data-mode="rapido">Diagnóstico rápido</button>
             <button type="button" class="guide-mode-btn" data-mode="completo">Diagnóstico completo</button>
+          </div>
+
+          <div class="falta-cpu-warning" id="falta-cpu-warning" style="display:none">
+            <p><strong>Estación incompleta:</strong> Esta estación no cuenta con CPU/gabinete. No aplica revisión de Windows, BIOS, RAM, disco ni comandos CMD.</p>
           </div>
 
           <div class="guide-sections" id="guide-sections"></div>
@@ -1447,16 +1875,41 @@
             <select id="estado" name="estado">
               <option value="gris">Sin revisar</option>
               <option value="verde">Funcional</option>
-              <option value="amarillo">Con observaciones</option>
+              <option value="amarillo">Funcional con observaciones</option>
               <option value="rojo">No funcional</option>
+              <option value="incompleta">Incompleta</option>
+              <option value="falta_cpu">Falta CPU</option>
+              <option value="falta_monitor">Falta monitor</option>
+              <option value="falta_teclado">Falta teclado</option>
+              <option value="falta_mouse">Falta mouse</option>
+              <option value="requiere_mantenimiento">Requiere mantenimiento</option>
+              <option value="requiere_baja">Requiere baja/revisión mayor</option>
             </select>
           </div>
 
           <div class="field">
-            <label for="responsable">Revisó (referencia local)</label>
-            <input id="responsable" name="responsable" maxlength="120" autocomplete="off" placeholder="Nombre o iniciales">
+            <label for="proteccionElectrica">Protección eléctrica</label>
+            <select id="proteccionElectrica" name="proteccionElectrica">
+              <option value="No-break presente">No-break presente</option>
+              <option value="Regulador presente">Regulador presente</option>
+              <option value="Conectado directo a corriente">Conectado directo a corriente</option>
+              <option value="No-break faltante">No-break faltante</option>
+              <option value="Pendiente revisar" selected>Pendiente revisar</option>
+              <option value="No aplica">No aplica</option>
+            </select>
           </div>
-
+          <div class="field">
+            <label for="situacionPatrimonial">Situación patrimonial</label>
+            <select id="situacionPatrimonial" name="situacionPatrimonial">
+              <option value="Coincide con inventario">Coincide con inventario</option>
+              <option value="Pendiente comparar con inventario previo" selected>Pendiente comparar con inventario previo</option>
+              <option value="Falta componente">Falta componente</option>
+              <option value="Componente suelto">Componente suelto</option>
+              <option value="Requiere aclaración de resguardo">Requiere aclaración de resguardo</option>
+              <option value="Pendiente de baja">Pendiente de baja</option>
+              <option value="Pendiente de localización">Pendiente de localización</option>
+            </select>
+          </div>
           <div class="field">
             <label for="observaciones">Observaciones adicionales</label>
             <textarea
@@ -1472,21 +1925,33 @@
               <div>
                 <h3 class="photo-title" id="photo-title">Evidencia fotográfica local</h3>
                 <p class="photo-help">
-                  Una foto por estación. Se comprime antes de guardarse para reducir el uso de espacio.
+                  Una foto por estación. Puedes usar la cámara en vivo o subir una imagen.
                 </p>
               </div>
             </div>
+
+            <div class="camera-box" id="camera-box" style="display:none">
+              <video id="camera-video" autoplay playsinline muted></video>
+              <div class="camera-actions">
+                <button class="btn btn-primary" id="capture-btn" type="button">Tomar foto</button>
+                <button class="btn btn-secondary" id="restart-camera" type="button">Reiniciar cámara</button>
+              </div>
+              <p class="camera-status" id="camera-status"></p>
+            </div>
+
             <div class="photo-frame">
               <img class="photo-preview" id="photo-preview" alt="Vista previa de la estación">
               <span class="photo-placeholder" id="photo-placeholder">Todavía no hay una fotografía para esta estación.</span>
             </div>
             <div class="photo-actions">
+              <button class="btn btn-secondary" id="open-camera" type="button">Abrir cámara</button>
               <label class="btn btn-secondary file-button">
-                Tomar o elegir foto
-                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+                Subir foto desde galería
+                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp">
               </label>
               <button class="btn btn-danger" id="remove-photo" type="button">Quitar foto</button>
             </div>
+            <p class="camera-msg" id="camera-msg"></p>
             <p class="storage-meter" id="photo-status">Formatos admitidos: JPG, PNG y WebP.</p>
           </section>
         </div>
@@ -1535,6 +2000,58 @@
     </section>
   </div>
 
+  <div class="modal" id="import-chatgpt-modal" role="dialog" aria-modal="true" aria-labelledby="import-chatgpt-title">
+    <section class="modal-card" style="max-width:820px;">
+      <header class="modal-head">
+        <div>
+          <p class="modal-kicker">Importación asistida</p>
+          <h2 class="modal-title" id="import-chatgpt-title">Importar datos revisados por ChatGPT</h2>
+        </div>
+        <button class="icon-btn" id="close-import-chatgpt" type="button" aria-label="Cerrar importación">x</button>
+      </header>
+      <form id="import-chatgpt-form">
+        <div class="modal-body">
+          <p style="margin:0 0 14px;color:var(--muted);font-size:0.9rem;line-height:1.6;">
+            Pegue aquí el JSON generado por ChatGPT a partir de fotos o notas del laboratorio.
+            También puede <strong>subir un archivo JSON</strong> con el mismo formato.
+          </p>
+          <textarea class="import-modal-textarea" id="import-chatgpt-json" placeholder='[
+  {
+    "stationId": "E01",
+    "estadoGeneral": "Funcional con observaciones",
+    "opciones": {
+      "encendido": ["Enciende correctamente"],
+      "windows": ["Windows inicia"],
+      "red": ["Ethernet desconectado", "IP 169.254 detectada"]
+    },
+    "campos": {
+      "windowsVersion": "Windows 10 Pro 22H2",
+      "procesador": "Intel Core i3",
+      "ram": "8 GB",
+      "disco": "1 TB HDD"
+    },
+    "observaciones": "Equipo inicia, sin conexión de red.",
+    "recomendaciones": ["Requiere cable RJ45 corto"],
+    "fuente": "Revisión asistida por ChatGPT",
+    "fechaRevision": "2026-06-09"
+  }
+]'></textarea>
+          <div class="import-actions">
+            <label class="btn btn-secondary file-button" style="cursor:pointer;">
+              Subir archivo JSON
+              <input type="file" id="import-chatgpt-file" accept="application/json,.json" style="display:none;">
+            </label>
+            <button class="btn btn-primary" id="validate-import-json" type="button">Validar datos</button>
+            <button class="btn btn-danger" id="confirm-import-json" type="button" style="display:none;">Confirmar importación</button>
+            <button class="btn btn-secondary" id="cancel-import-chatgpt" type="button">Cancelar</button>
+          </div>
+          <div id="import-preview-area" style="margin-top:14px;"></div>
+          <div id="import-status" class="import-status" style="display:none;"></div>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -1545,35 +2062,125 @@
 
       const STORAGE_KEY = "sase310.lab310.audit.v2";
       const LEGACY_STORAGE_KEY = "sase310.lab310.audit.v1";
+      const STATIONS_KEY = "lab310_stations";
+      const LOOSE_ASSETS_KEY = "lab310_loose_assets";
+      const GENERAL_FINDINGS_KEY = "lab310_general_findings";
+      const IMPORT_HISTORY_KEY = "lab310_import_history";
+      const HALLAZGOS_KEY = "sase310.lab310.hallazgos.v1";
+      const CURRENT_USER_KEY = "lab310_current_user";
+
+      const loadCurrentUser = () => {
+        return { id: 'admin', name: 'Administrador Local', role: 'admin' };
+      };
+      const saveCurrentUser = (user) => {
+        try {
+          const str = JSON.stringify(user);
+          sessionStorage.setItem(CURRENT_USER_KEY, str);
+          localStorage.setItem(CURRENT_USER_KEY, str);
+        } catch { /* storage may be unavailable */ }
+      };
+      const clearCurrentUser = () => {
+        try {
+          sessionStorage.removeItem(CURRENT_USER_KEY);
+          localStorage.removeItem(CURRENT_USER_KEY);
+        } catch { /* ignore */ }
+      };
+      const applyUserToRecord = (record, isNew) => {
+        const now = new Date().toISOString();
+        const user = loadCurrentUser();
+        if (!user) return;
+        if (isNew || !record.createdByInitials) {
+          record.createdByName = user.name;
+          record.createdByInitials = user.initials;
+          record.createdByRole = user.role;
+          record.createdAt = now;
+        }
+        record.updatedByName = user.name;
+        record.updatedByInitials = user.initials;
+        record.updatedByRole = user.role;
+        record.updatedAt = now;
+        record.updateSource = record.updateSource || "manual";
+      };
+      const getUserLabel = (record) => {
+        const initials = record.updatedByInitials || record.createdByInitials || "";
+        const date = record.updatedAt || record.createdAt || "";
+        const prefix = record.updatedByInitials ? "" : (record.createdByInitials ? "Creado por " : "");
+        if (!initials && !date) return "";
+        const formatted = date ? formatDate(date, true) : "";
+        return prefix + initials + (formatted ? " · " + formatted : "");
+      };
       const SCHEMA_VERSION = 2;
       const STATION_COUNT = 30;
       const MAX_SOURCE_PHOTO_BYTES = 15 * 1024 * 1024;
       const MAX_PHOTO_DATA_URL_LENGTH = 100000;
-      const VALID_STATES = ["verde", "amarillo", "rojo", "gris"];
+      const VALID_STATES = ["verde", "amarillo", "rojo", "gris", "incompleta", "falta_cpu", "falta_monitor", "falta_teclado", "falta_mouse", "requiere_mantenimiento", "requiere_baja"];
       const STATUS_LABELS = {
         verde: "Funcional",
         amarillo: "Con observaciones",
         rojo: "No funcional",
-        gris: "Sin revisar"
+        gris: "Sin revisar",
+        incompleta: "Incompleta",
+        falta_cpu: "Falta CPU",
+        falta_monitor: "Falta monitor",
+        falta_teclado: "Falta teclado",
+        falta_mouse: "Falta mouse",
+        requiere_mantenimiento: "Requiere mantenimiento",
+        requiere_baja: "Requiere baja/revisión mayor"
       };
       const TEXT_FIELDS = ["cpu", "monitor", "teclado", "mouse", "red", "responsable", "observaciones"];
+      const PROTECCION_OPTIONS = [
+        "No-break presente",
+        "Regulador presente",
+        "Conectado directo a corriente",
+        "No-break faltante",
+        "Pendiente revisar",
+        "No aplica"
+      ];
+      const SITUACION_OPTIONS = [
+        "Coincide con inventario",
+        "Pendiente comparar con inventario previo",
+        "Falta componente",
+        "Componente suelto",
+        "Requiere aclaración de resguardo",
+        "Pendiente de baja",
+        "Pendiente de localización"
+      ];
+      const INVENTARIO_FIELDS = ["proteccionElectrica", "situacionPatrimonial"];
 
       const GUIDE_SECTIONS = [
-        { id: 'encendido', title: 'Encendido', instruction: 'Conecta la estación a la corriente y presiona el botón de encendido.', mode: 'rapido', options: [
+        { id: 'encendido', title: 'Encendido y arranque',
+          queRevisar: 'El equipo debe encender sin ruidos anormales y mostrar imagen en el monitor.',
+          dondeEntrar: 'Conecta el cable de corriente, presiona el botón de encendido y observa las luces LED.',
+          interpretacion: 'Si enciende sin problema y ves la pantalla de inicio, sigue a la siguiente sección. Si no hay luces ni ventiladores, verifica el cable de corriente y la fuente de poder.',
+          queFoto: 'Toma foto del panel frontal mostrando los LEDs encendidos y el monitor mostrando imagen.',
+          mode: 'rapido', options: [
           { label: 'Enciende normalmente', value: 'enciende_normal', field: '', valueMap: '' },
           { label: 'No enciende', value: 'no_enciende', field: 'cpu', valueMap: 'No enciende' },
           { label: 'Enciende sin video', value: 'enciende_sin_video', field: 'monitor', valueMap: 'No recibe señal' },
           { label: 'Enciende con ruidos', value: 'enciende_ruidos', field: 'cpu', valueMap: 'Ruidos extraños al encender' },
-          { label: 'Se apaga solo', value: 'enciende_se_apaga', field: 'cpu', valueMap: 'Se apaga inesperadamente' }
-        ], commands: [] },
-        { id: 'bios', title: 'BIOS', instruction: 'Durante el arranque presiona F2, F10, F12 o Supr para acceder a la BIOS.', mode: 'completo', options: [
+          { label: 'Se apaga solo', value: 'enciende_se_apaga', field: 'cpu', valueMap: 'Se apaga inesperadamente' },
+          { label: 'Falta CPU', value: 'falta_cpu', field: 'cpu', valueMap: 'Falta CPU' }
+        ], commands: [
+          { cmd: 'powercfg /lastwake', label: 'Última activación', desc: 'Muestra qué dispositivo despertó al equipo.' }
+        ] },
+        { id: 'bios', title: 'BIOS / fecha / configuración',
+          queRevisar: 'La BIOS debe detectar correctamente el disco duro, la RAM y mostrar la fecha/hora correcta.',
+          dondeEntrar: 'Reinicia el equipo. Durante el arranque presiona F2, F10, F12 o Supr repetidamente.',
+          interpretacion: 'Si la fecha/hora son incorrectas, la pila CR2032 está agotada. Si no detecta disco o RAM, puede haber fallo de hardware o conexión suelta.',
+          queFoto: 'Toma foto de la pantalla de BIOS mostrando la fecha y los dispositivos detectados.',
+          mode: 'completo', options: [
           { label: 'Accede sin problema', value: 'bios_ok', field: '', valueMap: '' },
           { label: 'No accede / pide contraseña', value: 'bios_password', field: '', valueMap: '' },
           { label: 'Batería baja (fecha/hora incorrectas)', value: 'bios_bateria', field: '', valueMap: '' },
           { label: 'No reconoce disco duro', value: 'bios_no_disco', field: 'cpu', valueMap: 'BIOS no detecta disco' },
           { label: 'No reconoce RAM', value: 'bios_no_ram', field: 'cpu', valueMap: 'BIOS no detecta RAM' }
         ], commands: [] },
-        { id: 'windows', title: 'Windows', instruction: 'Espera a que Windows inicie sesión. Verifica la versión y el rendimiento general.', mode: 'rapido', options: [
+        { id: 'windows', title: 'Windows / sistema',
+          queRevisar: 'Windows debe iniciar sesión sin errores. Verifica la versión, activación y rendimiento general.',
+          dondeEntrar: 'Espera a que Windows cargue el escritorio. Usa Ejecutar (Win+R) para los comandos.',
+          interpretacion: 'Si ves pantalla azul, el sistema tiene un error crítico. Si tarda mucho en iniciar, puede ser HDD lento o demasiados programas de inicio.',
+          queFoto: 'Toma foto de la pantalla de "Acerca de Windows" (winver) mostrando la versión y compilación.',
+          mode: 'rapido', options: [
           { label: 'Inicio normal', value: 'windows_normal', field: '', valueMap: '' },
           { label: 'Inicio lento', value: 'windows_lento', field: 'cpu', valueMap: 'Inicio de Windows lento' },
           { label: 'Pantalla azul / error', value: 'windows_bsod', field: 'cpu', valueMap: 'Pantalla azul en inicio' },
@@ -1584,10 +2191,16 @@
           { label: 'Windows 11', value: 'win11', field: '', valueMap: '' }
         ], commands: [
           { cmd: 'winver', label: 'Versión de Windows', desc: 'Muestra la versión y compilación de Windows.' },
+          { cmd: 'slmgr /xpr', label: 'Estado de activación', desc: 'Muestra si Windows está activado y la fecha de expiración.' },
           { cmd: 'msinfo32', label: 'Información del sistema', desc: 'Abre el resumen completo del sistema.' },
           { cmd: 'systeminfo', label: 'Detalles del sistema', desc: 'Lista configuración de hardware y SO.' }
         ] },
-        { id: 'cpuRamDisco', title: 'CPU / RAM / Disco', instruction: 'Revisa el rendimiento del procesador, la memoria RAM y el estado del disco duro.', mode: 'rapido', options: [
+        { id: 'cpuRamDisco', title: 'CPU / RAM / Disco',
+          queRevisar: 'Verifica el procesador, la cantidad de memoria RAM y el tipo/estado del disco duro.',
+          dondeEntrar: 'Abre Símbolo del sistema (CMD) como administrador. Ejecuta los comandos de la derecha.',
+          interpretacion: 'CPU debe estar por debajo del 50% en reposo. RAM mínima recomendada: 4 GB (ideal 8 GB). SSD es preferible sobre HDD mecánico.',
+          queFoto: 'Toma foto de la ventana de CMD con los resultados de wmic cpu y wmic memorychip visibles.',
+          mode: 'rapido', options: [
           { label: 'Rendimiento normal', value: 'cpu_normal', field: 'cpu', valueMap: 'Rendimiento normal' },
           { label: 'CPU al 100% sin razón', value: 'cpu_alto', field: 'cpu', valueMap: 'CPU al 100% en reposo' },
           { label: 'RAM insuficiente (<4GB)', value: 'ram_poca', field: 'cpu', valueMap: 'RAM insuficiente' },
@@ -1597,10 +2210,15 @@
           { label: 'Sobrecalentamiento', value: 'sobrecalentamiento', field: 'cpu', valueMap: 'Equipo se sobrecalienta' }
         ], commands: [
           { cmd: 'wmic cpu get name', label: 'Modelo de CPU', desc: 'Muestra el procesador instalado.' },
-          { cmd: 'wmic memorychip get capacity,speed', label: 'Memoria RAM', desc: 'Muestra capacidad y velocidad de cada módulo.' },
-          { cmd: 'wmic diskdrive get model,size', label: 'Disco duro', desc: 'Lista los discos instalados y su tamaño.' }
+          { cmd: 'wmic memorychip get capacity', label: 'Memoria RAM', desc: 'Muestra la capacidad de cada módulo de RAM en bytes.' },
+          { cmd: 'wmic diskdrive get model,size,status', label: 'Discos instalados', desc: 'Lista los discos, su tamaño y estado (OK/Pred Fail).' }
         ] },
-        { id: 'red', title: 'Red / Internet', instruction: 'Conecta el cable de red o verifica WiFi. Abre el navegador para confirmar conectividad.', mode: 'rapido', options: [
+        { id: 'red', title: 'Red / Internet',
+          queRevisar: 'La estación debe tener conectividad de red e Internet. Verifica IP, DNS y ping.',
+          dondeEntrar: 'Abre Símbolo del sistema (CMD) como administrador. Ejecuta los comandos de red.',
+          interpretacion: 'Si ipconfig muestra una IP 169.254.x.x, no hay DHCP. Si ping 8.8.8.8 falla pero ping 127.0.0.1 funciona, el problema es de Internet, no de la tarjeta de red.',
+          queFoto: 'Toma foto de la ventana de CMD mostrando ipconfig y un ping exitoso.',
+          mode: 'rapido', options: [
           { label: 'Conectividad normal', value: 'red_normal', field: 'red', valueMap: 'Conectividad normal' },
           { label: 'Sin conexión', value: 'red_sin_conexion', field: 'red', valueMap: 'Sin conexión de red' },
           { label: 'Solo red local (sin Internet)', value: 'red_solo_local', field: 'red', valueMap: 'Solo red local' },
@@ -1609,41 +2227,68 @@
           { label: 'IP estática', value: 'red_estatica', field: '', valueMap: '' }
         ], commands: [
           { cmd: 'ipconfig', label: 'IP actual', desc: 'Muestra la configuración de red actual.' },
-          { cmd: 'ipconfig /all', label: 'IP detallada', desc: 'Muestra toda la info de red.' },
-          { cmd: 'ping 127.0.0.1', label: 'Ping local', desc: 'Verifica que la tarjeta de red funciona.' },
+          { cmd: 'ipconfig /all', label: 'IP detallada', desc: 'Muestra toda la info de red (MAC, DNS, gateway).' },
+          { cmd: 'ping 127.0.0.1', label: 'Ping local', desc: 'Verifica que la tarjeta de red funciona internamente.' },
           { cmd: 'ping 8.8.8.8', label: 'Ping a Google DNS', desc: 'Verifica conectividad a Internet.' },
-          { cmd: 'ping google.com', label: 'Ping por nombre', desc: 'Verifica resolución DNS.' }
+          { cmd: 'ping google.com', label: 'Ping por nombre', desc: 'Verifica que la resolución DNS funciona.' }
         ] },
-        { id: 'monitor', title: 'Monitor', instruction: 'Verifica que la imagen se vea correctamente, sin pixeles muertos ni distorsión.', mode: 'rapido', options: [
+        { id: 'monitor', title: 'Monitor',
+          queRevisar: 'La imagen debe verse clara, sin distorsión, parpadeo ni píxeles muertos.',
+          dondeEntrar: 'Observa la pantalla directamente. Abre una página blanca para detectar píxeles muertos.',
+          interpretacion: 'Si no hay imagen, verifica el cable de video y la alimentación. Si parpadea, prueba con otro cable o ajusta la frecuencia.',
+          queFoto: 'Toma foto de la pantalla mostrando una imagen de prueba o el escritorio completo.',
+          mode: 'rapido', options: [
           { label: 'Funciona correctamente', value: 'monitor_ok', field: 'monitor', valueMap: 'Funciona correctamente' },
           { label: 'No prende / sin luz', value: 'monitor_no_prende', field: 'monitor', valueMap: 'No prende' },
           { label: 'Imagen distorsionada / rayas', value: 'monitor_distorsion', field: 'monitor', valueMap: 'Imagen distorsionada' },
           { label: 'Pixeles muertos', value: 'monitor_pixeles', field: 'monitor', valueMap: 'Pixeles muertos visibles' },
           { label: 'Flicker / parpadeo', value: 'monitor_flicker', field: 'monitor', valueMap: 'Parpadeo en pantalla' },
           { label: 'Cable dañado / suelto', value: 'monitor_cable', field: 'monitor', valueMap: 'Cable de monitor dañado' }
-        ], commands: [] },
-        { id: 'teclado', title: 'Teclado', instruction: 'Conecta el teclado y prueba cada grupo de teclas.', mode: 'completo', options: [
+        ], commands: [
+          { cmd: 'wmic desktopmonitor get screenheight,screenwidth', label: 'Resolución', desc: 'Muestra la resolución actual del monitor.' }
+        ] },
+        { id: 'teclado', title: 'Teclado',
+          queRevisar: 'Todas las teclas deben responder correctamente. El puerto USB debe reconocer el teclado.',
+          dondeEntrar: 'Conecta el teclado. Abre un bloc de notas y prueba cada tecla.',
+          interpretacion: 'Si ninguna tecla funciona, prueba en otro puerto USB. Si sigue sin funcionar, el teclado está dañado.',
+          queFoto: 'Toma foto del teclado mostrando su estado físico (leyendas, limpieza, daños).',
+          mode: 'completo', options: [
           { label: 'Funciona correctamente', value: 'teclado_ok', field: 'teclado', valueMap: 'Funciona correctamente' },
           { label: 'Teclas no responden', value: 'teclado_no_responde', field: 'teclado', valueMap: 'Teclas no responden' },
           { label: 'Puerto USB dañado', value: 'teclado_usb', field: 'teclado', valueMap: 'Puerto USB no reconoce' },
           { label: 'Teclas pegajosas / atascadas', value: 'teclado_pegajoso', field: 'teclado', valueMap: 'Teclas pegajosas' },
           { label: 'Falta teclado', value: 'teclado_falta', field: 'teclado', valueMap: 'No hay teclado' }
         ], commands: [] },
-        { id: 'mouse', title: 'Mouse', instruction: 'Conecta el mouse y verifica que el cursor se mueva suavemente.', mode: 'completo', options: [
+        { id: 'mouse', title: 'Mouse',
+          queRevisar: 'El cursor debe moverse suavemente. Todos los botones y el scroll deben funcionar.',
+          dondeEntrar: 'Conecta el mouse. Mueve el cursor por toda la pantalla. Prueba clics y scroll.',
+          interpretacion: 'Si el cursor no se mueve, limpia el sensor óptico. Si los botones no responden, tiene desgaste mecánico.',
+          queFoto: 'Toma foto del mouse mostrando su estado físico (cable, botones, sensor).',
+          mode: 'completo', options: [
           { label: 'Funciona correctamente', value: 'mouse_ok', field: 'mouse', valueMap: 'Funciona correctamente' },
           { label: 'Cursor no se mueve', value: 'mouse_no_curse', field: 'mouse', valueMap: 'Cursor no se mueve' },
           { label: 'Botones no responden', value: 'mouse_botones', field: 'mouse', valueMap: 'Botones no responden' },
           { label: 'Scroll no funciona', value: 'mouse_scroll', field: 'mouse', valueMap: 'Scroll no funciona' },
           { label: 'Falta mouse', value: 'mouse_falta', field: 'mouse', valueMap: 'No hay mouse' }
         ], commands: [] },
-        { id: 'audio', title: 'Audio', instruction: 'Conecta bocinas o audífonos. Reproduce un sonido y verifica volumen.', mode: 'completo', options: [
+        { id: 'audio', title: 'Audio',
+          queRevisar: 'Las bocinas o audífonos deben reproducir sonido claro, sin distorsión.',
+          dondeEntrar: 'Conecta bocinas o audífonos. Reproduce un archivo de audio o video.',
+          interpretacion: 'Si no hay sonido, verifica volumen en Windows y el conector. Si se escucha distorsionado, prueba con otros audífonos.',
+          queFoto: 'Toma foto del conector de audio y las bocinas mostrando su estado físico.',
+          mode: 'completo', options: [
           { label: 'Audio funciona', value: 'audio_ok', field: '', valueMap: '' },
           { label: 'No hay sonido', value: 'audio_no', field: '', valueMap: '' },
           { label: 'Audio distorsionado', value: 'audio_distorsion', field: '', valueMap: '' },
           { label: 'Solo un canal', value: 'audio_mono', field: '', valueMap: '' },
           { label: 'Plug dañado / no reconoce', value: 'audio_plug', field: '', valueMap: '' }
         ], commands: [] },
-        { id: 'energia', title: 'Energía', instruction: 'Verifica el cable de corriente, el estado del regulador o UPS y la fuente de poder.', mode: 'completo', options: [
+        { id: 'energia', title: 'Energía',
+          queRevisar: 'La estación debe recibir corriente estable. Verifica el cable, fuente de poder y regulador.',
+          dondeEntrar: 'Observa físicamente el cable de corriente, la fuente de poder y el regulador de voltaje.',
+          interpretacion: 'Si la fuente no enciende (no gira el ventilador), reemplázala. Si el regulador falta, la estación no está protegida.',
+          queFoto: 'Toma foto de la fuente de poder y del regulador/UPS mostrando etiquetas y estado.',
+          mode: 'completo', options: [
           { label: 'Cable de corriente OK', value: 'cable_ok', field: '', valueMap: '' },
           { label: 'Cable dañado', value: 'cable_danado', field: '', valueMap: '' },
           { label: 'Fuente de poder no funciona', value: 'fuente_muerta', field: '', valueMap: '' },
@@ -1680,6 +2325,7 @@
         bios_no_disco: 'Verificar conexión SATA del disco. Podría haber fallado.',
         bios_no_ram: 'Reseat los módulos de RAM. Limpiar contactos con borrador.',
         no_enciende: 'Verificar cable de corriente y fuente de poder. Probar con otro cable.',
+        falta_cpu: 'Estación incompleta: falta CPU. No apta para uso con alumnos hasta localizar, asignar o sustituir gabinete correspondiente.',
         enciende_sin_video: 'Reseat RAM y tarjeta de video si es dedicada. Probar otro monitor.',
         enciende_se_apaga: 'Posible sobrecalentamiento o fuente deficiente. Revisar ventiladores.',
         enciende_ruidos: 'Verificar ventiladores y fuente de poder. Limpiar el interior.',
@@ -1745,6 +2391,13 @@
       const photoPreview = document.querySelector("#photo-preview");
       const photoPlaceholder = document.querySelector("#photo-placeholder");
       const photoStatus = document.querySelector("#photo-status");
+      const cameraVideo = document.querySelector("#camera-video");
+      const cameraBox = document.querySelector("#camera-box");
+      const cameraMsg = document.querySelector("#camera-msg");
+      const openCameraBtn = document.querySelector("#open-camera");
+      const captureBtn = document.querySelector("#capture-btn");
+      const restartCameraBtn = document.querySelector("#restart-camera");
+      let mediaStream = null;
       let selectedId = null;
       let pendingPhoto = null;
       let toastTimer = null;
@@ -1766,6 +2419,8 @@
         red: "Pendiente",
         responsable: "",
         observaciones: "",
+        proteccionElectrica: "Pendiente revisar",
+        situacionPatrimonial: "Pendiente comparar con inventario previo",
         photo: null,
         guiadx: null,
         updatedAt: null
@@ -1785,6 +2440,208 @@
 
       const cleanText = (value, maxLength = 1000) =>
         typeof value === "string" ? value.slice(0, maxLength) : "";
+
+      const readLocalArray = (key) => {
+        try {
+          const value = JSON.parse(localStorage.getItem(key) || "[]");
+          return Array.isArray(value) ? value : [];
+        } catch {
+          return [];
+        }
+      };
+
+      const writeLocalArray = (key, value) => {
+        localStorage.setItem(key, JSON.stringify(Array.isArray(value) ? value : []));
+      };
+
+      const firstText = (value, keys, fallback = "") => {
+        if (!value || typeof value !== "object") return fallback;
+        for (const key of keys) {
+          const candidate = value[key];
+          if (candidate !== undefined && candidate !== null && String(candidate).trim()) {
+            return cleanText(String(candidate).trim(), 1000);
+          }
+        }
+        return fallback;
+      };
+
+      const normalizeRecommendations = (value) => {
+        if (Array.isArray(value)) {
+          return value.map((item) => cleanText(String(item), 500)).filter(Boolean);
+        }
+        if (typeof value === "string" && value.trim()) {
+          return value.split(/\r?\n|;\s*/).map((item) => cleanText(item.trim(), 500)).filter(Boolean);
+        }
+        return [];
+      };
+
+      const inferLooseAssetCategory = (value) => {
+        const text = [
+          value && value.categoria,
+          value && value.categoría,
+          value && value.tipoRegistro,
+          value && value.tipo,
+          value && value.tipoEquipo,
+          value && value.etiquetaVisible,
+          value && value.descripcion,
+          value && value.observaciones
+        ].filter(Boolean).join(" ").toLowerCase();
+
+        if (/no[\s-]?break|ups/.test(text)) return "No-break suelto";
+        if (/regulador/.test(text)) return "Regulador suelto";
+        if (/monitor|pantalla/.test(text)) return "Monitor suelto";
+        if (/teclado/.test(text)) return "Teclado suelto";
+        if (/mouse|rat[oó]n/.test(text)) return "Mouse suelto";
+        if (/\bcpu\b|gabinete|torre/.test(text)) return "CPU suelta";
+        if (/etiqueta|inventario anterior|inventario previo/.test(text)) return "Etiqueta previa / inventario anterior";
+        if (/emparejar|asignar|sin estaci[oó]n/.test(text)) return "Pendiente de emparejar";
+        return "Equipo rezagado";
+      };
+
+      const normalizeLooseAsset = (value, index = 0) => {
+        const raw = value && typeof value === "object" ? value : { descripcion: String(value || "") };
+        const assetId = firstText(raw, ["assetId", "assetID", "idActivo", "asset_id", "id"], "");
+        const explicitCategory = firstText(raw, ["categoria", "categoría", "category"], "");
+        const validCategories = [
+          "CPU suelta",
+          "Monitor suelto",
+          "Teclado suelto",
+          "Mouse suelto",
+          "No-break suelto",
+          "Regulador suelto",
+          "Equipo rezagado",
+          "Pendiente de emparejar",
+          "Etiqueta previa / inventario anterior"
+        ];
+        const categoria = validCategories.includes(explicitCategory)
+          ? explicitCategory
+          : inferLooseAssetCategory(raw);
+        const asset = {
+          assetId: assetId || "LOCAL-" + Date.now().toString(36) + "-" + String(index + 1).padStart(3, "0"),
+          tipoRegistro: firstText(raw, ["tipoRegistro", "registro", "type", "tipo"], "Activo suelto"),
+          categoria,
+          etiquetaVisible: firstText(raw, ["etiquetaVisible", "etiqueta", "label", "nombre", "numeroInventario"], "Sin etiqueta visible"),
+          estadoGeneral: firstText(raw, ["estadoGeneral", "estado", "status", "condicion"], "Pendiente de revisión"),
+          descripcion: firstText(raw, ["descripcion", "descripción", "observaciones", "detalle", "notas"], "Sin descripción adicional."),
+          recomendaciones: normalizeRecommendations(raw.recomendaciones || raw.recommendations || raw.recomendacion),
+          fecha: firstText(raw, ["fecha", "fechaRevision", "createdAt", "updatedAt"], new Date().toISOString()),
+          fuente: firstText(raw, ["fuente", "source", "origen"], "Importación local"),
+          importedAt: typeof raw.importedAt === "string" ? raw.importedAt : new Date().toISOString()
+        };
+        if (!asset.createdByInitials) {
+          const user = loadCurrentUser();
+          if (user) {
+            asset.createdByName = user.name;
+            asset.createdByInitials = user.initials;
+            asset.createdByRole = user.role;
+            asset.createdAt = asset.createdAt || asset.fecha || new Date().toISOString();
+          }
+        }
+        return asset;
+      };
+
+      const inferFindingCategory = (value) => {
+        const text = [
+          value && value.categoria,
+          value && value.categoría,
+          value && value.tipo,
+          value && value.titulo,
+          value && value.descripcion,
+          value && value.hallazgo,
+          value && value.observaciones
+        ].filter(Boolean).join(" ").toLowerCase();
+
+        if (/limpieza|polvo|suciedad/.test(text)) return "Limpieza urgente";
+        if (/no[\s-]?break|ups|protecci[oó]n el[eé]ctrica|regulador/.test(text)) return "Protección eléctrica / no-breaks";
+        if (/interrupci[oó]n|interrump/.test(text)) return "Interrupciones durante diagnóstico";
+        if (/emparejar|emparejamiento|asignar componente/.test(text)) return "Necesidad de emparejamiento físico";
+        if (/resguardo|responsable/.test(text)) return "Resguardo";
+        if (/inventario previo|inventario anterior|etiqueta previa/.test(text)) return "Inventario previo pendiente";
+        if (/rezagad|incomplet|faltante/.test(text)) return "Equipo rezagado o incompleto";
+        return "Hallazgo general";
+      };
+
+      const normalizeGeneralFinding = (value, index = 0) => {
+        const raw = typeof value === "string" ? { descripcion: value } : (value && typeof value === "object" ? value : {});
+        const explicitCategory = firstText(raw, ["categoria", "categoría", "category"], "");
+        const validCategories = [
+          "Equipo rezagado o incompleto",
+          "Inventario previo pendiente",
+          "Resguardo",
+          "Protección eléctrica / no-breaks",
+          "Limpieza urgente",
+          "Interrupciones durante diagnóstico",
+          "Necesidad de emparejamiento físico",
+          "Hallazgo general"
+        ];
+        const categoria = validCategories.includes(explicitCategory)
+          ? explicitCategory
+          : inferFindingCategory(raw);
+        const finding = {
+          findingId: firstText(raw, ["findingId", "hallazgoId", "id"], "") ||
+            "HALLAZGO-" + Date.now().toString(36) + "-" + String(index + 1).padStart(3, "0"),
+          categoria,
+          titulo: firstText(raw, ["titulo", "title", "tipo"], categoria),
+          descripcion: firstText(raw, ["descripcion", "descripción", "hallazgo", "observaciones", "detalle"], "Hallazgo pendiente de ampliar."),
+          recomendaciones: normalizeRecommendations(raw.recomendaciones || raw.recommendations || raw.recomendacion),
+          fecha: firstText(raw, ["fecha", "fechaRevision", "createdAt", "updatedAt"], new Date().toISOString()),
+          fuente: firstText(raw, ["fuente", "source", "origen"], "Importación local"),
+          importedAt: typeof raw.importedAt === "string" ? raw.importedAt : new Date().toISOString()
+        };
+        if (!finding.createdByInitials) {
+          const user = loadCurrentUser();
+          if (user) {
+            finding.createdByName = user.name;
+            finding.createdByInitials = user.initials;
+            finding.createdByRole = user.role;
+            finding.createdAt = finding.createdAt || finding.fecha || new Date().toISOString();
+          }
+        }
+        return finding;
+      };
+
+      const looseAssetKey = (asset) =>
+        cleanText(asset.assetId, 160).toLowerCase() ||
+        [asset.categoria, asset.etiquetaVisible, asset.descripcion].join("|").toLowerCase();
+
+      const findingKey = (finding) =>
+        cleanText(finding.findingId, 160).toLowerCase() ||
+        [finding.categoria, finding.titulo, finding.descripcion].join("|").toLowerCase();
+
+      const mergeLocalRecords = (existing, incoming, keyFn) => {
+        const result = existing.map((item) => ({ ...item }));
+        const byKey = new Map(result.map((item, index) => [keyFn(item), index]));
+        let added = 0;
+        let conflicts = 0;
+
+        incoming.forEach((item) => {
+          const key = keyFn(item);
+          if (!byKey.has(key)) {
+            byKey.set(key, result.length);
+            result.push(item);
+            added += 1;
+            return;
+          }
+
+          const currentIndex = byKey.get(key);
+          const current = result[currentIndex];
+          if (JSON.stringify(current) !== JSON.stringify(item)) {
+            conflicts += 1;
+            const merged = { ...current };
+            Object.entries(item).forEach(([field, incomingValue]) => {
+              const currentValue = merged[field];
+              const currentEmpty = currentValue === "" || currentValue === null ||
+                currentValue === undefined || (Array.isArray(currentValue) && currentValue.length === 0);
+              if (currentEmpty && incomingValue !== "" && incomingValue !== null && incomingValue !== undefined) {
+                merged[field] = incomingValue;
+              }
+            });
+            result[currentIndex] = merged;
+          }
+        });
+
+        return { records: result, added, conflicts };
+      };
 
       const normalizePhoto = (value) => {
         if (!value || typeof value !== "object") return null;
@@ -1811,6 +2668,12 @@
           const limit = field === "observaciones" ? 1000 : 120;
           base[field] = cleanText(value[field], limit) || (field === "responsable" || field === "observaciones" ? "" : "Pendiente");
         });
+        INVENTARIO_FIELDS.forEach((field) => {
+          if (typeof value[field] === "string" && value[field]) {
+            const valid = field === "proteccionElectrica" ? PROTECCION_OPTIONS : SITUACION_OPTIONS;
+            if (valid.includes(value[field])) base[field] = value[field];
+          }
+        });
         base.photo = normalizePhoto(value.photo);
         base.guiadx = normalizeGuiadx(value.guiadx);
         base.updatedAt = typeof value.updatedAt === "string" ? value.updatedAt : null;
@@ -1821,10 +2684,13 @@
         kind: "localStorage",
         loadCurrent() {
           const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-          return raw ? JSON.parse(raw) : null;
+          if (raw) return JSON.parse(raw);
+          const stations = readLocalArray(STATIONS_KEY);
+          return stations.length ? { stations } : null;
         },
         saveCurrent(value) {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+          writeLocalArray(STATIONS_KEY, value && Array.isArray(value.stations) ? value.stations : []);
         },
         clearCurrent() {
           localStorage.removeItem(STORAGE_KEY);
@@ -1858,6 +2724,26 @@
           };
       };
 
+      const loadLooseAssets = () =>
+        readLocalArray(LOOSE_ASSETS_KEY).map((item, index) => normalizeLooseAsset(item, index));
+
+      const saveLooseAssets = (items) => {
+        writeLocalArray(LOOSE_ASSETS_KEY, items);
+      };
+
+      const loadGeneralFindings = () =>
+        readLocalArray(GENERAL_FINDINGS_KEY).map((item, index) => normalizeGeneralFinding(item, index));
+
+      const saveGeneralFindings = (items) => {
+        writeLocalArray(GENERAL_FINDINGS_KEY, items);
+      };
+
+      const loadImportHistory = () => readLocalArray(IMPORT_HISTORY_KEY);
+
+      const saveImportHistory = (items) => {
+        writeLocalArray(IMPORT_HISTORY_KEY, items.slice(-100));
+      };
+
       const loadAudit = () => {
         try {
           return normalizeAudit(localAuditRepository.loadCurrent());
@@ -1869,6 +2755,42 @@
       };
 
       let audit = loadAudit();
+      let looseAssets = loadLooseAssets();
+      let generalFindings = loadGeneralFindings();
+      let importHistory = loadImportHistory();
+      let currentUser = loadCurrentUser();
+
+      const migrateLegacyCollections = () => {
+        let legacy = {};
+        try {
+          legacy = JSON.parse(localStorage.getItem(HALLAZGOS_KEY) || "{}");
+        } catch {
+          legacy = {};
+        }
+
+        const legacyAssets = Array.isArray(legacy._activosRezagados)
+          ? legacy._activosRezagados.map((item, index) => normalizeLooseAsset(item, index))
+          : [];
+        const rawLegacyFindings = legacy._hallazgosGenerales;
+        const legacyFindings = rawLegacyFindings
+          ? (Array.isArray(rawLegacyFindings) ? rawLegacyFindings : [rawLegacyFindings])
+              .map((item, index) => normalizeGeneralFinding(item, index))
+          : [];
+
+        if (legacyAssets.length) {
+          looseAssets = mergeLocalRecords(looseAssets, legacyAssets, looseAssetKey).records;
+        }
+        if (legacyFindings.length) {
+          generalFindings = mergeLocalRecords(generalFindings, legacyFindings, findingKey).records;
+        }
+
+        saveLooseAssets(looseAssets);
+        saveGeneralFindings(generalFindings);
+        saveImportHistory(importHistory);
+        writeLocalArray(STATIONS_KEY, audit.stations);
+      };
+
+      migrateLegacyCollections();
 
       const formatDate = (iso, includeTime = false) => {
         if (!iso) return "";
@@ -1890,8 +2812,8 @@
           localAuditRepository.saveCurrent(audit);
           const sizeMb = (localAuditRepository.serializedSize(audit) / (1024 * 1024)).toFixed(2);
           document.querySelector("#storage-status").textContent = audit.updatedAt
-            ? "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB"
-            : "Nueva auditoría guardada localmente · " + sizeMb + " MB";
+            ? "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB · lab310_stations"
+            : "Nueva auditoría guardada localmente · " + sizeMb + " MB · lab310_stations";
           updateSyncBadge();
           if (isSupabaseConfigured() && !skipSyncFlag) {
             syncAuditToSupabase(true);
@@ -1906,25 +2828,76 @@
       };
 
       const getSummary = () => {
-        const summary = { total: audit.stations.length, verde: 0, amarillo: 0, rojo: 0, gris: 0 };
+        const summary = {
+          total: audit.stations.length,
+          verde: 0,
+          amarillo: 0,
+          rojo: 0,
+          gris: 0,
+          reviewed: 0,
+          incomplete: 0
+        };
+        summary.sinCPU = 0;
+        summary.monitoresSueltos = 0;
+        summary.cpuSueltas = 0;
+        summary.sinProteccion = 0;
+        summary.noBreaksSueltos = 0;
+        summary.pendientesEmparejar = 0;
+        summary.hallazgosGenerales = generalFindings.length;
         audit.stations.forEach((station) => {
-          summary[station.estado] += 1;
+          if (Object.prototype.hasOwnProperty.call(summary, station.estado)) {
+            summary[station.estado] += 1;
+          }
+          if (station.estado !== "gris") summary.reviewed += 1;
+
+          const cpuText = String(station.cpu || "").toLowerCase();
+          const monitorText = String(station.monitor || "").toLowerCase();
+          const keyboardText = String(station.teclado || "").toLowerCase();
+          const mouseText = String(station.mouse || "").toLowerCase();
+          const missingCpu = station.estado === "falta_cpu" || /\bfalta\b.*\bcpu\b|sin cpu|no hay cpu/.test(cpuText);
+          const incomplete = station.estado === "incompleta" ||
+            ["falta_cpu", "falta_monitor", "falta_teclado", "falta_mouse"].includes(station.estado) ||
+            missingCpu || /falta|no hay/.test(monitorText + " " + keyboardText + " " + mouseText);
+          if (missingCpu) summary.sinCPU += 1;
+          if (incomplete) summary.incomplete += 1;
+
+          const pe = station.proteccionElectrica || "Pendiente revisar";
+          if (pe === "No-break faltante" || pe === "Conectado directo a corriente" || pe === "Pendiente revisar") summary.sinProteccion++;
+        });
+
+        looseAssets.forEach((asset) => {
+          if (asset.categoria === "CPU suelta") summary.cpuSueltas += 1;
+          if (asset.categoria === "Monitor suelto") summary.monitoresSueltos += 1;
+          if (asset.categoria === "No-break suelto") summary.noBreaksSueltos += 1;
+          if (asset.categoria === "Pendiente de emparejar" ||
+              /emparejar|sin estaci[oó]n/i.test(asset.tipoRegistro + " " + asset.descripcion)) {
+            summary.pendientesEmparejar += 1;
+          }
         });
         return summary;
       };
 
       const renderSummary = () => {
         const summary = getSummary();
-        const reviewed = summary.total - summary.gris;
-        const percent = Math.round((reviewed / summary.total) * 100);
+        const percent = Math.round((summary.reviewed / summary.total) * 100);
 
         document.querySelector("#count-total").textContent = summary.total;
         document.querySelector("#count-verde").textContent = summary.verde;
         document.querySelector("#count-amarillo").textContent = summary.amarillo;
         document.querySelector("#count-rojo").textContent = summary.rojo;
         document.querySelector("#count-gris").textContent = summary.gris;
+        document.querySelector("#count-reviewed").textContent = summary.reviewed;
+        document.querySelector("#count-reviewed-observations").textContent = summary.amarillo;
+        document.querySelector("#count-incomplete").textContent = summary.incomplete;
+        document.querySelector("#count-sinCPU").textContent = summary.sinCPU;
+        document.querySelector("#count-cpuSueltas").textContent = summary.cpuSueltas;
+        document.querySelector("#count-monitoresSueltos").textContent = summary.monitoresSueltos;
+        document.querySelector("#count-sinProteccion").textContent = summary.sinProteccion;
+        document.querySelector("#count-noBreaksSueltos").textContent = summary.noBreaksSueltos;
+        document.querySelector("#count-pending-pair").textContent = summary.pendientesEmparejar;
+        document.querySelector("#count-general-findings").textContent = summary.hallazgosGenerales;
         document.querySelector("#progress-bar").style.width = percent + "%";
-        document.querySelector("#progress-label").textContent = reviewed + " de " + summary.total + " revisadas";
+        document.querySelector("#progress-label").textContent = summary.reviewed + " de " + summary.total + " revisadas";
         document.querySelector("#progress-percent").textContent = percent + "%";
         document.querySelector("#audit-date").textContent = "Iniciada " + formatDate(audit.startedAt);
         document.querySelector("#last-update").textContent = audit.updatedAt
@@ -1943,7 +2916,9 @@
           return;
         }
 
-        grid.innerHTML = visible.map((station) => `
+        grid.innerHTML = visible.map((station) => {
+          const userLabel = getUserLabel(station);
+          return `
           <button
             class="station"
             type="button"
@@ -1953,17 +2928,106 @@
           >
             <span class="station-number">E${String(station.id).padStart(2, "0")}</span>
             ${station.photo ? '<span class="station-photo" title="Incluye fotografía" aria-label="Incluye fotografía">F</span>' : ""}
+            ${station.observaciones && station.observaciones.includes("[Importado desde revisión asistida por ChatGPT") ? '<span class="station-photo" style="right:45px;background:#e8f0ff;border-color:#93c5fd;color:#1e40af;" title="Datos importados de ChatGPT">AI</span>' : ""}
             <span class="station-status">
               <span class="station-dot" aria-hidden="true"></span>
               ${STATUS_LABELS[station.estado]}
             </span>
-          </button>
+            ${userLabel ? '<span class="station-author">' + escapeHtml(userLabel) + '</span>' : ""}
+          </button>`;
+        }).join("");
+      };
+
+      const renderLooseAssets = () => {
+        const container = document.querySelector("#loose-assets-list");
+        const counter = document.querySelector("#loose-assets-count");
+        if (!container || !counter) return;
+        counter.textContent = looseAssets.length + (looseAssets.length === 1 ? " registro" : " registros");
+
+        if (!looseAssets.length) {
+          container.innerHTML = '<p class="registry-empty">No hay equipo suelto registrado en este navegador.</p>';
+          return;
+        }
+
+        container.innerHTML = looseAssets.map((asset) => `
+          <article class="registry-card">
+            <header class="registry-card-head">
+              <div>
+                <h3>${escapeHtml(asset.etiquetaVisible || asset.assetId)}</h3>
+                <span class="registry-tag">${escapeHtml(asset.categoria)}</span>
+              </div>
+              <span class="registry-tag">${escapeHtml(asset.estadoGeneral)}</span>
+            </header>
+            <dl class="registry-data">
+              <div><dt>Asset ID</dt><dd>${escapeHtml(asset.assetId)}</dd></div>
+              <div><dt>Tipo de registro</dt><dd>${escapeHtml(asset.tipoRegistro)}</dd></div>
+              <div><dt>Categoría</dt><dd>${escapeHtml(asset.categoria)}</dd></div>
+              <div><dt>Etiqueta visible</dt><dd>${escapeHtml(asset.etiquetaVisible)}</dd></div>
+              <div><dt>Descripción</dt><dd>${escapeHtml(asset.descripcion)}</dd></div>
+              <div><dt>Recomendaciones</dt><dd>${escapeHtml(asset.recomendaciones.join("\n") || "Sin recomendaciones registradas.")}</dd></div>
+              <div><dt>Fecha</dt><dd>${escapeHtml(asset.fecha)}</dd></div>
+              <div><dt>Fuente</dt><dd>${escapeHtml(asset.fuente)}</dd></div>
+              ${asset.createdByInitials ? '<div><dt>Registrado por</dt><dd>' + escapeHtml(asset.createdByInitials + (asset.createdAt ? " · " + formatDate(asset.createdAt, true) : "")) + '</dd></div>' : ""}
+            </dl>
+          </article>
         `).join("");
+      };
+
+      const renderGeneralFindings = () => {
+        const container = document.querySelector("#general-findings-list");
+        const counter = document.querySelector("#general-findings-count");
+        const lastImportNote = document.querySelector("#last-import-note");
+        if (!container || !counter) return;
+        counter.textContent = generalFindings.length + (generalFindings.length === 1 ? " registro" : " registros");
+
+        if (lastImportNote) {
+          const lastImport = importHistory[importHistory.length - 1];
+          lastImportNote.textContent = lastImport
+            ? ". Última importación local: " + formatDate(lastImport.importedAt, true)
+            : ".";
+        }
+
+        if (!generalFindings.length) {
+          container.innerHTML = '<p class="registry-empty">No hay hallazgos generales importados en este navegador.</p>';
+          return;
+        }
+
+        container.innerHTML = generalFindings.map((finding) => `
+          <article class="registry-card">
+            <header class="registry-card-head">
+              <div>
+                <h3>${escapeHtml(finding.titulo)}</h3>
+                <span class="registry-tag">${escapeHtml(finding.categoria)}</span>
+              </div>
+            </header>
+            <dl class="registry-data">
+              <div><dt>Descripción</dt><dd>${escapeHtml(finding.descripcion)}</dd></div>
+              <div><dt>Recomendaciones</dt><dd>${escapeHtml(finding.recomendaciones.join("\n") || "Pendiente de definir.")}</dd></div>
+              <div><dt>Fecha</dt><dd>${escapeHtml(finding.fecha)}</dd></div>
+              <div><dt>Fuente</dt><dd>${escapeHtml(finding.fuente)}</dd></div>
+              ${finding.createdByInitials ? '<div><dt>Registrado por</dt><dd>' + escapeHtml(finding.createdByInitials + (finding.createdAt ? " · " + formatDate(finding.createdAt, true) : "")) + '</dd></div>' : ""}
+            </dl>
+          </article>
+        `).join("");
+      };
+
+      const renderUserBadge = () => {
+        const el = document.querySelector("#user-badge");
+        if (!el) return;
+        const user = loadCurrentUser();
+        el.textContent = user
+          ? user.initials + " · " + user.name
+          : "Sin sesión — los cambios no se guardarán";
+        el.style.background = user ? "#eef2ff" : "#ffe7e7";
+        el.style.color = user ? "#4338ca" : "#991b1b";
       };
 
       const render = () => {
         renderSummary();
         renderStations();
+        renderLooseAssets();
+        renderGeneralFindings();
+        renderUserBadge();
       };
 
       const showToast = (message) => {
@@ -2013,9 +3077,108 @@
         new Promise((resolve, reject) => {
           const image = new Image();
           image.onload = () => resolve(image);
-          image.onerror = () => reject(new Error("El archivo no contiene una imagen válida."));
+          image.onerror = () => reject(new Error("No fue posible cargar la imagen."));
           image.src = source;
         });
+
+      const stopCamera = () => {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => track.stop());
+          mediaStream = null;
+        }
+        if (cameraVideo.srcObject) {
+          cameraVideo.srcObject = null;
+        }
+        cameraVideo.removeAttribute("src");
+        cameraBox.style.display = "none";
+        cameraMsg.textContent = "";
+      };
+
+      const startCamera = async () => {
+        stopCamera();
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          cameraMsg.textContent = "Cámara no disponible en este navegador. Use subir foto desde galería.";
+          return;
+        }
+        cameraMsg.textContent = "Solicitando permiso de cámara…";
+        cameraBox.style.display = "block";
+        cameraMsg.style.color = "#94a3b8";
+        const constraints = {
+          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        };
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch {
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          } catch (err) {
+            stopCamera();
+            cameraMsg.style.color = "#dc2626";
+            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+              cameraMsg.textContent = "Permiso denegado. Use subir foto desde galería.";
+            } else if (err.name === "NotFoundError") {
+              cameraMsg.textContent = "No se encontró cámara en este dispositivo. Use subir foto desde galería.";
+            } else {
+              cameraMsg.textContent = "Cámara no disponible. Use subir foto desde galería.";
+            }
+            return;
+          }
+        }
+        cameraVideo.srcObject = mediaStream;
+        try {
+          await new Promise((resolve, reject) => {
+            cameraVideo.onloadedmetadata = () => resolve();
+            cameraVideo.onerror = () => reject(new Error("Error al cargar video"));
+            setTimeout(() => reject(new Error("Timeout")), 10000);
+          });
+          await cameraVideo.play();
+          // Check if camera actually delivers frames
+          await new Promise((resolve, reject) => {
+            let attempts = 0;
+            const check = () => {
+              if (cameraVideo.videoWidth > 0 && cameraVideo.videoHeight > 0) return resolve();
+              attempts++;
+              if (attempts > 20) return reject(new Error("No frames"));
+              setTimeout(check, 250);
+            };
+            check();
+          });
+          cameraMsg.style.color = "#0f7b4a";
+          cameraMsg.textContent = "Cámara lista. Presione Tomar foto para capturar.";
+        } catch {
+          stopCamera();
+          cameraMsg.style.color = "#dc2626";
+          cameraMsg.textContent = "No se pudo iniciar vista previa. Use subir foto desde galería.";
+        }
+      };
+
+      const captureFromCamera = () => {
+        if (!mediaStream) return;
+        const w = cameraVideo.videoWidth || 640;
+        const h = cameraVideo.videoHeight || 480;
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d", { alpha: false });
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(cameraVideo, 0, 0, w, h);
+        canvas.toBlob(async (blob) => {
+          if (!blob) { showToast("No se pudo capturar la imagen."); return; }
+          const file = new File([blob], "camara_" + Date.now() + ".jpg", { type: "image/jpeg" });
+          try {
+            photoStatus.textContent = "Comprimiendo fotografía…";
+            pendingPhoto = await compressPhoto(file);
+            formModified = true;
+            setPhotoPreview(pendingPhoto);
+            stopCamera();
+            showToast("Foto capturada y comprimida. Guarda la ficha para conservarla.");
+          } catch (err) {
+            showToast(err instanceof Error ? err.message : "No se pudo procesar la foto.");
+          }
+        }, "image/jpeg", 0.85);
+      };
 
       const compressPhoto = async (file) => {
         if (!file || !/^image\/(?:jpeg|png|webp)$/i.test(file.type)) {
@@ -2069,40 +3232,53 @@
       };
 
       const openStation = (id) => {
-        const station = audit.stations.find((item) => item.id === id);
-        if (!station) return;
+        try {
+          const station = audit.stations.find((item) => item.id === id);
+          if (!station) { console.error("openStation: estación no encontrada, id=" + id); return; }
 
-        selectedId = id;
-        formModified = false;
-        pendingPhoto = station.photo ? { ...station.photo } : null;
-        document.querySelector("#modal-title").textContent = "Estación " + id;
-        form.elements.estado.value = station.estado;
-        TEXT_FIELDS.forEach((field) => {
-          form.elements[field].value = station[field];
-        });
-        photoInput.value = "";
-        setPhotoPreview(pendingPhoto);
-        document.querySelector("#form-save-status").textContent = station.updatedAt
-          ? "Último guardado local: " + formatDate(station.updatedAt, true)
-          : "Los cambios se guardan al confirmar.";
+          selectedId = id;
+          formModified = false;
+          pendingPhoto = station.photo ? { ...station.photo } : null;
+          document.querySelector("#modal-title").textContent = "Estación " + id;
+          form.elements.estado.value = station.estado;
+          TEXT_FIELDS.forEach((field) => {
+            const el = form.elements[field];
+            if (el) el.value = station[field];
+          });
+          INVENTARIO_FIELDS.forEach((field) => {
+            const el = form.elements[field];
+            if (el) el.value = station[field] || (field === "proteccionElectrica" ? "Pendiente revisar" : "Pendiente comparar con inventario previo");
+          });
+          photoInput.value = "";
+          setPhotoPreview(pendingPhoto);
+          const userLabel = getUserLabel(station);
+          document.querySelector("#form-save-status").textContent = userLabel
+            ? "Última modificación: " + userLabel
+            : (station.updatedAt ? "Último guardado local: " + formatDate(station.updatedAt, true) : "Los cambios se guardan al confirmar.");
+          const banner = document.querySelector("#no-user-banner");
+          if (banner) banner.style.display = loadCurrentUser() ? "none" : "block";
 
-        if (!station.guiadx) station.guiadx = createGuiadx();
-        const modeBtn = document.querySelector(`.guide-mode-btn[data-mode="${station.guiadx.mode}"]`);
-        if (modeBtn) {
-          document.querySelectorAll(".guide-mode-btn").forEach(b => b.classList.remove("is-active"));
-          modeBtn.classList.add("is-active");
+          if (!station.guiadx) station.guiadx = createGuiadx();
+          const modeBtn = document.querySelector(`.guide-mode-btn[data-mode="${station.guiadx.mode}"]`);
+          if (modeBtn) {
+            document.querySelectorAll(".guide-mode-btn").forEach(b => b.classList.remove("is-active"));
+            modeBtn.classList.add("is-active");
+          }
+          const photoTypeSel = document.querySelector("#guide-photo-type");
+          if (photoTypeSel && station.guiadx.photoType) photoTypeSel.value = station.guiadx.photoType;
+          renderGuideSections();
+          updateGuideRecommendations();
+
+          modal.classList.add("is-open");
+          document.body.style.overflow = "hidden";
+          form.elements.estado.focus();
+        } catch (e) {
+          console.error("openStation: error al abrir estación " + id + ":", e);
         }
-        const photoTypeSel = document.querySelector("#guide-photo-type");
-        if (photoTypeSel && station.guiadx.photoType) photoTypeSel.value = station.guiadx.photoType;
-        renderGuideSections();
-        updateGuideRecommendations();
-
-        modal.classList.add("is-open");
-        document.body.style.overflow = "hidden";
-        form.elements.estado.focus();
       };
 
       const closeModal = () => {
+        stopCamera();
         modal.classList.remove("is-open");
         document.body.style.overflow = "";
         const stationButton = grid.querySelector(`[data-id="${selectedId}"]`);
@@ -2131,7 +3307,12 @@
         exportedAt: new Date().toISOString(),
         scope: "local",
         repository: localAuditRepository.kind,
-        audit
+        audit,
+        estaciones: audit.stations,
+        activosRezagados: looseAssets,
+        hallazgosGenerales: generalFindings,
+        historialImportacion: importHistory,
+        inventarioPrevioResguardo: loadHallazgos()
       });
 
       const exportJson = () => {
@@ -2152,9 +3333,23 @@
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#039;");
 
+      const institutionalFindingText = (finding) => {
+        const messages = {
+          "Equipo rezagado o incompleto": "Se identificaron equipos o componentes pendientes de integración a una estación completa. Se recomienda realizar cotejo físico antes de su asignación.",
+          "Inventario previo pendiente": "Se requiere cotejar el inventario previo con la existencia física actual y conservar evidencia documental de las diferencias encontradas.",
+          "Resguardo": "Se recomienda confirmar documentalmente el resguardo y la situación administrativa de los bienes relacionados.",
+          "Protección eléctrica / no-breaks": "Se observaron necesidades de protección eléctrica que deben validarse antes de la operación regular de los equipos.",
+          "Limpieza urgente": "Se identificó necesidad de limpieza preventiva prioritaria para reducir riesgos de sobrecalentamiento y fallas.",
+          "Interrupciones durante diagnóstico": "Durante la jornada se registraron interrupciones que pudieron afectar la continuidad del diagnóstico; se recomienda programar una revisión complementaria.",
+          "Necesidad de emparejamiento físico": "Se requiere emparejar físicamente componentes y etiquetas antes de consolidar el inventario por estación.",
+          "Hallazgo general": "Se registró una observación general pendiente de validación técnica o documental."
+        };
+        return messages[finding.categoria] || messages["Hallazgo general"];
+      };
+
       const buildReportHtml = () => {
         const summary = getSummary();
-        const reviewed = summary.total - summary.gris;
+        const reviewed = summary.reviewed;
         const stationCards = audit.stations.map((station) => {
           let guideHtml = "";
           if (station.guiadx) {
@@ -2187,23 +3382,102 @@
               <span class="status">${escapeHtml(STATUS_LABELS[station.estado])}</span>
             </header>
             ${station.photo ? `<img src="${station.photo.dataUrl}" alt="Evidencia de estación ${station.id}">` : ""}
+            ${station.estado === "incompleta" || station.estado === "falta_cpu" ? `<div class="incomplete-banner">Estación incompleta — falta CPU/gabinete. Periféricos presentes pueden ser evaluados.</div>` : ""}
             <dl>
               <div><dt>CPU</dt><dd>${escapeHtml(station.cpu)}</dd></div>
               <div><dt>Monitor</dt><dd>${escapeHtml(station.monitor)}</dd></div>
               <div><dt>Teclado</dt><dd>${escapeHtml(station.teclado)}</dd></div>
               <div><dt>Mouse</dt><dd>${escapeHtml(station.mouse)}</dd></div>
               <div><dt>Red / Internet</dt><dd>${escapeHtml(station.red)}</dd></div>
-              <div><dt>Revisó</dt><dd>${escapeHtml(station.responsable || "Sin registrar")}</dd></div>
+              <div><dt>Protección eléctrica</dt><dd>${escapeHtml(station.proteccionElectrica || "Pendiente revisar")}</dd></div>
+              <div><dt>Situación patrimonial</dt><dd>${escapeHtml(station.situacionPatrimonial || "Pendiente comparar con inventario previo")}</dd></div>
             </dl>
             ${guideHtml}
             <section class="notes">
               <strong>Observaciones</strong>
               <p>${escapeHtml(station.observaciones || "Sin observaciones registradas.")}</p>
             </section>
-            <footer>${station.updatedAt ? "Actualización local: " + escapeHtml(formatDate(station.updatedAt, true)) : "Sin actualización registrada"}</footer>
+            <footer>${(station.updatedByInitials || station.createdByInitials) ? "Última modificación: " + escapeHtml(getUserLabel(station)) : (station.updatedAt ? "Actualización local: " + escapeHtml(formatDate(station.updatedAt, true)) : "Sin actualización registrada")}${station.observaciones && station.observaciones.includes("[Importado desde revisión asistida por ChatGPT") ? '<br><span style="display:inline-block;margin-top:4px;padding:3px 8px;border-radius:999px;background:#e8f0ff;color:#1e40af;font-size:10px;font-weight:800;">Datos complementados mediante revisión asistida por ChatGPT.</span>' : ""}</footer>
           </article>
         `;
         }).join("");
+
+        const incompleteStations = audit.stations.filter((station) => {
+          const text = [station.cpu, station.monitor, station.teclado, station.mouse].join(" ").toLowerCase();
+          return station.estado === "incompleta" ||
+            ["falta_cpu", "falta_monitor", "falta_teclado", "falta_mouse"].includes(station.estado) ||
+            /falta|no hay|sin cpu/.test(text);
+        });
+        const noProtectionStations = audit.stations.filter((station) =>
+          ["No-break faltante", "Conectado directo a corriente", "Pendiente revisar"].includes(
+            station.proteccionElectrica || "Pendiente revisar"
+          )
+        );
+        const electricalAssets = looseAssets.filter((asset) =>
+          asset.categoria === "No-break suelto" || asset.categoria === "Regulador suelto"
+        );
+        const cleaningFindings = generalFindings.filter((finding) => finding.categoria === "Limpieza urgente");
+        const electricalFindings = generalFindings.filter((finding) =>
+          finding.categoria === "Protección eléctrica / no-breaks"
+        );
+        const priorInventory = loadHallazgos();
+
+        const incompleteRows = incompleteStations.length
+          ? incompleteStations.map((station) => `
+              <tr>
+                <td>E${String(station.id).padStart(2, "0")}</td>
+                <td>${escapeHtml(STATUS_LABELS[station.estado] || station.estado)}</td>
+                <td>${escapeHtml(station.cpu)}</td>
+                <td>${escapeHtml(station.monitor)}</td>
+                <td>${escapeHtml(station.teclado)}</td>
+                <td>${escapeHtml(station.mouse)}</td>
+              </tr>`).join("")
+          : '<tr><td colspan="6">No hay estaciones incompletas registradas.</td></tr>';
+
+        const looseRows = looseAssets.length
+          ? looseAssets.map((asset) => `
+              <tr>
+                <td>${escapeHtml(asset.assetId)}</td>
+                <td>${escapeHtml(asset.categoria)}</td>
+                <td>${escapeHtml(asset.etiquetaVisible)}</td>
+                <td>${escapeHtml(asset.estadoGeneral)}</td>
+                <td>${escapeHtml(asset.descripcion)}</td>
+                <td>${escapeHtml(asset.fuente)} · ${escapeHtml(asset.fecha)}</td>
+              </tr>`).join("")
+          : '<tr><td colspan="6">No hay equipo suelto registrado.</td></tr>';
+
+        const findingsHtml = generalFindings.length
+          ? generalFindings.map((finding) => `
+              <article class="finding">
+                <h3>${escapeHtml(finding.categoria)}</h3>
+                <p>${escapeHtml(institutionalFindingText(finding))}</p>
+                ${finding.recomendaciones.length
+                  ? `<p><strong>Seguimiento sugerido:</strong> ${escapeHtml(finding.recomendaciones.join(" "))}</p>`
+                  : ""}
+                <small>Fuente de registro: ${escapeHtml(finding.fuente)} · ${escapeHtml(finding.fecha)}</small>
+              </article>`).join("")
+          : '<p class="empty">No hay hallazgos generales registrados.</p>';
+
+        const priorInventoryItems = [
+          ["h-inv-previo", "Existencia de inventario previo"],
+          ["h-cpu-registradas", "CPU registradas"],
+          ["h-monitores-registrados", "Monitores registrados"],
+          ["h-teclados-registrados", "Teclados y mouse registrados"],
+          ["h-nobreaks-registrados", "No-breaks/reguladores registrados"],
+          ["h-responsable-resguardo", "Referencia de resguardo"],
+          ["h-acta-entrega", "Acta de entrega-recepción"],
+          ["h-supervisor", "Referencia de supervisión de acceso"],
+          ["h-inv-posterior", "Inventario posterior"],
+          ["h-equipos-observaciones", "Equipos en situación especial"]
+        ].filter(([key]) => priorInventory[key]);
+
+        const priorInventoryHtml = priorInventoryItems.length
+          ? priorInventoryItems.map(([key, label]) => `
+              <div class="fact">
+                <strong>${escapeHtml(label)}</strong>
+                <span>${escapeHtml(priorInventory[key])}</span>
+              </div>`).join("")
+          : '<p class="empty">No hay información de inventario previo o resguardo registrada.</p>';
 
         return `<!doctype html>
 <html lang="es">
@@ -2224,10 +3498,14 @@
     .station header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.station h2{margin:0;font-size:25px}.kicker{margin:0;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
     .status{padding:7px 11px;border-radius:999px;background:#f1f5f9;font-size:12px;font-weight:850}.station img{display:block;width:100%;max-height:430px;margin:18px 0;border-radius:14px;object-fit:contain;background:#e2e8f0}
     dl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}dl div{padding:11px;border-radius:11px;background:#f8fafc}dt{color:var(--muted);font-size:11px;font-weight:850;text-transform:uppercase}dd{margin:3px 0 0;font-weight:700}
+    .incomplete-banner{margin:14px 0;padding:12px 14px;border:1px solid #f59e0b;border-radius:12px;background:#fffbeb;color:#92400e;font-size:13px;font-weight:700;line-height:1.4}
     .notes{padding:13px;border-radius:12px;background:#f8fafc}.notes p{margin:4px 0 0;white-space:pre-wrap}.station footer{margin-top:12px;color:var(--muted);font-size:11px}
     .guide-report,.guide-report-rec{margin:12px 0;padding:11px;border-radius:11px;background:#f8fafc}.guide-report strong,.guide-report-rec strong{display:block;margin-bottom:6px;font-size:11px;text-transform:uppercase;color:var(--muted)}.guide-tags{display:flex;flex-wrap:wrap;gap:5px}.guide-tag{padding:4px 9px;border-radius:999px;background:#e8f0ff;font-size:11px;font-weight:700}.guide-tag b{font-weight:850}.guide-photo-info{margin:6px 0 0;font-size:11px;color:var(--muted)}.guide-report-rec p{margin:4px 0;padding:6px 9px;border-left:3px solid #eab308;background:white;border-radius:6px;font-size:12px}
+    .report-section{margin:20px 0;padding:20px;border:1px solid var(--line);border-radius:18px;background:white;break-inside:avoid}.report-section h2{margin:0 0 6px;font-size:23px}.report-section .intro{margin:0 0 14px;color:var(--muted);font-size:13px}
+    .report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th,.report-table td{padding:9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.report-table th{background:#f8fafc;color:#475569;font-size:10px;text-transform:uppercase}
+    .findings-grid,.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.finding,.fact{padding:13px;border-radius:12px;background:#f8fafc}.finding h3{margin:0 0 5px;font-size:15px}.finding p{margin:5px 0}.finding small{color:var(--muted)}.fact strong{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}.fact span{display:block;margin-top:3px;font-weight:700}.empty{color:var(--muted);font-style:italic}
     .report-footer{margin-top:24px;color:var(--muted);font-size:12px;text-align:center}.print-button{position:fixed;right:20px;bottom:20px;padding:12px 18px;border:0;border-radius:999px;background:#0b1220;color:white;font-weight:850;cursor:pointer}
-    @media(max-width:720px){.summary{grid-template-columns:repeat(2,1fr)}dl{grid-template-columns:1fr}.report-head{padding:22px}}
+    @media(max-width:720px){.summary{grid-template-columns:repeat(2,1fr)}dl,.findings-grid,.facts{grid-template-columns:1fr}.report-head{padding:22px}.report-table{display:block;overflow-x:auto}}
     @media print{body{background:white}main{width:auto;padding:0}.report-head{border-radius:0}.print-button{display:none}.station{box-shadow:none}.summary div{box-shadow:none}@page{margin:12mm}}
   </style>
 </head>
@@ -2239,14 +3517,94 @@
       <p>Diagnóstico e inventario por estación. Este archivo no acredita notificación, firma, auditoría ni persistencia institucional.</p>
       <p>Auditoría iniciada: ${escapeHtml(formatDate(audit.startedAt, true))} · Informe generado: ${escapeHtml(formatDate(new Date().toISOString(), true))}</p>
     </header>
-    <section class="summary">
-      <div><span>Total</span><strong>${summary.total}</strong></div>
-      <div><span>Revisadas</span><strong>${reviewed}</strong></div>
-      <div><span>Funcionales</span><strong>${summary.verde}</strong></div>
-      <div><span>Observaciones</span><strong>${summary.amarillo}</strong></div>
-      <div><span>Fallas</span><strong>${summary.rojo}</strong></div>
+    <section class="report-section">
+      <h2>1. Resumen de estaciones</h2>
+      <p class="intro">Concentrado local del avance de revisión y condiciones registradas.</p>
+      <div class="summary">
+        <div><span>Total</span><strong>${summary.total}</strong></div>
+        <div><span>Revisadas</span><strong>${reviewed}</strong></div>
+        <div><span>Con observaciones</span><strong>${summary.amarillo}</strong></div>
+        <div><span>Incompletas</span><strong>${summary.incomplete}</strong></div>
+        <div><span>Sin protección</span><strong>${summary.sinProteccion}</strong></div>
+      </div>
     </section>
-    ${stationCards}
+
+    <section class="report-section">
+      <h2>2. Estaciones incompletas</h2>
+      <p class="intro">Relación de estaciones que requieren localizar, asignar o sustituir uno o más componentes.</p>
+      <table class="report-table">
+        <thead><tr><th>Estación</th><th>Estado</th><th>CPU</th><th>Monitor</th><th>Teclado</th><th>Mouse</th></tr></thead>
+        <tbody>${incompleteRows}</tbody>
+      </table>
+    </section>
+
+    <section class="report-section">
+      <h2>3. Equipo suelto o pendiente de emparejar</h2>
+      <p class="intro">Activos que requieren cotejo físico o asignación antes de integrarse al inventario por estación.</p>
+      <table class="report-table">
+        <thead><tr><th>Asset ID</th><th>Categoría</th><th>Etiqueta</th><th>Estado</th><th>Descripción</th><th>Fuente / fecha</th></tr></thead>
+        <tbody>${looseRows}</tbody>
+      </table>
+    </section>
+
+    <section class="report-section">
+      <h2>4. Hallazgos generales</h2>
+      <p class="intro">Redacción institucional orientada a verificación y seguimiento, sin atribución de responsabilidades.</p>
+      <div class="findings-grid">${findingsHtml}</div>
+    </section>
+
+    <section class="report-section">
+      <h2>5. Inventario previo y resguardo</h2>
+      <p class="intro">Información local para cotejar documentos, existencia física y situación administrativa de los bienes.</p>
+      <div class="facts">${priorInventoryHtml}</div>
+    </section>
+
+    <section class="report-section">
+      <h2>6. Protección eléctrica / no-breaks</h2>
+      <p class="intro">
+        Se registran ${noProtectionStations.length} estaciones sin protección confirmada y
+        ${electricalAssets.length} no-breaks o reguladores sueltos. Se recomienda validar capacidad,
+        estado y asignación antes de la operación regular.
+      </p>
+      ${electricalFindings.length
+        ? `<div class="findings-grid">${electricalFindings.map((finding) => `<article class="finding"><h3>${escapeHtml(finding.categoria)}</h3><p>${escapeHtml(institutionalFindingText(finding))}</p></article>`).join("")}</div>`
+        : ""}
+    </section>
+
+    <section class="report-section">
+      <h2>7. Limpieza urgente</h2>
+      ${cleaningFindings.length
+        ? `<div class="findings-grid">${cleaningFindings.map((finding) => `<article class="finding"><h3>${escapeHtml(finding.titulo)}</h3><p>${escapeHtml(institutionalFindingText(finding))}</p>${finding.recomendaciones.length ? `<p><strong>Seguimiento sugerido:</strong> ${escapeHtml(finding.recomendaciones.join(" "))}</p>` : ""}</article>`).join("")}</div>`
+        : '<p class="intro">No hay un hallazgo general de limpieza urgente registrado en la colección local.</p>'}
+    </section>
+
+    <section class="report-section">
+      <h2>Registros por responsable</h2>
+      <p class="intro">Conteo de estaciones modificadas por cada usuario registrado en la bitácora local.</p>
+      <div class="summary">
+        ${(() => {
+          const byInitials = {};
+          audit.stations.forEach(function(st) {
+            const key = st.updatedByInitials || st.createdByInitials || "Sin identificar";
+            byInitials[key] = (byInitials[key] || 0) + 1;
+          });
+          const importsDone = importHistory.length;
+          const lastMod = audit.stations.reduce(function(latest, st) {
+            return (st.updatedAt && st.updatedAt > latest) ? st.updatedAt : latest;
+          }, "");
+          return Object.entries(byInitials).map(function(entry) {
+            return '<div><span>' + escapeHtml(entry[0]) + '</span><strong>' + entry[1] + ' estaciones</strong></div>';
+          }).join("") +
+            '<div><span>Importaciones</span><strong>' + importsDone + '</strong></div>' +
+            (lastMod ? '<div><span>Última modificación</span><strong>' + escapeHtml(formatDate(lastMod, true)) + '</strong></div>' : "");
+        })()}
+      </div>
+    </section>
+    <section class="report-section">
+      <h2>Detalle de estaciones</h2>
+      <p class="intro">Fichas técnicas locales disponibles al momento de generar este informe.</p>
+      ${stationCards}
+    </section>
     <p class="report-footer">Laboratorio Digital 310 · Copia local en preparación</p>
   </main>
   <button class="print-button" type="button" onclick="window.print()">Imprimir / Guardar PDF</button>
@@ -2284,7 +3642,16 @@
         if (!file) return;
         try {
           const parsed = JSON.parse(await file.text());
-          const candidate = parsed && parsed.audit ? parsed.audit : parsed;
+          let candidate = null;
+          if (Array.isArray(parsed)) {
+            candidate = { stations: parsed };
+          } else if (parsed && parsed.audit && Array.isArray(parsed.audit.stations)) {
+            candidate = parsed.audit;
+          } else if (parsed && Array.isArray(parsed.estaciones)) {
+            candidate = { ...parsed, stations: parsed.estaciones };
+          } else if (parsed && Array.isArray(parsed.stations)) {
+            candidate = parsed;
+          }
           if (!candidate || !Array.isArray(candidate.stations)) {
             throw new Error("El respaldo no contiene estaciones.");
           }
@@ -2304,9 +3671,48 @@
           audit.scope = "local";
           audit.updatedAt = new Date().toISOString();
           filter.value = "todos";
+
+          const restoredAssets = Array.isArray(parsed.activosRezagados)
+            ? parsed.activosRezagados.map((item, index) => normalizeLooseAsset(item, index))
+            : [];
+          const restoredFindings = Array.isArray(parsed.hallazgosGenerales)
+            ? parsed.hallazgosGenerales.map((item, index) => normalizeGeneralFinding(item, index))
+            : [];
+          looseAssets = mergeLocalRecords(looseAssets, restoredAssets, looseAssetKey).records;
+          generalFindings = mergeLocalRecords(generalFindings, restoredFindings, findingKey).records;
+
+          if (Array.isArray(parsed.historialImportacion)) {
+            importHistory = [...importHistory, ...parsed.historialImportacion].slice(-100);
+          }
+    const user = loadCurrentUser();
+    importHistory.push({
+      importedAt: new Date().toISOString(),
+      importedByName: user ? user.name : "Sesión no identificada",
+      importedByInitials: user ? user.initials : "---",
+      importedByRole: user ? user.role : "desconocido",
+      source: file.name || "Respaldo JSON",
+      type: "restauracion",
+      stationsUpdated: restored.stations.length,
+      looseAssetsAdded: restoredAssets.length,
+      findingsAdded: restoredFindings.length,
+      conflicts: 0
+    });
+          importHistory = importHistory.slice(-100);
+
+          const priorData = parsed.inventarioPrevioResguardo || parsed.hallazgos;
+          if (priorData && typeof priorData === "object") {
+            saveHallazgos(priorData);
+            applyHallazgos(priorData);
+          }
+
+          saveLooseAssets(looseAssets);
+          saveGeneralFindings(generalFindings);
+          saveImportHistory(importHistory);
           const saved = saveAudit();
           render();
-          showToast(saved ? "Respaldo JSON restaurado localmente." : "Respaldo abierto, pero sin persistencia local.");
+          showToast(saved
+            ? "Respaldo restaurado en lab310_stations y colecciones locales."
+            : "Respaldo abierto, pero sin persistencia local.");
         } catch (error) {
           showToast("El archivo JSON no es un respaldo válido de Lab 310.");
         } finally {
@@ -2437,6 +3843,49 @@
       };
       // ---- End Supabase Integration ----
 
+      // ---- Hallazgos / Inventario previo ----
+      const HALLAZGOS_FIELDS = [
+        "h-inv-previo", "h-cpu-registradas", "h-monitores-registrados", "h-teclados-registrados",
+        "h-nobreaks-registrados", "h-responsable-resguardo", "h-acta-entrega", "h-supervisor",
+        "h-inv-posterior", "h-equipos-observaciones"
+      ];
+      const loadHallazgos = () => {
+        try { return JSON.parse(localStorage.getItem(HALLAZGOS_KEY) || "{}"); } catch { return {}; }
+      };
+      const saveHallazgos = (data) => {
+        localStorage.setItem(HALLAZGOS_KEY, JSON.stringify(data));
+      };
+      const collectHallazgos = () => {
+        const data = {};
+        HALLAZGOS_FIELDS.forEach(id => {
+          const el = document.querySelector("#" + id);
+          if (el) data[id] = el.value;
+        });
+        return data;
+      };
+      const applyHallazgos = (data) => {
+        HALLAZGOS_FIELDS.forEach(id => {
+          const el = document.querySelector("#" + id);
+          if (el && data[id] !== undefined) el.value = data[id];
+        });
+      };
+      const renderHallazgosStatus = (msg, isError) => {
+        const el = document.querySelector("#hallazgos-status");
+        if (el) { el.textContent = msg; el.style.color = isError ? "#dc2626" : "#10b981"; }
+      };
+      const saveHallazgosHandler = () => {
+        const data = { ...loadHallazgos(), ...collectHallazgos() };
+        saveHallazgos(data);
+        renderHallazgosStatus("Guardado localmente.");
+        showToast("Datos de inventario previo guardados.");
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        applyHallazgos(loadHallazgos());
+        const btn = document.querySelector("#hallazgos-save");
+        if (btn) btn.addEventListener("click", saveHallazgosHandler);
+      });
+      // ---- End Hallazgos ----
+
       // ---- Guided Diagnostic UI ----
       const renderGuideSections = () => {
         const container = document.querySelector("#guide-sections");
@@ -2448,26 +3897,47 @@
         const mode = guiadx.mode || "rapido";
         const visible = GUIDE_SECTIONS.filter(s => mode === "completo" || s.mode === "rapido");
 
+        // Show falta-cpu warning on render
+        const faltaCpuActive = guiadx.sections.encendido?.selected === "falta_cpu";
+        const warningEl = document.querySelector("#falta-cpu-warning");
+        if (warningEl) warningEl.style.display = faltaCpuActive ? "block" : "none";
+
         container.innerHTML = visible.map(section => {
           const secData = guiadx.sections[section.id] || { selected: "", notes: "" };
           const selectedOption = section.options.find(o => o.value === secData.selected);
           const summaryStatus = selectedOption ? selectedOption.label : "";
 
+          const naSections = ["bios", "windows", "cpuRamDisco"];
+          const isNa = faltaCpuActive && naSections.includes(section.id);
+          if (isNa) {
+            return `<details class="guide-details"><summary class="guide-summary"><span class="guide-summary-title">${escapeHtml(section.title)}</span><span class="guide-summary-status" style="color:#94a3b8">No aplica (falta CPU)</span></summary></details>`;
+          }
+
+          const queRevisarHtml = `<div class="guide-field"><span class="guide-field-label">Qué revisar</span><p class="guide-field-text">${escapeHtml(section.queRevisar || "")}</p></div>`;
+          const dondeEntrarHtml = `<div class="guide-field"><span class="guide-field-label">Dónde entrar</span><p class="guide-field-text">${escapeHtml(section.dondeEntrar || "")}</p></div>`;
+          const interpretacionHtml = `<div class="guide-field"><span class="guide-field-label">Interpretación simple</span><p class="guide-field-text">${escapeHtml(section.interpretacion || "")}</p></div>`;
+          const queFotoHtml = `<div class="guide-field"><span class="guide-field-label">Qué foto tomar</span><p class="guide-field-text">${escapeHtml(section.queFoto || "")}</p></div>`;
           const optionsHtml = section.options.map(opt =>
             `<button type="button" class="guide-option-btn${secData.selected === opt.value ? " is-selected" : ""}" data-section="${section.id}" data-value="${opt.value}" data-field="${opt.field || ""}" data-field-value="${opt.valueMap || ""}">${escapeHtml(opt.label)}</button>`
           ).join("");
-
           const commandsHtml = section.commands.length
-            ? `<div class="guide-commands">${section.commands.map(c =>
+            ? `<div class="guide-commands-label">Comandos CMD</div><div class="guide-commands">${section.commands.map(c =>
                 `<div class="guide-cmd-block"><code class="guide-cmd-code">${escapeHtml(c.cmd)}</code><button type="button" class="guide-cmd-copy" data-cmd="${escapeHtml(c.cmd)}">Copiar</button><span class="guide-cmd-desc">${escapeHtml(c.desc)}</span></div>`
               ).join("")}</div>`
             : "";
-
           const notesHtml = `<textarea class="guide-notes" data-section="${section.id}" placeholder="Notas para esta sección..." maxlength="300">${escapeHtml(secData.notes || "")}</textarea>`;
 
           return `<details class="guide-details"${secData.selected ? " open" : ""}>
             <summary class="guide-summary"><span class="guide-summary-title">${escapeHtml(section.title)}</span>${summaryStatus ? `<span class="guide-summary-status">${escapeHtml(summaryStatus)}</span>` : ""}</summary>
-            <div class="guide-body"><p class="guide-instruction">${escapeHtml(section.instruction)}</p><div class="guide-options">${optionsHtml}</div>${commandsHtml}${notesHtml}</div>
+            <div class="guide-body">
+              ${queRevisarHtml}
+              ${dondeEntrarHtml}
+              ${commandsHtml}
+              ${interpretacionHtml}
+              <div class="guide-field"><span class="guide-field-label">Qué opción marcar en la ficha</span><div class="guide-options">${optionsHtml}</div></div>
+              ${queFotoHtml}
+              ${notesHtml}
+            </div>
           </details>`;
         }).join("");
       };
@@ -2564,6 +4034,19 @@
 
         updateGuideRecommendations();
         formModified = true;
+
+        if (value === "falta_cpu" && sectionId === "encendido") {
+          document.querySelector("#falta-cpu-warning").style.display = newValue ? "block" : "none";
+          if (newValue && form.elements.estado.value !== "incompleta") {
+            form.elements.estado.value = "incompleta";
+            formModified = true;
+          }
+        } else if (sectionId === "encendido") {
+          const station2 = audit.stations.find(s => s.id === selectedId);
+          if (station2 && station2.guiadx?.sections?.encendido?.selected !== "falta_cpu") {
+            document.querySelector("#falta-cpu-warning").style.display = "none";
+          }
+        }
       };
 
       const handleGuideModeToggle = (btn) => {
@@ -2619,9 +4102,13 @@
       // ---- End Guided Diagnostic UI ----
 
       grid.addEventListener("click", (event) => {
-        const button = event.target.closest(".station");
-        if (!button) return;
-        openStation(Number(button.dataset.id));
+        try {
+          const button = event.target.closest(".station");
+          if (!button) return;
+          openStation(Number(button.dataset.id));
+        } catch (e) {
+          console.error("Error al abrir estación:", e);
+        }
       });
 
       filter.addEventListener("change", renderStations);
@@ -2635,6 +4122,10 @@
         if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal();
         if (event.key === "Escape" && document.querySelector("#supabase-config-modal").classList.contains("is-open")) {
           document.querySelector("#supabase-config-modal").classList.remove("is-open");
+          document.body.style.overflow = "";
+        }
+        if (event.key === "Escape" && document.querySelector("#import-chatgpt-modal").classList.contains("is-open")) {
+          document.querySelector("#import-chatgpt-modal").classList.remove("is-open");
           document.body.style.overflow = "";
         }
       });
@@ -2667,6 +4158,10 @@
         showToast("Fotografía retirada de la ficha. Guarda para confirmar.");
       });
 
+      openCameraBtn.addEventListener("click", startCamera);
+      captureBtn.addEventListener("click", captureFromCamera);
+      restartCameraBtn.addEventListener("click", startCamera);
+
       form.addEventListener("input", () => {
         formModified = true;
       });
@@ -2676,11 +4171,22 @@
         const station = audit.stations.find((item) => item.id === selectedId);
         if (!station) return;
 
+        const user = loadCurrentUser();
+        if (!user) {
+          showToast("Para guardar cambios debe ingresar con una clave autorizada.");
+          return;
+        }
+
         station.estado = VALID_STATES.includes(form.elements.estado.value)
           ? form.elements.estado.value
           : "gris";
         TEXT_FIELDS.forEach((field) => {
-          station[field] = cleanText(form.elements[field].value, field === "observaciones" ? 1000 : 120);
+          const el = form.elements[field];
+          if (el) station[field] = cleanText(el.value, field === "observaciones" ? 1000 : 120);
+        });
+        INVENTARIO_FIELDS.forEach((field) => {
+          const el = form.elements[field];
+          if (el) station[field] = el.value;
         });
         station.photo = pendingPhoto ? { ...pendingPhoto } : null;
 
@@ -2690,7 +4196,7 @@
           if (TEXT_FIELDS.includes(key)) station[key] = val;
         });
 
-        station.updatedAt = new Date().toISOString();
+        applyUserToRecord(station, !station.createdByInitials);
         audit.updatedAt = station.updatedAt;
 
         const saved = saveAudit();
@@ -2742,7 +4248,15 @@
       });
 
       document.querySelector("#config-supabase").addEventListener("click", () => {
-        const config = loadSupabaseConfig();
+        let config = loadSupabaseConfig();
+        if (!config.url && !config.anonKey) {
+          config = {
+            url: "https://ucxmqcbjznqqznuzhtsx.supabase.co",
+            anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjeG1xY2Jqem5xcXpudXpodHN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDEzNTUsImV4cCI6MjA5NjYxNzM1NX0.VL9JTDpAt8kyLuqTQAbZBo_IkVdqsFyWcFqYggbfsUk",
+            auditToken: "a9db51c0-570b-4d22-985e-e65c00b84a3e"
+          };
+          saveSupabaseConfig(config);
+        }
         document.querySelector("#supabase-url").value = config.url;
         document.querySelector("#supabase-anon-key").value = config.anonKey;
         document.querySelector("#supabase-audit-token").value = config.auditToken || "";
@@ -2804,10 +4318,514 @@
         }
       });
 
+      // ---- Importar datos revisados por ChatGPT ----
+      const normalizeStationId = (input) => {
+        if (input == null) return null;
+        const str = String(input).trim().toLowerCase();
+        const match = str.match(/(?:estaci[oó]n\s*)?e?\s*(\d+)/i);
+        return match ? parseInt(match[1], 10) : null;
+      };
+
+      const mapEstadoGeneral = (text) => {
+        if (!text || typeof text !== "string") return null;
+        const t = text.toLowerCase().trim();
+        if (t.includes("falta cpu") || t.includes("incompleta")) return "incompleta";
+        if (t.includes("no funcional") || t.includes("falla")) return "rojo";
+        if (t.includes("observacion") || t.includes("observación")) return "amarillo";
+        if (t.includes("funcional") || t.includes("verde")) return "verde";
+        if (t.includes("sin revisar") || t.includes("gris")) return "gris";
+        return null;
+      };
+
+      const SECTION_OPTION_LABEL_MAP = {};
+      GUIDE_SECTIONS.forEach(s => {
+        s.options.forEach(o => {
+          SECTION_OPTION_LABEL_MAP[o.label.toLowerCase().trim()] = o.value;
+        });
+      });
+
+      const findOptionValue = (sectionId, label) => {
+        const section = GUIDE_SECTIONS.find(s => s.id === sectionId);
+        if (!section) return null;
+        const clean = label.toLowerCase().trim();
+        for (const o of section.options) {
+          if (o.label.toLowerCase().trim() === clean) return o.value;
+        }
+        return null;
+      };
+
+      const parseChatGptJson = (text) => {
+        let data;
+        try { data = JSON.parse(text); }
+        catch { return { error: "Formato inválido. Revise el JSON generado por ChatGPT." }; }
+
+        const estaciones = [];
+        const activosRezagados = [];
+        const hallazgosGenerales = [];
+        const invalidStations = [];
+        const stationIdFrom = (item) =>
+          item && (item.stationId ?? item.estacionId ?? item.estacion ?? item.numeroEstacion ??
+            (!item.assetId ? item.id : null));
+        const classifyItems = (items) => {
+          if (!Array.isArray(items)) return;
+          items.forEach((item) => {
+            if (!item || typeof item !== "object") {
+              invalidStations.push(item);
+              return;
+            }
+            const stationIdentifier = stationIdFrom(item);
+            if (item.assetId && stationIdentifier == null) {
+              activosRezagados.push(item);
+            } else {
+              estaciones.push(item);
+            }
+          });
+        };
+
+        if (Array.isArray(data)) {
+          classifyItems(data);
+        } else if (data && typeof data === "object") {
+          classifyItems(data.estaciones || data.stations || []);
+          const looseInput = data.activosRezagados || data.looseAssets || [];
+          if (Array.isArray(looseInput)) activosRezagados.push(...looseInput);
+          const findingsInput = data.hallazgosGenerales || data.generalFindings || [];
+          if (Array.isArray(findingsInput)) hallazgosGenerales.push(...findingsInput);
+          else if (findingsInput) hallazgosGenerales.push(findingsInput);
+
+          if (data.assetId && stationIdFrom(data) == null) {
+            activosRezagados.push(data);
+          } else if (stationIdFrom(data) != null && !data.estaciones && !data.stations) {
+            estaciones.push(data);
+          }
+        } else {
+          return { error: "El JSON no contiene estaciones ni activos importables." };
+        }
+
+        if (!estaciones.length && !activosRezagados.length && !hallazgosGenerales.length) {
+          return { error: "El JSON no contiene estaciones ni activos importables." };
+        }
+
+        const entries = estaciones.map((item, idx) => {
+          if (!item || typeof item !== "object") {
+            invalidStations.push(item);
+            return null;
+          }
+          const stationInput = stationIdFrom(item);
+          const stationNumber = normalizeStationId(stationInput);
+          if (stationNumber === null || stationNumber < 1 || stationNumber > STATION_COUNT) {
+            invalidStations.push({ index: idx + 1, stationId: stationInput });
+            return null;
+          }
+          return { stationNumber, raw: item };
+        }).filter(Boolean);
+
+        const normalizedAssets = activosRezagados.map((item, index) => normalizeLooseAsset(item, index));
+        const normalizedFindings = hallazgosGenerales.map((item, index) => normalizeGeneralFinding(item, index));
+        const conflictCount = invalidStations.length;
+        const warning = conflictCount
+          ? conflictCount + " registro(s) de estación no tienen un identificador válido y se marcarán como conflicto."
+          : null;
+
+        return {
+          entries,
+          activosRezagados: normalizedAssets,
+          hallazgosGenerales: normalizedFindings,
+          conflicts: conflictCount,
+          warning
+        };
+      };
+
+      let cachedImportPreview = null;
+
+      const buildImportPreview = (entries, initialConflicts = 0) => {
+        const preview = { entries: [], conflictos: initialConflicts, nuevos: 0, notfound: [], merges: 0 };
+        entries.forEach(({ stationNumber, raw }) => {
+          const station = audit.stations.find(s => s.id === stationNumber);
+          const changes = { stationNumber, raw, estado: null, campos: [], directFields: [], opciones: [], observaciones: false, recomendaciones: false, conflictos: [] };
+          if (!station) { preview.notfound.push(stationNumber); return; }
+          const newEstado = VALID_STATES.includes(raw.estado)
+            ? raw.estado
+            : mapEstadoGeneral(raw.estadoGeneral || raw.estado);
+          if (newEstado && newEstado !== station.estado) {
+            if (station.estado === "gris") { changes.estado = { from: station.estado, to: newEstado, auto: true }; preview.nuevos++; }
+            else { changes.estado = { from: station.estado, to: newEstado, conflict: true }; changes.conflictos.push("estadoGeneral"); preview.conflictos++; }
+          }
+          [...TEXT_FIELDS.filter((field) => field !== "observaciones"), ...INVENTARIO_FIELDS].forEach((field) => {
+            const incomingValue = raw[field];
+            if (incomingValue === undefined || incomingValue === null || String(incomingValue).trim() === "") return;
+            const value = cleanText(String(incomingValue).trim(), field === "observaciones" ? 1000 : 200);
+            const currentValue = station[field];
+            const defaultValue = field === "proteccionElectrica"
+              ? "Pendiente revisar"
+              : field === "situacionPatrimonial"
+                ? "Pendiente comparar con inventario previo"
+                : field === "responsable" || field === "observaciones"
+                  ? ""
+                  : "Pendiente";
+            if (!currentValue || currentValue === defaultValue) {
+              changes.directFields.push({ field, value, action: "llenar" });
+              preview.nuevos++;
+            } else if (String(currentValue) !== value && field !== "observaciones") {
+              changes.directFields.push({ field, value, existing: String(currentValue), action: "conflicto" });
+              changes.conflictos.push(`${field}: valor local diferente`);
+              preview.conflictos++;
+            }
+          });
+          if (raw.opciones && typeof raw.opciones === "object") {
+            Object.entries(raw.opciones).forEach(([sectionId, labels]) => {
+              if (!Array.isArray(labels)) return;
+              const section = GUIDE_SECTIONS.find(s => s.id === sectionId);
+              if (!section) { changes.conflictos.push(`Sección "${sectionId}" no reconocida`); preview.conflictos++; return; }
+              const gui = station.guiadx;
+              const existing = gui && gui.sections && gui.sections[sectionId] ? gui.sections[sectionId].selected : "";
+              const matched = [];
+              labels.forEach(label => {
+                const val = findOptionValue(sectionId, label);
+                if (val) { matched.push(val); }
+                else { changes.conflictos.push(`Opción "${label}" no encontrada en ${section.title}`); preview.conflictos++; }
+              });
+              if (matched.length) {
+                if (!existing) { changes.opciones.push({ section: section.title, values: matched, action: "llenar" }); preview.nuevos++; }
+                else if (matched.includes(existing)) { changes.opciones.push({ section: section.title, values: matched, action: "coincide" }); }
+                else { changes.opciones.push({ section: section.title, values: matched, existing, action: "conflicto" }); changes.conflictos.push(`${section.title}: "${existing}" vs "${matched.join(", ")}"`); preview.conflictos++; }
+              }
+            });
+          }
+          if (raw.campos && typeof raw.campos === "object") {
+            Object.entries(raw.campos).forEach(([key, val]) => {
+              changes.campos.push({ key, val: String(val), action: "agregar" });
+              preview.merges++;
+            });
+          }
+          if (raw.observaciones) {
+            const existingObs = station.observaciones || "";
+            if (!existingObs) { changes.observaciones = true; preview.nuevos++; }
+            else if (existingObs.includes(raw.observaciones.slice(0, 40))) { changes.observaciones = "ya_incluye"; }
+            else { changes.observaciones = "append"; preview.merges++; }
+          }
+          if (raw.recomendaciones && Array.isArray(raw.recomendaciones) && raw.recomendaciones.length) {
+            const gui = station.guiadx;
+            const existingRecs = gui && gui.recomendaciones ? gui.recomendaciones : [];
+            const newRecs = raw.recomendaciones.filter(r => !existingRecs.includes(r));
+            if (newRecs.length) { changes.recomendaciones = newRecs; preview.merges++; }
+          }
+          preview.entries.push(changes);
+        });
+        return preview;
+      };
+
+      const renderImportPreview = (preview) => {
+        const area = document.querySelector("#import-preview-area");
+        const statusEl = document.querySelector("#import-status");
+        const confirmBtn = document.querySelector("#confirm-import-json");
+        const looseCount = preview && Array.isArray(preview._activosRezagados) ? preview._activosRezagados.length : 0;
+        const findingsCount = preview && Array.isArray(preview._hallazgosGenerales) ? preview._hallazgosGenerales.length : 0;
+        if (!preview || (preview.entries.length === 0 && preview.notfound.length === 0 && looseCount === 0 && findingsCount === 0 && preview.conflictos === 0)) {
+          area.innerHTML = "<p style='color:var(--muted);'>No se detectaron cambios para importar.</p>";
+          statusEl.style.display = "block"; statusEl.className = "import-status warn"; statusEl.textContent = "No se aplicaron cambios.";
+          confirmBtn.style.display = "none"; return;
+        }
+        let html = `<div class="import-preview-grid">`;
+        html += `<p style="font-weight:800;margin:0 0 10px;">
+          Se detectaron <strong>${preview.entries.length + preview.notfound.length}</strong> estaciones,
+          <strong>${looseCount}</strong> activos sueltos y <strong>${findingsCount}</strong> hallazgos generales.
+        </p>`;
+        preview.entries.forEach(ch => {
+          const station = audit.stations.find(s => s.id === ch.stationNumber);
+          html += `<div class="import-preview-card"><h4>Estación ${String(ch.stationNumber).padStart(2, "0")} ${station ? "· " + STATUS_LABELS[station.estado] : ""}</h4>`;
+          if (ch.estado) {
+            const cls = ch.estado.conflict ? "tag-conflict" : "tag-new";
+            html += `<p><span class="tag ${cls}">Estado: ${ch.estado.from} → ${ch.estado.to}</span></p>`;
+          }
+          ch.opciones.forEach(o => {
+            const cls = o.action === "conflicto" ? "tag-conflict" : o.action === "coincide" ? "tag-merge" : "tag-new";
+            html += `<p><span class="tag ${cls}">${o.section}: ${o.values.join(", ")}${o.existing ? ` (existente: ${o.existing})` : ""}</span></p>`;
+          });
+          ch.campos.forEach(c => {
+            html += `<p><span class="tag tag-new">${c.key}: ${c.val}</span></p>`;
+          });
+          ch.directFields.forEach((field) => {
+            const cls = field.action === "conflicto" ? "tag-conflict" : "tag-new";
+            html += `<p><span class="tag ${cls}">${field.field}: ${field.value}${field.existing ? ` (local: ${field.existing})` : ""}</span></p>`;
+          });
+          if (ch.observaciones === true) html += `<p><span class="tag tag-new">+ observaciones</span></p>`;
+          else if (ch.observaciones === "append") html += `<p><span class="tag tag-merge">+ observaciones (se agregarán al final)</span></p>`;
+          if (ch.recomendaciones) html += `<p><span class="tag tag-merge">+ ${ch.recomendaciones.length} recomendaciones</span></p>`;
+          if (ch.conflictos.length) html += `<p><span class="tag tag-conflict">${ch.conflictos.length} conflicto(s)</span></p>`;
+          html += `</div>`;
+        });
+        preview.notfound.forEach(n => {
+          html += `<div class="import-preview-card"><h4>Estación ${String(n).padStart(2, "0")}</h4><p><span class="tag tag-notfound">No encontrada en el inventario actual</span></p></div>`;
+        });
+        if (looseCount) {
+          html += `<div class="import-preview-card"><h4>Equipo suelto y pendiente de emparejar</h4>
+            <p><span class="tag tag-new">${looseCount} activo(s) se guardarán en lab310_loose_assets</span></p>
+            ${preview._activosRezagados.slice(0, 5).map((asset) =>
+              `<p style="font-size:13px;color:var(--muted);"><strong>${escapeHtml(asset.assetId)}</strong> · ${escapeHtml(asset.categoria)} · ${escapeHtml(asset.etiquetaVisible)}</p>`
+            ).join("")}
+          </div>`;
+        }
+        if (findingsCount) {
+          html += `<div class="import-preview-card"><h4>Hallazgos generales</h4>
+            <p><span class="tag tag-new">${findingsCount} hallazgo(s) se guardarán en lab310_general_findings</span></p>
+            ${preview._hallazgosGenerales.slice(0, 5).map((finding) =>
+              `<p style="font-size:13px;color:var(--muted);"><strong>${escapeHtml(finding.categoria)}</strong> · ${escapeHtml(finding.titulo)}</p>`
+            ).join("")}
+          </div>`;
+        }
+        html += `</div>`;
+        area.innerHTML = html;
+        statusEl.style.display = "block";
+        const hasExtra = looseCount > 0 || findingsCount > 0;
+        if (preview.conflictos > 0) {
+          statusEl.className = "import-status warn";
+          statusEl.textContent = `Hay ${preview.conflictos} conflicto(s) que requieren revisión.`;
+        } else if (preview.nuevos > 0 || preview.merges > 0 || hasExtra) {
+          statusEl.className = "import-status ok";
+          statusEl.textContent = `JSON válido. Se detectaron ${preview.entries.length} estaciones con cambios${hasExtra ? " y datos adicionales" : ""}.`;
+        } else {
+          statusEl.className = "import-status warn";
+          statusEl.textContent = "No se detectaron cambios nuevos para aplicar.";
+        }
+        const showConfirm = preview.entries.length > 0 || hasExtra;
+        confirmBtn.style.display = showConfirm ? "inline-flex" : "none";
+      };
+
+      const applyImport = () => {
+        if (!cachedImportPreview) return;
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/[T:-]/g, "");
+        const backupKey = "lab310_backup_before_ai_import_" + timestamp;
+        try {
+          localStorage.setItem(backupKey, JSON.stringify(createExportSnapshot()));
+        } catch { showToast("No se pudo crear respaldo automático."); return; }
+
+        let stationsUpdated = 0;
+        cachedImportPreview.entries.forEach(ch => {
+          const station = audit.stations.find(s => s.id === ch.stationNumber);
+          if (!station) return;
+          let stationChanged = false;
+          if (ch.estado && !ch.estado.conflict) {
+            station.estado = ch.estado.to;
+            stationChanged = true;
+            if (ch.estado.to === "incompleta" || ch.estado.to === "falta_cpu") {
+              if (!station.guiadx) station.guiadx = createGuiadx();
+              station.guiadx.sections.encendido.selected = "falta_cpu";
+              station.guiadx.sections.bios.selected = "";
+              station.guiadx.sections.windows.selected = "";
+              station.guiadx.sections.cpuRamDisco.selected = "";
+            }
+          }
+          ch.directFields.forEach((field) => {
+            if (field.action !== "conflicto") {
+              station[field.field] = field.value;
+              stationChanged = true;
+            }
+          });
+          ch.opciones.forEach(o => {
+            if (o.action === "conflicto") return;
+            if (!station.guiadx) station.guiadx = createGuiadx();
+            if (o.values.length && o.action !== "coincide") {
+              const sectionId = GUIDE_SECTIONS.find(s => s.title === o.section)?.id;
+              if (sectionId && station.guiadx.sections[sectionId]) {
+                station.guiadx.sections[sectionId].selected = o.values[0];
+                stationChanged = true;
+              }
+            }
+          });
+          const importParts = [];
+          if (ch.campos.length) {
+            importParts.push(ch.campos.map(c => `${c.key}: ${c.val}`).join(" | "));
+            const ipField = ch.campos.find(c => c.key.toLowerCase().includes("ip"));
+            if (ipField && ipField.val.includes("169.254")) {
+              station.red = "IP 169.254 detectada";
+              stationChanged = true;
+            }
+          }
+          if (ch.observaciones && ch.observaciones !== "ya_incluye") {
+            const entry = ch.raw;
+            if (entry && entry.observaciones) importParts.push(entry.observaciones);
+          }
+          if (importParts.length) {
+            const marker = `[Importado desde revisión asistida por ChatGPT - ${new Date().toLocaleDateString("es-MX")}] ${importParts.join(" | ")}`;
+            if (station.observaciones) {
+              if (!station.observaciones.includes(marker)) {
+                station.observaciones += "\n" + marker;
+                stationChanged = true;
+              }
+            } else {
+              station.observaciones = marker;
+              stationChanged = true;
+            }
+          }
+          if (ch.recomendaciones && ch.recomendaciones.length) {
+            if (!station.guiadx) station.guiadx = createGuiadx();
+            ch.recomendaciones.forEach(r => {
+              if (!station.guiadx.recomendaciones.includes(r)) {
+                station.guiadx.recomendaciones.push(r);
+                stationChanged = true;
+              }
+            });
+          }
+          if (stationChanged) {
+            const user = loadCurrentUser();
+            if (user) {
+              station.updatedByName = user.name;
+              station.updatedByInitials = user.initials;
+              station.updatedByRole = user.role;
+              station.updatedAt = new Date().toISOString();
+              station.updateSource = "importación asistida";
+            } else {
+              station.updatedAt = new Date().toISOString();
+            }
+            stationsUpdated += 1;
+          }
+        });
+
+        const assetMerge = mergeLocalRecords(
+          looseAssets,
+          cachedImportPreview._activosRezagados || [],
+          looseAssetKey
+        );
+        const findingMerge = mergeLocalRecords(
+          generalFindings,
+          cachedImportPreview._hallazgosGenerales || [],
+          findingKey
+        );
+        looseAssets = assetMerge.records;
+        generalFindings = findingMerge.records;
+        saveLooseAssets(looseAssets);
+        saveGeneralFindings(generalFindings);
+
+        const conflictCount = cachedImportPreview.conflictos + assetMerge.conflicts + findingMerge.conflicts;
+        const user = loadCurrentUser();
+        const importRecord = {
+          importedAt: new Date().toISOString(),
+          importedByName: user ? user.name : "Sesión no identificada",
+          importedByInitials: user ? user.initials : "---",
+          importedByRole: user ? user.role : "desconocido",
+          source: "Importación asistida por ChatGPT",
+          type: "importacion_asistida",
+          stationsUpdated,
+          looseAssetsAdded: assetMerge.added,
+          findingsAdded: findingMerge.added,
+          conflicts: conflictCount,
+          backupKey
+        };
+        importHistory.push(importRecord);
+        importHistory = importHistory.slice(-100);
+        saveImportHistory(importHistory);
+
+        audit.updatedAt = new Date().toISOString();
+        audit._syncStatus = "pending";
+        saveAudit();
+        render();
+        const statusEl = document.querySelector("#import-status");
+        statusEl.style.display = "block";
+        statusEl.className = "import-status ok";
+        statusEl.innerHTML = `<strong>Importación completada:</strong><br>
+          - ${stationsUpdated} ${stationsUpdated === 1 ? "estación actualizada" : "estaciones actualizadas"}<br>
+          - ${assetMerge.added} ${assetMerge.added === 1 ? "activo suelto registrado" : "activos sueltos registrados"}<br>
+          - ${findingMerge.added} ${findingMerge.added === 1 ? "hallazgo general agregado" : "hallazgos generales agregados"}<br>
+          - ${conflictCount} ${conflictCount === 1 ? "conflicto detectado" : "conflictos detectados"}<br><br>
+          Guardado solo en este navegador: <code>lab310_stations</code>,
+          <code>lab310_loose_assets</code>, <code>lab310_general_findings</code> y
+          <code>lab310_import_history</code>.<br>
+          Respaldo previo: <code>${escapeHtml(backupKey)}</code>.`;
+        document.querySelector("#confirm-import-json").style.display = "none";
+        cachedImportPreview = null;
+        showToast(`Importación local: ${stationsUpdated} estaciones, ${assetMerge.added} activos, ${findingMerge.added} hallazgos.`);
+      };
+
+      document.querySelector("#logout-btn").addEventListener("click", () => {
+        if (window.confirm("¿Cerrar sesión? Los cambios no guardados se perderán.")) {
+          clearCurrentUser();
+          window.location.href = "index.html";
+        }
+      });
+
+      document.querySelector("#import-chatgpt").addEventListener("click", () => {
+        if (!loadCurrentUser()) {
+          showToast("Para importar datos debe ingresar con una clave autorizada.");
+          return;
+        }
+        document.querySelector("#import-chatgpt-json").value = "";
+        document.querySelector("#import-preview-area").innerHTML = "";
+        const statusEl = document.querySelector("#import-status");
+        statusEl.style.display = "none";
+        document.querySelector("#confirm-import-json").style.display = "none";
+        cachedImportPreview = null;
+        document.querySelector("#import-chatgpt-modal").classList.add("is-open");
+        document.body.style.overflow = "hidden";
+        document.querySelector("#import-chatgpt-json").focus();
+      });
+
+      document.querySelector("#close-import-chatgpt").addEventListener("click", () => {
+        document.querySelector("#import-chatgpt-modal").classList.remove("is-open");
+        document.body.style.overflow = "";
+      });
+      document.querySelector("#cancel-import-chatgpt").addEventListener("click", () => {
+        document.querySelector("#import-chatgpt-modal").classList.remove("is-open");
+        document.body.style.overflow = "";
+      });
+      document.querySelector("#import-chatgpt-modal").addEventListener("click", (event) => {
+        if (event.target === event.currentTarget) {
+          document.querySelector("#import-chatgpt-modal").classList.remove("is-open");
+          document.body.style.overflow = "";
+        }
+      });
+
+      document.querySelector("#import-chatgpt-file").addEventListener("change", async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          document.querySelector("#import-chatgpt-json").value = text;
+          document.querySelector("#validate-import-json").click();
+        } catch {
+          const statusEl = document.querySelector("#import-status");
+          statusEl.style.display = "block"; statusEl.className = "import-status err";
+          statusEl.textContent = "No se pudo leer el archivo.";
+        }
+        event.target.value = "";
+      });
+
+      document.querySelector("#validate-import-json").addEventListener("click", () => {
+        const text = document.querySelector("#import-chatgpt-json").value.trim();
+        const statusEl = document.querySelector("#import-status");
+        statusEl.style.display = "block";
+        if (!text) {
+          statusEl.className = "import-status err"; statusEl.textContent = "Pega el JSON o sube un archivo primero.";
+          return;
+        }
+        const result = parseChatGptJson(text);
+        if (result.error) {
+          document.querySelector("#import-preview-area").innerHTML = "";
+          statusEl.className = "import-status err"; statusEl.textContent = result.error;
+          cachedImportPreview = null;
+          document.querySelector("#confirm-import-json").style.display = "none";
+          return;
+        }
+        if (result.warning) {
+          statusEl.className = "import-status warn";
+          statusEl.textContent = result.warning;
+        }
+        cachedImportPreview = buildImportPreview(result.entries || [], result.conflicts || 0);
+        cachedImportPreview._activosRezagados = result.activosRezagados || [];
+        cachedImportPreview._hallazgosGenerales = result.hallazgosGenerales || [];
+        renderImportPreview(cachedImportPreview);
+        const hasStations = cachedImportPreview.entries.length > 0;
+        const hasExtras = cachedImportPreview._activosRezagados.length > 0 ||
+          cachedImportPreview._hallazgosGenerales.length > 0;
+        document.querySelector("#confirm-import-json").style.display =
+          (hasStations || hasExtras) ? "inline-flex" : "none";
+      });
+
+      document.querySelector("#confirm-import-json").addEventListener("click", applyImport);
+
       if (audit.updatedAt) {
         const sizeMb = (localAuditRepository.serializedSize(audit) / (1024 * 1024)).toFixed(2);
         document.querySelector("#storage-status").textContent =
-          "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB";
+          "Último guardado local: " + formatDate(audit.updatedAt, true) + " · " + sizeMb + " MB · lab310_stations";
       }
       updateSyncBadge();
 
@@ -2817,6 +4835,8 @@
   <script>
     (() => {
       const STORAGE_KEY = "lab310_direccion_respuestas_v1";
+      const SUPABASE_CONFIG_KEY = "sase310.lab310.supabase.config";
+      const DIR_RESP_ID = "lab310_direccion";
       const GROUP_LABELS = {
         proyecto: "1. Proyecto original",
         rack: "2. Rack y cableado",
@@ -2866,12 +4886,10 @@
         if (id.startsWith("tiempos")) return "tiempos";
         return "otro";
       };
-      const renderDirResponses = () => {
+      const renderDirData = (data) => {
         const body = document.getElementById("dir-responses-body");
         if (!body) return;
-        let data;
-        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { data = {}; }
-        const hasData = Object.values(data).some(a => a && (a.option || a.open));
+        const hasData = data && Object.values(data).some(a => a && (a.option || a.open));
         if (!hasData) {
           body.innerHTML = '<p class="dir-response-empty">Aún no hay respuestas guardadas de Dirección.</p>';
           return;
@@ -2897,6 +4915,34 @@
           html += '</div>';
         });
         body.innerHTML = html;
+      };
+      const loadDirFromSupabase = (callback) => {
+        try {
+          const raw = localStorage.getItem(SUPABASE_CONFIG_KEY);
+          if (!raw || typeof supabase === "undefined") { callback(null); return; }
+          const cfg = JSON.parse(raw);
+          if (!cfg.url || !cfg.anonKey) { callback(null); return; }
+          const headers = {};
+          if (cfg.auditToken) headers["x-audit-token"] = cfg.auditToken;
+          const client = supabase.createClient(cfg.url, cfg.anonKey, { global: { headers } });
+          client.from("direccion_respuestas").select("data").eq("id", DIR_RESP_ID).limit(1)
+            .then(function (resp) {
+              if (resp.error || !resp.data || !resp.data.length) { callback(null); return; }
+              callback(resp.data[0].data);
+            })
+            .catch(function () { callback(null); });
+        } catch { callback(null); }
+      };
+      const renderDirResponses = () => {
+        loadDirFromSupabase(function (sbData) {
+          if (sbData) {
+            renderDirData(sbData);
+            return;
+          }
+          let data;
+          try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { data = {}; }
+          renderDirData(data);
+        });
       };
       const details = document.getElementById("dir-responses");
       if (details) {

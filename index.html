@@ -271,7 +271,10 @@
 
   <script>
     (() => {
-      const PASSWORD = 'hugo.310.lab';
+      const USERS = [
+        { password: 'hugo.310.lab', name: 'Hugo Sánchez Reséndiz', initials: 'HSR', role: 'responsable_diagnostico', roleLabel: 'Responsable diagnóstico / Administrador local' },
+        { password: 'rocio.lab310', name: 'Rocío Azuceno', initials: 'RA', role: 'apoyo_inventario', roleLabel: 'Apoyo inventario' }
+      ];
       const overlay = document.getElementById('modal-overlay');
       const input = document.getElementById('password-input');
       const error = document.getElementById('password-error');
@@ -287,7 +290,18 @@
       };
       const closeModal = () => overlay.classList.remove('open');
       const checkPassword = () => {
-        if (input.value === PASSWORD) {
+        const entered = input.value;
+        const user = USERS.find(function(u) { return u.password === entered; });
+        if (user) {
+          try {
+            sessionStorage.setItem('lab310_current_user', JSON.stringify({
+              name: user.name,
+              initials: user.initials,
+              role: user.role,
+              roleLabel: user.roleLabel,
+              loginTimestamp: new Date().toISOString()
+            }));
+          } catch(e) { /* sessionStorage may fail in some contexts */ }
           window.location.href = 'inventario.html';
         } else {
           error.style.display = 'block';
@@ -298,11 +312,11 @@
       btnInventario.addEventListener('click', openModal);
       btnConfirm.addEventListener('click', checkPassword);
       btnCancel.addEventListener('click', closeModal);
-      input.addEventListener('keydown', (e) => {
+      input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') checkPassword();
         if (e.key === 'Escape') closeModal();
       });
-      overlay.addEventListener('click', (e) => {
+      overlay.addEventListener('click', function(e) {
         if (e.target === overlay) closeModal();
       });
     })();

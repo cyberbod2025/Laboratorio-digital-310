@@ -950,6 +950,59 @@
       </p>
     </section>
 
+    <!-- 13. Información requerida -->
+    <section class="card" style="border-left:4px solid #6366f1;">
+      <h2>Información requerida para comparar inventario previo contra estado actual</h2>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;">
+        No se atribuyen responsabilidades. Se solicita documentación para aclarar diferencias
+        entre inventario previo, traslado/remodelación y estado físico actual.
+        Esta información es necesaria para regularizar la situación patrimonial del equipamiento
+        del Laboratorio Digital 310 y proceder con la fase de diagnóstico formal.
+      </p>
+      <div class="form-section" style="margin-top:4px;">
+        <div class="form-group">
+          <label>¿Existe inventario previo a la remodelación del aula?</label>
+          <textarea data-q="invprevio_existe" placeholder="Sí / No / Se desconoce. Si existe, adjuntar copia si es posible."></textarea>
+        </div>
+        <div class="form-group">
+          <label>¿Cuántas CPU estaban registradas en el inventario anterior?</label>
+          <input type="text" data-q="invprevio_cpu" placeholder="Ej: 25">
+        </div>
+        <div class="form-group">
+          <label>¿Cuántos monitores estaban registrados?</label>
+          <input type="text" data-q="invprevio_monitores" placeholder="Ej: 28">
+        </div>
+        <div class="form-group">
+          <label>¿Cuántos teclados y mouse estaban registrados?</label>
+          <input type="text" data-q="invprevio_teclados" placeholder="Ej: 25 juegos">
+        </div>
+        <div class="form-group">
+          <label>¿Cuántos no-breaks o reguladores estaban registrados?</label>
+          <input type="text" data-q="invprevio_nobreaks" placeholder="Ej: 5 no-breaks, 10 reguladores">
+        </div>
+        <div class="form-group">
+          <label>¿Quién tenía el resguardo del equipamiento?</label>
+          <input type="text" data-q="invprevio_resguardo" placeholder="Nombre del responsable anterior">
+        </div>
+        <div class="form-group">
+          <label>¿Hubo acta de entrega-recepción antes de los trabajos de remodelación/cableado?</label>
+          <textarea data-q="invprevio_acta" placeholder="Sí / No / Se desconoce"></textarea>
+        </div>
+        <div class="form-group">
+          <label>¿Quién supervisó el acceso al aula durante la remodelación o cableado?</label>
+          <input type="text" data-q="invprevio_supervisor" placeholder="Nombre o área responsable">
+        </div>
+        <div class="form-group">
+          <label>¿Se hizo un inventario posterior a los trabajos?</label>
+          <textarea data-q="invprevio_posterior" placeholder="Sí / No / Parcial"></textarea>
+        </div>
+        <div class="form-group">
+          <label>¿Hay equipos dados de baja, reubicados, prestados o enviados a reparación?</label>
+          <textarea data-q="invprevio_equipos" placeholder="Detallar equipos y su situación actual"></textarea>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <div class="footer-note">
       Propuesta preliminar · Laboratorio Digital 310 · Prof. Hugo Sánchez Reséndiz
@@ -961,6 +1014,9 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <p id="supabase-dir-status" style="text-align:center;font-size:0.78rem;color:var(--muted);margin:0 0 10px;"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       "use strict";
@@ -968,6 +1024,55 @@
       var STORAGE_KEY = "lab310_respuestas_direccion_v1";
       var OLG_KEY = "lab310_direccion_respuestas_v1";
       try { localStorage.removeItem(OLG_KEY); } catch (e) { /* ignore */ }
+      var SUPABASE_CONFIG_KEY = "sase310.lab310.supabase.config";
+      var DIR_RESP_ID = "lab310_direccion";
+      var supabaseDirClient = null;
+
+      function initDirSupabase() {
+        try {
+          var raw = localStorage.getItem(SUPABASE_CONFIG_KEY);
+          if (!raw) return null;
+          var cfg = JSON.parse(raw);
+          if (!cfg.url || !cfg.anonKey || typeof supabase === "undefined") return null;
+          var headers = {};
+          if (cfg.auditToken) headers["x-audit-token"] = cfg.auditToken;
+          supabaseDirClient = supabase.createClient(cfg.url, cfg.anonKey, { global: { headers } });
+          return supabaseDirClient;
+        } catch { return null; }
+      }
+
+      function syncToSupabase(data) {
+        var client = initDirSupabase();
+        if (!client) return;
+        var cfg;
+        try { cfg = JSON.parse(localStorage.getItem(SUPABASE_CONFIG_KEY)); } catch { return; }
+        if (!cfg || !cfg.auditToken) return;
+        client
+          .from("direccion_respuestas")
+          .upsert({ id: DIR_RESP_ID, pilot_token: cfg.auditToken, data: data, updated_at: new Date().toISOString() }, { onConflict: "id" })
+          .then(function (resp) {
+            if (resp.error) console.warn("Supabase sync error (direccion):", resp.error.message);
+            else {
+              var el = document.getElementById("supabase-dir-status");
+              if (el) el.textContent = "Respuestas sincronizadas en la nube. Visibles en cualquier dispositivo.";
+            }
+          });
+      }
+
+      function loadFromSupabase(callback) {
+        var client = initDirSupabase();
+        if (!client) { callback(null); return; }
+        client
+          .from("direccion_respuestas")
+          .select("data")
+          .eq("id", DIR_RESP_ID)
+          .limit(1)
+          .then(function (resp) {
+            if (resp.error || !resp.data || !resp.data.length) { callback(null); return; }
+            callback(resp.data[0].data);
+          })
+          .catch(function () { callback(null); });
+      }
 
       var CQ_QUESTIONS = [
         "proyecto_autorizo","proyecto_memoria","proyecto_fecha","proyecto_objetivo",
@@ -975,7 +1080,10 @@
         "internet_contratado","internet_compartir","internet_capacidad","internet_wifi_pass","internet_dedicado",
         "pass_admin","pass_bios","pass_usuarios","pass_politica",
         "op_autorizar_fase","op_responsable","op_fecha","op_presupuesto","op_horario",
-        "tiempos_grupos","tiempos_docentes","tiempos_fecha_limite","tiempos_software"
+        "tiempos_grupos","tiempos_docentes","tiempos_fecha_limite","tiempos_software",
+        "invprevio_existe","invprevio_cpu","invprevio_monitores","invprevio_teclados",
+        "invprevio_nobreaks","invprevio_resguardo","invprevio_acta","invprevio_supervisor",
+        "invprevio_posterior","invprevio_equipos"
       ];
 
       var toast = document.getElementById("toast");
@@ -1000,10 +1108,15 @@
           var id = CQ_QUESTIONS[i];
           var select = document.querySelector('select[data-q="' + id + '"]');
           var textarea = document.querySelector('textarea.cq-open[data-q="' + id + '"]');
-          data[id] = {
-            option: select ? select.value : "",
-            open: textarea ? textarea.value.trim() : ""
-          };
+          if (select) {
+            data[id] = {
+              option: select.value,
+              open: textarea ? textarea.value.trim() : ""
+            };
+          } else {
+            var input = document.querySelector('input[data-q="' + id + '"]') || document.querySelector('textarea[data-q="' + id + '"]');
+            data[id] = input ? input.value : "";
+          }
         }
         return data;
       }
@@ -1011,7 +1124,8 @@
       function buildResumenText(data) {
         function g(id) {
           var a = data[id];
-          if (!a) return "\u2014";
+          if (a == null || a === "") return "\u2014";
+          if (typeof a === "string") return a;
           if (!a.option && !a.open) return "\u2014";
           if (!a.option && a.open) return a.open;
           var parts = [];
@@ -1063,6 +1177,18 @@
           "\u2022 Fecha l\u00edmite: " + g("tiempos_fecha_limite"),
           "\u2022 Software: " + g("tiempos_software"),
           "",
+          "INVENTARIO PREVIO Y RESGUARDO",
+          "\u2022 \u00bfExiste inventario previo?: " + g("invprevio_existe"),
+          "\u2022 CPU registradas: " + g("invprevio_cpu"),
+          "\u2022 Monitores registrados: " + g("invprevio_monitores"),
+          "\u2022 Teclados y mouse registrados: " + g("invprevio_teclados"),
+          "\u2022 No-breaks/reguladores registrados: " + g("invprevio_nobreaks"),
+          "\u2022 Responsable del resguardo: " + g("invprevio_resguardo"),
+          "\u2022 Acta de entrega-recepci\u00f3n: " + g("invprevio_acta"),
+          "\u2022 Supervisor de acceso al aula: " + g("invprevio_supervisor"),
+          "\u2022 Inventario posterior: " + g("invprevio_posterior"),
+          "\u2022 Equipos en situaci\u00f3n especial: " + g("invprevio_equipos"),
+          "",
           "---",
           "Generado autom\u00e1ticamente desde el cuestionario del Laboratorio Digital 310."
         ].join("\n");
@@ -1072,6 +1198,7 @@
         try {
           var data = collectData();
           localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          syncToSupabase(data);
           var statusEl = document.getElementById("cq-status");
           if (statusEl) statusEl.textContent = "Respuestas guardadas. Ahora puede enviarlas por WhatsApp, correo o copiarlas.";
 
@@ -1131,31 +1258,52 @@
       }
 
       function loadSaved() {
-        try {
-          var raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return;
-          var data = JSON.parse(raw);
-          if (!data) return;
+        function applyData(data) {
+          if (!data) return false;
           var hasData = false;
           for (var i = 0; i < CQ_QUESTIONS.length; i++) {
             var id = CQ_QUESTIONS[i];
             var ans = data[id];
-            if (!ans) continue;
+            if (ans == null || ans === "") continue;
             var select = document.querySelector('select[data-q="' + id + '"]');
             var textarea = document.querySelector('textarea.cq-open[data-q="' + id + '"]');
-            if (ans.option && select) { select.value = ans.option; hasData = true; }
-            if (ans.open && textarea) { textarea.value = ans.open; }
+            if (typeof ans === "string" && ans) {
+              var inp = document.querySelector('input[data-q="' + id + '"]') || document.querySelector('textarea[data-q="' + id + '"]');
+              if (inp) { inp.value = ans; hasData = true; }
+            } else {
+              if (ans.option && select) { select.value = ans.option; hasData = true; }
+              if (ans.open && textarea) { textarea.value = ans.open; }
+            }
           }
-          if (hasData) {
+          return hasData;
+        }
+        function showResumen(data) {
+          var text = buildResumenText(data);
+          var contentEl = document.getElementById("resumen-content");
+          if (contentEl) contentEl.textContent = text;
+          var box = document.getElementById("resumen-box");
+          if (box) box.style.display = "block";
+        }
+        // Try Supabase first
+        loadFromSupabase(function (sbData) {
+          if (sbData && applyData(sbData)) {
             var statusEl = document.getElementById("cq-status");
-            if (statusEl) statusEl.textContent = "Respuestas recuperadas de este navegador.";
-            var text = buildResumenText(data);
-            var contentEl = document.getElementById("resumen-content");
-            if (contentEl) contentEl.textContent = text;
-            var box = document.getElementById("resumen-box");
-            if (box) box.style.display = "block";
+            if (statusEl) statusEl.textContent = "Respuestas recuperadas desde la nube.";
+            showResumen(sbData);
+            return;
           }
-        } catch (e) { /* silent */ }
+          // Fallback to localStorage
+          try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            var data = JSON.parse(raw);
+            if (applyData(data)) {
+              var statusEl = document.getElementById("cq-status");
+              if (statusEl) statusEl.textContent = "Respuestas recuperadas de este navegador.";
+              showResumen(data);
+            }
+          } catch (e) { /* silent */ }
+        });
       }
 
       function exportJson() {
@@ -1164,7 +1312,7 @@
           if (!raw) { showToast("No hay respuestas para exportar."); return; }
           var data = JSON.parse(raw);
           var hasData = false;
-          for (var k in data) { if (data[k] && (data[k].option || data[k].open)) { hasData = true; break; } }
+          for (var k in data) { if (data[k] && (typeof data[k] === 'string' ? data[k] : (data[k].option || data[k].open))) { hasData = true; break; } }
           if (!hasData) { showToast("No hay respuestas para exportar."); return; }
           var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
           var url = URL.createObjectURL(blob);
@@ -1194,6 +1342,8 @@
             for (var i = 0; i < selects.length; i++) selects[i].value = "";
             var textareas = document.querySelectorAll("textarea.cq-open");
             for (var j = 0; j < textareas.length; j++) textareas[j].value = "";
+            var inputs = document.querySelectorAll("input[data-q], textarea[data-q]:not(.cq-open)");
+            for (var k = 0; k < inputs.length; k++) inputs[k].value = "";
             var box = document.getElementById("resumen-box");
             if (box) box.style.display = "none";
             var statusEl = document.getElementById("cq-status");
