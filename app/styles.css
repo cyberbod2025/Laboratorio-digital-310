@@ -1,0 +1,133 @@
+/* Laboratorio Digital 310 — estilos de la app (estética "Liquid Glass"
+   heredada del informe preliminar). */
+:root {
+  --bg: #05070d;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass2: rgba(255, 255, 255, 0.045);
+  --text: #f6f8ff;
+  --muted: #bbc5d9;
+  --cyan: #34e8ff;
+  --blue: #6b8cff;
+  --green: #39ef7d;
+  --yellow: #ffd166;
+  --red: #ff5c7a;
+  --line: rgba(255, 255, 255, 0.16);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+.orb { position: fixed; border-radius: 999px; filter: blur(28px); opacity: 0.45; z-index: -2; pointer-events: none; }
+.orb.one { width: 380px; height: 380px; background: #34e8ff; top: -120px; right: -80px; }
+.orb.two { width: 420px; height: 420px; background: #7c5cff; bottom: -160px; left: -120px; }
+main { max-width: 1120px; margin: auto; padding: 24px 16px 90px; }
+
+.topbar {
+  position: sticky; top: 10px; z-index: 10;
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  padding: 12px 16px; margin-bottom: 20px;
+  border: 1px solid var(--line); border-radius: 22px;
+  background: rgba(5, 7, 13, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+.topbar .brand { font-weight: 900; letter-spacing: -0.02em; font-size: 16px; }
+.topbar .brand small { display: block; color: var(--muted); font-weight: 700; font-size: 12px; }
+.topbar .spacer { flex: 1; }
+
+.hero, .card, .panel {
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, var(--glass), var(--glass2));
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(22px) saturate(170%);
+}
+.panel { padding: 24px; border-radius: 26px; margin-bottom: 20px; }
+.card { padding: 18px; border-radius: 20px; }
+h1 { font-size: clamp(30px, 6vw, 52px); line-height: 0.98; margin: 0 0 12px; letter-spacing: -0.05em; }
+h2 { font-size: clamp(22px, 3.4vw, 32px); margin: 0 0 14px; letter-spacing: -0.03em; }
+h3 { margin: 0 0 8px; font-size: 19px; }
+p, li, td, label { color: var(--muted); font-size: 16px; line-height: 1.55; }
+.gradient { background: linear-gradient(90deg, #fff, var(--cyan), #c9b6ff, #ff9ee8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Chips de estado */
+.status { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
+.status::before { content: ""; width: 9px; height: 9px; border-radius: 999px; background: currentColor; }
+.st-OPERATIVO { background: rgba(56, 239, 125, 0.16); color: var(--green); }
+.st-CON_FALLAS { background: rgba(255, 209, 102, 0.16); color: var(--yellow); }
+.st-EN_MANTENIMIENTO { background: rgba(52, 232, 255, 0.16); color: var(--cyan); }
+.st-FUERA_DE_SERVICIO { background: rgba(255, 92, 122, 0.16); color: var(--red); }
+
+/* Grid de inventario */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.equipo-card { display: block; text-decoration: none; color: inherit; transition: transform 0.12s ease, border-color 0.12s ease; }
+.equipo-card:hover { transform: translateY(-3px); border-color: var(--cyan); }
+.equipo-card .codigo { font-weight: 950; font-size: 20px; color: #fff; letter-spacing: -0.02em; }
+.equipo-card .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
+.equipo-card .ubic { font-size: 13px; color: var(--muted); }
+.badge-count { background: rgba(255, 92, 122, 0.18); color: var(--red); font-weight: 900; font-size: 12px; padding: 4px 9px; border-radius: 999px; }
+
+/* Métricas */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.metric { padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--glass2); }
+.metric .n { font-size: 30px; font-weight: 950; color: #fff; }
+.metric .l { font-size: 13px; color: var(--muted); font-weight: 700; }
+
+/* Formulario */
+.formgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 8px; }
+.field { display: grid; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: 14px; font-weight: 800; color: #fff; }
+input, select, textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07); color: #fff; padding: 12px 14px; font: inherit; outline: none;
+}
+textarea { min-height: 100px; resize: vertical; }
+input::placeholder, textarea::placeholder { color: rgba(255, 255, 255, 0.44); }
+
+/* Botones */
+.btn { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 900; font-size: 15px; cursor: pointer;
+  background: linear-gradient(135deg, var(--cyan), var(--blue)); color: #001018; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn.secondary { background: rgba(255, 255, 255, 0.09); color: #fff; border: 1px solid var(--line); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* Historial */
+.inc { border-left: 4px solid var(--line); padding: 12px 14px; border-radius: 12px; background: var(--glass2); margin-bottom: 10px; }
+.inc.sev-ALTA { border-left-color: var(--red); }
+.inc.sev-MEDIA { border-left-color: var(--yellow); }
+.inc.sev-BAJA { border-left-color: var(--cyan); }
+.inc .head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 4px; }
+.inc .tipo { font-weight: 900; color: #fff; font-size: 14px; }
+.inc .when { font-size: 12px; color: var(--muted); }
+.inc .estado-tag { font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--muted); }
+
+/* Banner de aviso (modo demo / errores) */
+.banner { padding: 12px 16px; border-radius: 16px; margin-bottom: 18px; font-weight: 700; font-size: 14px; border: 1px solid var(--line); }
+.banner.demo { background: rgba(255, 209, 102, 0.12); color: var(--yellow); border-color: rgba(255, 209, 102, 0.4); }
+.banner.ok { background: rgba(56, 239, 125, 0.12); color: var(--green); border-color: rgba(56, 239, 125, 0.4); }
+.banner.err { background: rgba(255, 92, 122, 0.12); color: var(--red); border-color: rgba(255, 92, 122, 0.4); }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+
+/* QR / impresión de etiquetas */
+.qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-top: 16px; }
+.qr-item { border: 1px solid var(--line); border-radius: 16px; padding: 14px; text-align: center; background: #fff; color: #05070d; }
+.qr-item img, .qr-item canvas { width: 150px; height: 150px; }
+.qr-item .qr-code { font-weight: 950; font-size: 16px; margin-top: 8px; }
+.qr-item .qr-sub { font-size: 12px; color: #333; }
+
+@media (max-width: 720px) {
+  .formgrid { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+}
+@media print {
+  body { background: #fff; color: #111; }
+  .orb, .topbar, .btn, .actions, .no-print, form { display: none !important; }
+  .panel, .card { background: #fff; box-shadow: none; border-color: #ccc; }
+  .qr-item { break-inside: avoid; }
+}

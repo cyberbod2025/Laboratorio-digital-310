@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Laboratorio Digital 310 · Equipos e incidencias</title>
+  <meta name="description" content="Estado de los equipos de cómputo del Laboratorio Digital 310. Escanea el QR de una estación para ver su ficha y reportar fallas." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <main id="app">
+    <noscript>
+      <div class="panel">Esta aplicación necesita JavaScript para funcionar.</div>
+    </noscript>
+  </main>
+
+  <!-- Cliente Supabase (se usa solo cuando config.js tiene una anon key válida). -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Generador de QR (MIT, Kazuhiko Arase) para imprimir etiquetas. -->
+  <script src="vendor/qrcode.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
