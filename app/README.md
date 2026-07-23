@@ -41,19 +41,20 @@ historial y reportes para Dirección, sin depender de bitácoras en papel.
 - **Privacidad:** el sistema no guarda datos personales de alumnos ni familias,
   solo equipos e incidencias técnicas.
 
-## Puesta en marcha (lo que falta)
+## Estado de la puesta en marcha
 
-1. **Reactivar el proyecto Supabase** `Laboratorio-digital-310` (está pausado; el
-   plan gratuito permite 2 proyectos activos a la vez).
-2. **Aplicar las migraciones** de `../supabase/migrations/` (en orden `0001`, `0002`).
-   Se pueden aplicar con el MCP de Supabase (`apply_migration`), el CLI de Supabase
-   o pegándolas en el SQL Editor.
-3. **Pegar la anon key** en `config.js` (`SUPABASE_ANON_KEY`). La URL del proyecto
-   ya está puesta. La anon key es pública por diseño: la seguridad la dan las RLS.
-4. **Desplegar** el repo en Vercel (sitio estático). El informe queda en `/` y la
-   app en `/app/`.
-5. **Imprimir los QR** desde el inventario (botón "Generar códigos QR" →
-   "Imprimir etiquetas") y pegarlos en cada estación.
+- [x] **Proyecto Supabase activo** (`Laboratorio-digital-310`, región us-east-1).
+- [x] **Migraciones aplicadas** (`0001` esquema+RLS, `0002` semilla de 30
+      estaciones, `0003` endurecimiento tras advisories). La BD tiene 30 equipos.
+- [x] **Key conectada** en `config.js` (publishable key; la seguridad la dan las
+      políticas RLS, verificadas end-to-end: lectura y alta de incidencias
+      públicas, escritura de equipos bloqueada).
+- [ ] **Desplegar en Vercel** (sitio estático). El informe queda en `/` y la app
+      en `/app/`. Al servir con dominio real, los QR apuntarán a ese dominio.
+- [ ] **Imprimir los QR** desde el inventario (botón "Generar códigos QR" →
+      "Imprimir etiquetas") y pegarlos en cada estación.
+- [ ] **Login de personal** (pendiente de diseño) para resolver/administrar
+      incidencias desde la app; hoy esa gestión se hace desde el panel de Supabase.
 
 ## Archivos
 

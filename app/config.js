@@ -14,5 +14,6 @@
 // dan las políticas RLS definidas en la migración, no el ocultamiento de la key.
 window.LAB_CONFIG = {
   SUPABASE_URL: "https://ucxmqcbjznqqznuzhtsx.supabase.co",
-  SUPABASE_ANON_KEY: "REEMPLAZAR_CON_ANON_KEY",
+  // Publishable key (pública por diseño; la seguridad la dan las políticas RLS).
+  SUPABASE_ANON_KEY: "sb_publishable_faQhpRq8F1VNtZg6Oe1fXQ_360UHNgL",
 };
